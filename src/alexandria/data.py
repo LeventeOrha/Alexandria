@@ -1,5 +1,8 @@
 from dataclasses import dataclass, asdict
+from typing import List
 import sqlite3
+import json
+
 
 @dataclass
 class Book:
@@ -8,14 +11,14 @@ class Book:
     date: str
     img: str
     ID: str
-    category: str
-    genre: str
+    category: List[str]
+    genre: List[str]
     start: str
     end: str
 
     def __str__(self):
         return f"{self.title} by {self.author}"
-    
+
     def __repr__(self):
         s = f"Book:\n"
         s += f"\ttitle: {self.title}\n"
@@ -29,7 +32,8 @@ class Book:
         s += f"\tend: {self.end}\n"
         return s
 
-def get_connection(datafile: str = "books.db"):
+
+def get_connection(datafile: str = "../../datafiles/books.db"):
     """
     Create SQL connection to datafile (books.db)
     """
@@ -37,20 +41,21 @@ def get_connection(datafile: str = "books.db"):
     conn.row_factory = sqlite3.Row
     return conn
 
+
 def createDatabase():
     """
-    Update database format
+    Create database table
     """
     conn = get_connection()
     cur = conn.cursor()
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS books (
-        title TEXT PRIMARY KEY,
+        ID TEXT PRIMARY KEY,
+        title TEXT,
         author TEXT,
         date TEXT,
         img TEXT,
-        ID TEXT,
         category TEXT,
         genre TEXT,
         start TEXT,
@@ -59,34 +64,51 @@ def createDatabase():
     """)
 
     conn.commit()
+    conn.close()
 
-    return
 
-def addColumnToData(column_name: str, placeholder: str = "---"):
+def row_to_book(row):
     """
-    Add a new column and data to each row
+    Convert SQLite row to Book object
     """
-    conn = get_connection()
-    cur = conn.cursor()
+    data = dict(row)
 
-    cur.execute(f"ALTER TABLE books ADD COLUMN {column_name} TEXT DEFAULT '{placeholder}'")
-    conn.commit()
+    data["category"] = json.loads(data["category"])
+    data["genre"] = json.loads(data["genre"])
 
-    return
+    return Book(**data)
 
-def addBooks(books: list):
+
+def addBooks(books: list[Book]):
     """
     Add many books to the database
-    Each book need the following format:
-    (title, author, date, img, id, category, genre, start, end)
     """
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.executemany("""INSERT OR IGNORE INTO books VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""", books)
-    conn.commit()
+    data = []
 
-    return
+    for book in books:
+        data.append((
+            book.ID,
+            book.title,
+            book.author,
+            book.date,
+            book.img,
+            json.dumps(book.category),
+            json.dumps(book.genre),
+            book.start,
+            book.end
+        ))
+
+    cur.executemany("""
+    INSERT OR IGNORE INTO books
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, data)
+
+    conn.commit()
+    conn.close()
+
 
 def updateBook(book: Book):
     """
@@ -94,25 +116,29 @@ def updateBook(book: Book):
     """
     data = asdict(book)
 
+    data["category"] = json.dumps(book.category)
+    data["genre"] = json.dumps(book.genre)
+
     conn = get_connection()
     cur = conn.cursor()
 
     cur.execute("""
     UPDATE books
     SET
+        title = :title,
         author = :author,
         date = :date,
         img = :img,
-        ID = :ID,
         category = :category,
         genre = :genre,
         start = :start,
         end = :end
-    WHERE title = :title
+    WHERE ID = :ID
     """, data)
 
     conn.commit()
     conn.close()
+
 
 def removeBook(book: Book):
     """
@@ -121,57 +147,135 @@ def removeBook(book: Book):
     conn = get_connection()
     cur = conn.cursor()
 
+    cur.execute("""
+    DELETE FROM books
+    WHERE ID = ?
+    """, (book.ID,))
+
+    conn.commit()
+    conn.close()
+
+
 def searchBy(key: str, value: str):
     """
-    Search all books by a specific key, for a value
+    Search all books by a specific key/value pair
 
     Parameters
     ----------
-    key: `str`
-        Column names of data (title, author, date, img, IG, category)
-    value: `str`
-        Value of that column
-    
+    key: str
+        Column name
+    value: str
+        Value to search for
+
     Returns
     -------
-    books: `lst[Books]`
-        List of each book contained in a Book class format
+    list[Book]
     """
     conn = get_connection()
     cur = conn.cursor()
 
-    allowed_columns = {"title", "author", "date", "img", "ID", "category"}
+    allowed_columns = {
+        "ID",
+        "title",
+        "author",
+        "date",
+        "img",
+        "start",
+        "end"
+    }
 
     if key not in allowed_columns:
         raise ValueError("Invalid column name")
-    
-    cur.execute(f"""SELECT * FROM books WHERE {key} == ?""", (value,))
+
+    cur.execute(
+        f"SELECT * FROM books WHERE {key} = ?",
+        (value,)
+    )
 
     rows = cur.fetchall()
 
-    books = [Book(**dict(row)) for row in rows]
+    conn.close()
 
-    return books
+    return [row_to_book(row) for row in rows]
+
+
+def searchByGenre(genre: str):
+    """
+    Search books containing a genre
+    """
+    books = getAllBooks()
+
+    return [
+        book for book in books
+        if genre in book.genre
+    ]
+
+
+def searchByCategory(category: str):
+    """
+    Search books containing a category
+    """
+    books = getAllBooks()
+
+    return [
+        book for book in books
+        if category in book.category
+    ]
+
 
 def getAllBooks():
     """
-    Get all books from current database    
+    Get all books from database
     """
     conn = get_connection()
     cur = conn.cursor()
+
     cur.execute("SELECT * FROM books")
+
     rows = cur.fetchall()
-    return [Book(**dict(row)) for row in rows]
+
+    conn.close()
+
+    return [row_to_book(row) for row in rows]
+
 
 if __name__ == "__main__":
-    # print(searchBy("category", "Reading"))
-    print(getAllBooks())
-    # createDatabase()
-    # books = [
-    #     ("A bűnbánat hegye", "Luca Tarenzi", "2025-09-15", "http://books.google.com/books/content?id=ksCGEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api", "ksCGEQAAQBAJ", "Reading", "Fantasy", "2026-05-17", "2026-05-21"),
-    #     ("Lord of the Empty Isles", "Jules Arbeaux", "2024-06-06", "http://books.google.com/books/content?id=_PnGEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api", "_PnGEAAAQBAJ", "Owned", "Sci-Fi", "2025-08-20", "2025-09-05")
-    # ]
-    # addBooks(books)
-    # book = Book("A bűnbánat hegye", "Luca Tarenzi", "2025-09-15", "http://books.google.com/books/content?id=ksCGEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api", "ksCGEQAAQBAJ", "Finished", "Fantasy", "2026-05-17", "2026-05-21")
-    # updateBook(book)
 
+    createDatabase()
+
+    books = [
+        Book(
+            title="A bűnbánat hegye",
+            author="Luca Tarenzi",
+            date="2025-09-15",
+            img="http://books.google.com/books/content?id=ksCGEQAAQBAJ",
+            ID="ksCGEQAAQBAJ",
+            category=["Reading", "Owned"],
+            genre=["Fantasy", "Dark Fantasy"],
+            start="2026-05-17",
+            end="2026-05-21"
+        ),
+
+        Book(
+            title="Lord of the Empty Isles",
+            author="Jules Arbeaux",
+            date="2024-06-06",
+            img="http://books.google.com/books/content?id=_PnGEAAAQBAJ",
+            ID="_PnGEAAAQBAJ",
+            category=["Owned"],
+            genre=["Sci-Fi", "Adventure"],
+            start="2025-08-20",
+            end="2025-09-05"
+        )
+    ]
+
+    addBooks(books)
+
+    print("\nALL BOOKS:\n")
+    print(getAllBooks())
+
+    print("\nFANTASY BOOKS:\n")
+    print(searchByGenre("Fantasy"))
+
+    print("\nOWNED BOOKS:\n")
+    print(searchByCategory("Owned"))
