@@ -1,8 +1,8 @@
 from google import genai
 from google.genai import types
-import Alexandria.src.alexandria.utils as u
-import Alexandria.src.alexandria.data as d
-import Alexandria.src.alexandria.search as s
+import alexandria.utils as u
+import alexandria.data as d
+import alexandria.search as s
 
 settings = u.readSettings()
 
