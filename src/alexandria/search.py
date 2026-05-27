@@ -4,7 +4,7 @@ File to do a Google Books search
 
 import requests
 import json
-from Alexandria.src.alexandria.utils import *
+from alexandria.utils import *
 
 def sparseResultsOfGoogle(response: dict):
     """
@@ -90,11 +90,9 @@ def searchByID(ID: str):
     return data
 
 if __name__ == "__main__":
-    searchByID('_PnGEAAAQBAJ')
-    exit()
 
-    title = "Lord of the empty isles"
-    author = "Jules Arbeaux"
+    title = "A harmadik lány"
+    author = "Agatha Christie"
 
     resp = searchBookOnGoogle(title, author)
 
