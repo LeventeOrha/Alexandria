@@ -4,3 +4,4 @@ __pycache__/*
 # Datafiles
 /*.json
 *.dat
+*.csv
