@@ -1,7 +1,12 @@
 # Python files
-__pycache__/*
+__pycache__/
 
 # Datafiles
-/*.json
+*.json
 *.dat
 *.csv
+
+# Needed settings
+!datafiles/**/*.json
+
+alexandria.egg-info/
