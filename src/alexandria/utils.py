@@ -4,7 +4,7 @@ Utility functions, used in different codes
 
 import json
 
-def readSettings(file: str = "settings.json"):
+def readSettings(file: str = "../../datafiles/settings.json"):
     """
     Read the settings file
 
