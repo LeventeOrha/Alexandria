@@ -238,44 +238,68 @@ def getAllBooks():
 
     return [row_to_book(row) for row in rows]
 
+def exportCSV(file: str):
+    """
+    Write all books from the database to a csv file
+    """
+    books = getAllBooks()
+    with open(file, "wt", encoding="utf-8") as out:
+        for book in books:
+            s = f"{book.ID};{book.title};{book.author};{book.date};{book.img};"
+            s += f"{str(book.genre).replace("[", "").replace("]", "").replace(" ", "").replace("'", '')};"
+            s += f"{str(book.category).replace("[", "").replace("]", "").replace(" ", "").replace("'", '')};"
+            s += f"{book.start};{book.end}\n"
+            out.write(s)
+    return 
+
+def bookExists(book_id: str) -> bool:
+    """
+    Check if a book (by ID) exists in the database
+    """
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT 1 FROM books WHERE ID = ? LIMIT 1",
+        (book_id,)
+    )
+
+    exists = cur.fetchone() is not None
+
+    conn.close()
+
+    return exists         
+
+def importCSV(file: str):
+    """
+    From a csv file, import books into the program and save it to the database
+    """
+    with open(file, "rt", encoding="utf-8") as inp:
+        books = []
+        for line in inp:
+            book = {}
+            parts = line.strip().split(";")
+            book["ID"] = parts[0]
+            book["title"] = parts[1]
+            book["author"] = parts[2]
+            book["date"] = parts[3]
+            book["img"] = parts[4]
+            book["genre"] = parts[5].split(",")
+            book["category"] = parts[6].split(",")
+            book["start"] = parts[7]
+            book["end"] = parts[8]
+            books.append(Book(**book))
+
+    for book in books:
+        if bookExists(book.ID) == True:
+            updateBook(book)
+        else:
+            addBooks([book])
+        
+    return books
+
+
 
 if __name__ == "__main__":
-
-    createDatabase()
-
-    books = [
-        Book(
-            title="A bűnbánat hegye",
-            author="Luca Tarenzi",
-            date="2025-09-15",
-            img="http://books.google.com/books/content?id=ksCGEQAAQBAJ",
-            ID="ksCGEQAAQBAJ",
-            category=["Reading", "Owned"],
-            genre=["Fantasy", "Dark Fantasy"],
-            start="2026-05-17",
-            end="2026-05-21"
-        ),
-
-        Book(
-            title="Lord of the Empty Isles",
-            author="Jules Arbeaux",
-            date="2024-06-06",
-            img="http://books.google.com/books/content?id=_PnGEAAAQBAJ",
-            ID="_PnGEAAAQBAJ",
-            category=["Owned"],
-            genre=["Sci-Fi", "Adventure"],
-            start="2025-08-20",
-            end="2025-09-05"
-        )
-    ]
-
-    addBooks(books)
-
-    print("\nALL BOOKS:\n")
-    print(getAllBooks())
-
-    print("\nFANTASY BOOKS:\n")
-    print(searchByGenre("Fantasy"))
-
-    print("\nOWNED BOOKS:\n")
-    print(searchByCategory("Owned"))
+    addBooks([Book("A harmadik lány", "Agatha Christie", '2009', None, 'DNK5ygAACAAJ', ['Reading'], ['Regény', 'Misztikus fikció', 'Krimi'], '2026-05-27', '---')])
+    exportCSV("book.csv")
