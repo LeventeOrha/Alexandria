@@ -2,7 +2,10 @@ from dataclasses import dataclass, asdict
 from typing import List
 import sqlite3
 import json
+from alexandria import utils as u
 
+# Default value for the 
+DATAFILE = u.readSettings()["datafile"]
 
 @dataclass
 class Book:
@@ -33,11 +36,11 @@ class Book:
         return s
 
 
-def get_connection(datafile: str = "../../datafiles/books.db"):
+def get_connection():
     """
     Create SQL connection to datafile (books.db)
     """
-    conn = sqlite3.connect(datafile)
+    conn = sqlite3.connect(DATAFILE)
     conn.row_factory = sqlite3.Row
     return conn
 
