@@ -3,15 +3,33 @@ Utility functions, used in different codes
 """
 
 import json
+import os
 
-def readSettings(file: str = "../../datafiles/settings.json"):
+SETTINGS = "../../datafiles/settings.json"
+
+def checkSettings() -> None:
+    if os.path.isfile(SETTINGS):
+        return
+    
+    print(f"Settings file {SETTINGS} is not found!")
+    new_settings = input("Add actual settings file (relative/absolute path): ")
+
+    new_param_keys = list(readSettings(new_settings).keys())
+    proper_keys = list(createSettings().keys())
+
+    if set(new_param_keys) == set(proper_keys):
+        print("All good now!")
+        return
+    
+    s = "These are not the settings we are looking for. Search for properties:"
+    s += str(proper_keys).replace("[", "").replace("]", "").replace("'", "")
+    s += "Restart program if you have found it. Bye!"
+    raise KeyError(s)
+            
+
+def readSettings(file) -> dict[str, str]:
     """
     Read the settings file
-
-    Parameters
-    ----------
-    file: `str`
-        Source file that contains the settings, json
     
     Returns
     -------
@@ -22,4 +40,30 @@ def readSettings(file: str = "../../datafiles/settings.json"):
         params = json.load(inp)
     return params
 
-    # TODO - Factory settings, file checking if exists
+def writeSettings(params: dict) -> None:
+    """
+    Write `params` dictionary out into the settings file
+    """
+    with open(SETTINGS, 'wt', encoding="utf-8") as out:
+        json.dump(params, out, ensure_ascii=False)
+    return
+
+def createSettings() -> dict[str, str]:
+    """
+    Create factory settings
+    """
+    params = {}
+
+    # Google Books API key
+    params["GB_API"] = ""
+
+    # Gemini API key
+    params["Gemini_API"] = ""
+
+    # Gemini model
+    params["Gemini_model"] = "gemini-3.5-flash"
+
+    # Source database
+    params["datafile"] = "../../datafiles/books.db"
+    
+    return params
