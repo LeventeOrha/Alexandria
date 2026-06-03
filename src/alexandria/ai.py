@@ -8,46 +8,30 @@ settings = u.readSettings()
 
 books = d.getAllBooks()
 
-SYSTEM_PROMPT = f"""
-You are an AI librarian, helping the user pick their next book and manage their collection.
+ai_settings = u.readSettings(settings["AI_settings"])
 
-ONLY recomment books from this list:
-{books}
+SYSTEM_PROMPT = f"""
+Role:
+{ai_settings["system_prompt"]["role"]}
 
 Rules:
-- You may use the searchByID tool to retrieve full book data when needed.
-- Do NOT invent books
-- ONLY use books from the provided list
-- Remember previous conversation context
-- If nothing matched, say so
+{"\n -".join(ai_settings["system_prompt"]["rules"])}
+
+{ai_settings["system_prompt"]["conditions"][0]}
+{books}
 """
 
-client = genai.Client(api_key=settings["Gemini_API"])
+tools = []
+for tool in ai_settings["tools"]:
+    tools.append(types.Tool(function_declarations=[types.FunctionDeclaration(**tool)]))
 
-search_tool = types.Tool(
-    function_declarations=[
-        types.FunctionDeclaration(
-            name="searchByID",
-            description="Retrieve full book data using its ID from the internal database.",
-            parameters={
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string",
-                        "description": "The unique book ID"
-                    }
-                },
-                "required": ["id"]
-            },
-        )
-    ]
-)
+client = genai.Client(api_key=settings["Gemini_API"])
 
 chat = client.chats.create(
     model=settings["Gemini_model"],
     config=types.GenerateContentConfig(
         system_instruction=SYSTEM_PROMPT,
-        tools=[search_tool]
+        tools=tools
     )
 )
 
