@@ -21,3 +21,5 @@ def readSettings(file: str = "../../datafiles/settings.json"):
     with open(file, "rt", encoding="utf-8") as inp:
         params = json.load(inp)
     return params
+
+    # TODO - Factory settings, file checking if exists

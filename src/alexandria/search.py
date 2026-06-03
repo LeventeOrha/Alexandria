@@ -21,6 +21,8 @@ def sparseResultsOfGoogle(response: dict):
         Dictionary of each book, keys are the titles, with the following
         data: title, author, publish date, image link, Google Books ID
     """
+
+    # TODO - change format here, so I can automatically get it into the database
     books = {}
 
     for data in response["items"]:
