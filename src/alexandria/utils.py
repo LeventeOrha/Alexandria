@@ -27,7 +27,7 @@ def checkSettings() -> None:
     raise KeyError(s)
             
 
-def readSettings(file) -> dict[str, str]:
+def readSettings(file: str = SETTINGS) -> dict[str, str]:
     """
     Read the settings file
     
@@ -65,5 +65,8 @@ def createSettings() -> dict[str, str]:
 
     # Source database
     params["datafile"] = "../../datafiles/books.db"
+
+    # Settings and starting prompts for AI
+    params["AI_settings"] = "../../datafiles/ai.json"
     
     return params
