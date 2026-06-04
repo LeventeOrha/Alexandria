@@ -35,12 +35,13 @@ def sparseResultsOfGoogle(response: dict):
         else:
             book["img"] = None
         book["ID"] = data["id"]
+        book["lang"] = data["volumeInfo"]["language"]
 
         books.append(book)
 
     return books
 
-def searchBookOnGoogle(title: str = "", author: str = ""):
+def searchBookOnGoogle(title: str = "", author: str = "", lang: str = "en"):
     """
     Search a book on Google Books
 
@@ -65,7 +66,12 @@ def searchBookOnGoogle(title: str = "", author: str = ""):
     else:
         query = f'intitle:{title}+inauthor:{author}'
     url = "https://www.googleapis.com/books/v1/volumes"
-    params = {"q": query, "maxResults": 5, "key": params["GB_API"]}
+    params = {
+        "q": query,
+        "langRestrict": lang,
+        "maxResults": 5,
+        "key": params["GB_API"]
+    }
 
     resp = requests.get(url, params=params).json()
 
@@ -121,28 +127,37 @@ def createBook(ID: str, category: str, start: str = "---", end: str = "---"):
 
 if __name__ == "__main__":
 
-    if ("-t" not in sys.argv) or ("-a" not in sys.argv):
+    if len(sys.argv) != 4:
         print(f"Useage: {sys.argv[0]} -t <title> -a <author> -l <language>")
         exit()
     
-    title = " ".join(sys.argv).split("-t")[1].split("-a")[0].strip()
-    author = " ".join(sys.argv).split("-t")[1].split("-a")[1].strip()
+    title = sys.argv[1]
+    author = sys.argv[2]
+    lang = sys.argv[3]
 
-    resp = searchBookOnGoogle(title, author)
+    resp = searchBookOnGoogle(title, author, lang)
 
     for i in range(len(resp)):
         b = resp[i]
+        if b["lang"] != lang: # Ignoring books if (for some reason) wrong language results are returned
+            continue
         print(f"{i+1}) {b["title"]} - {b["author"]} ({b["date"]}) - {b["img"]}")
 
-    pick = input("Which book is it actually? (c to cancel) ")  
+    pick = input("Which book is it actually? (c to cancel, or unique ID if another) ")  
     if pick.lower() == "c":
         exit()  
-
-    pick = int(pick) - 1
+    try:
+        pick = int(pick) - 1
+    except ValueError:
+        pass
     cat = input("Which category? ")
     start = input("Starting date: ")
 
-    book = createBook(resp[i]["ID"], cat, start)
+    try:
+        pick = int(pick) -1
+        book = createBook(resp[pick]["ID"], cat, start)
+    except ValueError:
+        book = createBook(pick, cat, start)
 
     if bookExists(book.ID):
         a = input(f"This book is already saved. Do you want to update the category and starting date? (y/n)")
@@ -150,3 +165,5 @@ if __name__ == "__main__":
             updateBook(book)
     else:
         addBooks([book])
+
+    print("Book succesfully added to database!")
