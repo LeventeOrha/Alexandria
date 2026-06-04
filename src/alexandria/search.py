@@ -3,8 +3,9 @@ File to do a Google Books search
 """
 
 import requests
-import json
+import sys
 from alexandria.utils import *
+from alexandria.data import *
 
 def sparseResultsOfGoogle(response: dict):
     """
@@ -22,21 +23,20 @@ def sparseResultsOfGoogle(response: dict):
         data: title, author, publish date, image link, Google Books ID
     """
 
-    # TODO - change format here, so I can automatically get it into the database
-    books = {}
+    books = []
 
     for data in response["items"]:
         book = {}
-        book["title"] = data["volumeInfo"]["title"]
-        book["author"] = data["volumeInfo"]["authors"]
-        book["date"] = data["volumeInfo"]["publishedDate"]
+        book["title"] = data["volumeInfo"].get("title")
+        book["author"] = data["volumeInfo"].get("authors")
+        book["date"] = data["volumeInfo"].get("publishedDate")
         if "imageLinks" in data["volumeInfo"]:
             book["img"] = data["volumeInfo"]["imageLinks"].get("thumbnail", None)
         else:
             book["img"] = None
         book["ID"] = data["id"]
 
-        books[book["title"]] = book
+        books.append(book)
 
     return books
 
@@ -91,12 +91,62 @@ def searchByID(ID: str):
 
     return data
 
+def createBook(ID: str, category: str, start: str = "---", end: str = "---"):
+    info = searchByID(ID)
+
+    book = {}
+    book["title"] = info["volumeInfo"]["title"]
+    book["author"] = info["volumeInfo"]["authors"][0]
+    book["date"] = info["volumeInfo"]["publishedDate"]
+
+    # As the image sizes are, if alphabetically ordered, are decreasing with each key
+    # I rather keep the first one, theoretically the biggest
+    book["img"] = sorted(info["volumeInfo"]["imageLinks"].keys())[0]
+
+    book["ID"] = ID
+    book["category"] = []
+    book["genre"] = []
+
+    for category in info["volumeInfo"]["categories"]:
+        cat = category.split(" / ")[1]
+        if cat not in book["genre"]:
+            book["genre"].append(cat)
+
+    book["start"] = start
+    book["end"] = end
+
+    book = Book(**book)
+
+    return book
+
 if __name__ == "__main__":
 
-    title = "A harmadik lány"
-    author = "Agatha Christie"
+    if ("-t" not in sys.argv) or ("-a" not in sys.argv):
+        print(f"Useage: {sys.argv[0]} -t <title> -a <author> -l <language>")
+        exit()
+    
+    title = " ".join(sys.argv).split("-t")[1].split("-a")[0].strip()
+    author = " ".join(sys.argv).split("-t")[1].split("-a")[1].strip()
 
     resp = searchBookOnGoogle(title, author)
 
-    with open('data.json', "wt", encoding="utf-8") as out:
-        json.dump(resp, out, indent=4, sort_keys=True, ensure_ascii=False)
+    for i in range(len(resp)):
+        b = resp[i]
+        print(f"{i+1}) {b["title"]} - {b["author"]} ({b["date"]}) - {b["img"]}")
+
+    pick = input("Which book is it actually? (c to cancel) ")  
+    if pick.lower() == "c":
+        exit()  
+
+    pick = int(pick) - 1
+    cat = input("Which category? ")
+    start = input("Starting date: ")
+
+    book = createBook(resp[i]["ID"], cat, start)
+
+    if bookExists(book.ID):
+        a = input(f"This book is already saved. Do you want to update the category and starting date? (y/n)")
+        if a == "y":
+            updateBook(book)
+    else:
+        addBooks([book])
