@@ -97,7 +97,7 @@ def searchByID(ID: str):
 
     return data
 
-def createBook(ID: str, category: str, start: str = "---", end: str = "---"):
+def createBook(ID: str, shelf: str, start: str = "---", end: str = "---"):
     info = searchByID(ID)
 
     book = {}
@@ -111,7 +111,7 @@ def createBook(ID: str, category: str, start: str = "---", end: str = "---"):
 
     book["ID"] = ID
     book["category"] = []
-    book["shelf"] = []
+    book["shelf"] = [shelf]
 
     for category in info["volumeInfo"]["categories"]:
         cat = category.split(" / ")[1]
