@@ -35,29 +35,57 @@ chat = client.chats.create(
     )
 )
 
+TOOLS = {
+    "addBooks": d.addBooks,
+    "removeBook": d.removeBook,
+    "updateBook": d.updateBook,
+    "searchBy": d.searchBy,
+    "searchByCategory": d.searchByCategory,
+    "searchByShelf": d.searchByShelf,
+    "createBook": s.createBook,
+    "searchByID": s.searchByID
+}
+
 def generateResponse(user_prompt: str):
     """
     From the already set-up AI, generate a new message
     """
     response = chat.send_message(user_prompt)
 
-    # Check if Gemini wants to call a function
-    if response.candidates[0].content.parts[0].function_call:
-        call = response.candidates[0].content.parts[0].function_call
+    # Check if Gemini wants to call a function (or several)
+    while True:
 
-        if call.name == "searchByID":
-            book_id = call.args["id"]
+        part = response.candidates[0].content.parts[0]
 
-            result = s.searchByID(book_id)  # your function
+        if not getattr(part, "function_call", None):
+            return response.text
 
-            tool_response = types.Part.from_function_response(
-                name="searchByID",
-                response=result  # your dictionary is fine here
-            )
+        call = part.function_call
 
-            response = chat.send_message([tool_response])
+        if call.name in ["removeBook", "updateBook"]:
+            result = TOOLS[call.name](s.Book(**call.args))
+        elif call.name == "addBooks":
+            result = TOOLS[call.name]([s.Book(**b) for b in call.args["books"]])
+        else:
+            result = TOOLS[call.name](**call.args)
 
-    return response.text
+        if call.name in ["searchBy", "searchByCategory", "searchByShelf"]:
+            res = []
+            for r in result:
+                res.append(r.asdict())
+            result = res
+        elif call.name == "createBook":
+            result = result.asdict()
+
+        if result is None:
+            result = {"success": True}
+
+        tool_response = types.Part.from_function_response(
+            name=call.name,
+            response=result
+        )
+
+        response = chat.send_message([tool_response])
 
 if __name__ == "__main__":
 
@@ -69,6 +97,8 @@ if __name__ == "__main__":
         if user_prompt.strip().lower() == "/exit":
             break
 
-        response = generateResponse(user_prompt)
-
-        print(response)
+        try:
+            response = generateResponse(user_prompt)
+            print(response)
+        except genai.errors.ServerError:
+            print("Sorry, something went wrong. Try again later!")
