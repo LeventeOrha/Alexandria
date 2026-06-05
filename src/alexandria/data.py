@@ -248,10 +248,10 @@ def exportCSV(file: str):
     books = getAllBooks()
     with open(file, "wt", encoding="utf-8") as out:
         for book in books:
-            s = f"{book.ID};{book.title};{book.author};{book.date};{book.img};"
-            s += f"{str(book.genre).replace("[", "").replace("]", "").replace(" ", "").replace("'", '')};"
-            s += f"{str(book.category).replace("[", "").replace("]", "").replace(" ", "").replace("'", '')};"
-            s += f"{book.start};{book.end}\n"
+            s = f"{book.ID};{book.title};{book.author};{book.date};{book.start};{book.end};"
+            s += f"{", ".join(book.category)};"
+            s += f"{", ".join(book.genre)};"
+            s += f"{book.img}\n"
             out.write(s)
     return 
 
@@ -286,11 +286,11 @@ def importCSV(file: str):
             book["title"] = parts[1]
             book["author"] = parts[2]
             book["date"] = parts[3]
-            book["img"] = parts[4]
-            book["genre"] = parts[5].split(",")
+            book["start"] = parts[4]
+            book["end"] = parts[5]
             book["category"] = parts[6].split(",")
-            book["start"] = parts[7]
-            book["end"] = parts[8]
+            book["genre"] = parts[7].split(",")
+            book["img"] = parts[8]
             books.append(Book(**book))
 
     for book in books:
@@ -304,5 +304,6 @@ def importCSV(file: str):
 
 
 if __name__ == "__main__":
-    addBooks([Book("A harmadik lány", "Agatha Christie", '2009', None, 'DNK5ygAACAAJ', ['Reading'], ['Regény', 'Misztikus fikció', 'Krimi'], '2026-05-27', '---')])
     exportCSV("book.csv")
+    # importCSV("book.csv")
+    # print(getAllBooks())
