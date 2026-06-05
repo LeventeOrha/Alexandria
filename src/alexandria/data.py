@@ -14,8 +14,8 @@ class Book:
     date: str
     img: str
     ID: str
+    shelf: List[str]
     category: List[str]
-    genre: List[str]
     start: str
     end: str
 
@@ -29,8 +29,8 @@ class Book:
         s += f"\tdate: {self.date}\n"
         s += f"\timg: {self.img}\n"
         s += f"\tID: {self.ID}\n"
+        s += f"\tshelf: {self.shelf}\n"
         s += f"\tcategory: {self.category}\n"
-        s += f"\tgenre: {self.genre}\n"
         s += f"\tstart: {self.start}\n"
         s += f"\tend: {self.end}\n"
         return s
@@ -59,8 +59,8 @@ def createDatabase():
         author TEXT,
         date TEXT,
         img TEXT,
+        shelf TEXT,
         category TEXT,
-        genre TEXT,
         start TEXT,
         end TEXT
     )
@@ -76,8 +76,8 @@ def row_to_book(row):
     """
     data = dict(row)
 
+    data["shelf"] = json.loads(data["shelf"])
     data["category"] = json.loads(data["category"])
-    data["genre"] = json.loads(data["genre"])
 
     return Book(**data)
 
@@ -98,8 +98,8 @@ def addBooks(books: list[Book]):
             book.author,
             book.date,
             book.img,
+            json.dumps(book.shelf),
             json.dumps(book.category),
-            json.dumps(book.genre),
             book.start,
             book.end
         ))
@@ -119,8 +119,8 @@ def updateBook(book: Book):
     """
     data = asdict(book)
 
+    data["shelf"] = json.dumps(book.shelf)
     data["category"] = json.dumps(book.category)
-    data["genre"] = json.dumps(book.genre)
 
     conn = get_connection()
     cur = conn.cursor()
@@ -132,8 +132,8 @@ def updateBook(book: Book):
         author = :author,
         date = :date,
         img = :img,
+        shelf = :shelf,
         category = :category,
-        genre = :genre,
         start = :start,
         end = :end
     WHERE ID = :ID
@@ -202,18 +202,6 @@ def searchBy(key: str, value: str):
     return [row_to_book(row) for row in rows]
 
 
-def searchByGenre(genre: str):
-    """
-    Search books containing a genre
-    """
-    books = getAllBooks()
-
-    return [
-        book for book in books
-        if genre in book.genre
-    ]
-
-
 def searchByCategory(category: str):
     """
     Search books containing a category
@@ -223,6 +211,18 @@ def searchByCategory(category: str):
     return [
         book for book in books
         if category in book.category
+    ]
+
+
+def searchByShelf(shelf: str):
+    """
+    Search books containing a shelf
+    """
+    books = getAllBooks()
+
+    return [
+        book for book in books
+        if shelf in book.shelf
     ]
 
 
@@ -249,8 +249,8 @@ def exportCSV(file: str):
     with open(file, "wt", encoding="utf-8") as out:
         for book in books:
             s = f"{book.ID};{book.title};{book.author};{book.date};{book.start};{book.end};"
+            s += f"{", ".join(book.shelf)};"
             s += f"{", ".join(book.category)};"
-            s += f"{", ".join(book.genre)};"
             s += f"{book.img}\n"
             out.write(s)
     return 
@@ -288,8 +288,8 @@ def importCSV(file: str):
             book["date"] = parts[3]
             book["start"] = parts[4]
             book["end"] = parts[5]
-            book["category"] = parts[6].split(",")
-            book["genre"] = parts[7].split(",")
+            book["shelf"] = parts[6].split(",")
+            book["category"] = parts[7].split(",")
             book["img"] = parts[8]
             books.append(Book(**book))
 
@@ -304,6 +304,6 @@ def importCSV(file: str):
 
 
 if __name__ == "__main__":
-    exportCSV("book.csv")
-    # importCSV("book.csv")
-    # print(getAllBooks())
+    createDatabase()
+    importCSV("book.csv")
+    print(getAllBooks())
