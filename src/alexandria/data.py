@@ -306,4 +306,4 @@ def importCSV(file: str):
 if __name__ == "__main__":
     createDatabase()
     importCSV("book.csv")
-    print(getAllBooks())
+    print(f"{len(getAllBooks())} books successfully imported!")
