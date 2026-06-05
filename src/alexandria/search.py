@@ -107,16 +107,16 @@ def createBook(ID: str, category: str, start: str = "---", end: str = "---"):
 
     # As the image sizes are, if alphabetically ordered, are decreasing with each key
     # I rather keep the first one, theoretically the biggest
-    book["img"] = sorted(info["volumeInfo"]["imageLinks"].keys())[0]
+    book["img"] = info["volumeInfo"]["imageLinks"][sorted(info["volumeInfo"]["imageLinks"].keys())[0]]
 
     book["ID"] = ID
     book["category"] = []
-    book["genre"] = []
+    book["shelf"] = []
 
     for category in info["volumeInfo"]["categories"]:
         cat = category.split(" / ")[1]
-        if cat not in book["genre"]:
-            book["genre"].append(cat)
+        if cat not in book["category"]:
+            book["category"].append(cat)
 
     book["start"] = start
     book["end"] = end
@@ -167,3 +167,5 @@ if __name__ == "__main__":
         addBooks([book])
 
     print("Book succesfully added to database!")
+
+    exportCSV("book.csv")
