@@ -35,14 +35,10 @@ chat = client.chats.create(
     )
 )
 
-print(f"{settings["Gemini_model"]} welcomes you! Type /exit to end chat.")
-
-while True:
-    user_prompt = input("> ")
-
-    if user_prompt.strip().lower() == "/exit":
-        break
-
+def generateResponse(user_prompt: str):
+    """
+    From the already set-up AI, generate a new message
+    """
     response = chat.send_message(user_prompt)
 
     # Check if Gemini wants to call a function
@@ -61,4 +57,18 @@ while True:
 
             response = chat.send_message([tool_response])
 
-    print(response.text)
+    return response.text
+
+if __name__ == "__main__":
+
+    print(f"{settings["Gemini_model"]} welcomes you! Type /exit to end chat.")
+
+    while True:
+        user_prompt = input("> ")
+
+        if user_prompt.strip().lower() == "/exit":
+            break
+
+        response = generateResponse(user_prompt)
+
+        print(response)
