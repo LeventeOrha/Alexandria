@@ -22,13 +22,195 @@
             "parameters": {
                 "type": "object",
                 "properties": {
-                        "id": {
+                        "ID": {
                             "type": "string",
                             "description": "The unique book ID"
                         }
                     },
-                "required": ["id"]
+                "required": ["ID"]
                 }
+        }, 
+        {
+            "name": "createBook",
+            "description": "Create a Book instance based on its ID",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "ID":{
+                            "type": "string",
+                            "description": "The unique book ID"
+                    },
+                    "shelf": {
+                        "type": "string",
+                        "description": "Shelf name where the book should be stored (e.g. 'read', 'wishlist', 'science')"
+                    },
+                    "start" : {
+                        "type": "string",
+                        "description": "Starting date of reading"
+                    },
+                    "end": {
+                        "type": "string",
+                        "description": "Finishing date of reading"
+                    }
+                },
+                "required": ["ID", "shelf"]
+            }
+        },
+        {
+            "name": "searchByShelf",
+            "description": "Name of the shelf to filter books by. Books may belong to multiple shelves.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "shelf": {
+                        "type": "string",
+                        "description": "Name of the shelf to filter books by (must match an existing shelf name exactly)"
+                    }
+                },
+                "required": ["shelf"]
+            }
+        },
+        {
+            "name": "searchByCategory",
+            "description": "Category name used to filter books. Must match one of the predefined categories assigned to books.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "category": {
+                        "type": "string",
+                        "description": "Category name used to filter books (must match an existing category exactly, e.g. 'Science', 'Fantasy', 'History')"
+                    }
+                },
+                "required": ["category"]
+            }
+        },
+        {
+            "name": "searchBy",
+            "description": "Search books by exact match on a field (no partial or fuzzy matching supported).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "enum": ["ID", "title", "author", "date", "img", "start", "end"],
+                        "description": "Field name to search by"
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "Exact value to match for the given field"
+                    }
+                },
+                "required": ["key", "value"]
+            }
+        },
+        {
+            "name": "updateBook",
+            "description": "Update an existing book record in the database. All provided fields will overwrite existing values.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "ID": { "type": "string" },
+                    "title": { "type": "string" },
+                    "author": { "type": "string" },
+                    "date": { "type": "string" },
+                    "img": { "type": "string" },
+                    "shelf": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                    },
+                    "category": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                    },
+                    "start": { "type": "string" },
+                    "end": { "type": "string" }
+                },
+                "required": ["ID", "title", "author", "date", "img", "shelf", "category", "start", "end"]
+            }
+        },
+        {
+            "name": "removeBook",
+            "description": "Remove a book from the database using its full Book data. Only the ID field is used for deletion, but a full Book object is expected as input.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "ID": {
+                        "type": "string",
+                        "description": "Unique identifier of the book to remove"
+                    },
+                    "title": { "type": "string" },
+                    "author": { "type": "string" },
+                    "date": { "type": "string" },
+                    "img": { "type": "string" },
+                    "shelf": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                    },
+                    "category": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                    },
+                    "start": { "type": "string" },
+                    "end": { "type": "string" }
+                },
+                "required": ["ID", "title", "author", "date", "img", "shelf", "category", "start", "end"]
+            }
+        },
+        {
+        "name": "addBooks",
+        "description": "Add multiple books to the database in a single operation. Each book must be provided as a full structured object.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "books": {
+                    "type": "array",
+                    "description": "List of books to insert into the database",
+                    "items": {
+                    "type": "object",
+                    "properties": {
+                        "ID": {
+                            "type": "string",
+                            "description": "Unique book identifier"
+                        },
+                        "title": {
+                            "type": "string"
+                        },
+                        "author": {
+                            "type": "string"
+                        },
+                        "date": {
+                            "type": "string"
+                        },
+                        "img": {
+                            "type": "string"
+                        },
+                        "shelf": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "List of shelves this book belongs to"
+                        },
+                        "category": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "List of categories for the book"
+                        },
+                        "start": {
+                            "type": "string"
+                        },
+                        "end": {
+                            "type": "string"
+                        }
+                    },
+                "required": ["ID", "title", "author", "date", "img", "shelf", "category"]
+                }
+                }
+            },
+            "required": ["books"]
+        }
         }
     ]
 }
