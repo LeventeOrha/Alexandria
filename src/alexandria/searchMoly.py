@@ -5,6 +5,7 @@ Search a book on the Moly.hu website (Hungarian books)
 import requests
 import html
 import re
+import unicodedata
 import json
 from datetime import datetime
 from bs4 import BeautifulSoup
@@ -55,7 +56,7 @@ def sparseResults(response: str):
     book: `dict`
         Dictionary containing all important info, with keys: author, title, year, ISBN, all categories, abstract, several image links
     """
-    url = moly + response[0]
+    url = moly + response
     response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
 
     # Escaping specific HTML characters, codes and invisible unicode characters
@@ -158,15 +159,68 @@ def searchBook(title: str = "", author: str = "", lang: str = "hu"):
 
     return books
 
+def normalizeText(s: str):
+    """
+    From a complicated text, make it just English alphabet characters
+    Replace every sign with "+"
+    """
+    # Decompose unicode characters
+    s = unicodedata.normalize("NFKD", s)
+
+    # Remove diacritics (accents)
+    s = "".join(c for c in s if not unicodedata.combining(c))
+
+    # Replace non-alphanumeric runs with "+"
+    s = re.sub(r"[^A-Za-z0-9]+", "-", s)
+
+    # Trim leading/trailing "+"
+    s = s.strip("+")
+    
+    return s
+
 def searchById(ID: str):
     """
     Given one ID, get every data of that book
     """
+    book = d.searchBy("ID", ID)[0]
+
+    author = normalizeText(book.author)
+
+    title = normalizeText(book.title)
+
+    url = f"{moly}/{author}-{title}"
+
+    print(url)
 
 def createBook(ID: str, shelf: str, start: str = "---", end: str = "---"):
     """
     Create a new book instance that can be straight saved in the database
     """
+    if "ISBN" in ID:
+        b = searchBook(ID.replace("ISBN", ""), "")[0]
+    
+    book = {
+        "title": b["title"],
+        "author": b["author"],
+        "date": b["date"],
+        "ID": ID,
+        "category": b["category"],
+        "shelf": [shelf],
+        "start": start,
+        "end": end
+    }
+
+    for i in range(len(b["imgs"])):
+        print(f"{1+i}) {b["imgs"][i]}")
+    pick = int(input("Which image is the one you want? "))
+    book["img"] = b["imgs"][pick-1]
+
+    return d.Book(**book)
+
 
 if __name__ == "__main__":
-    books = searchBook("Vörös, fehér és királykék", "Casey McQuiston")
+    books = searchBook("Vörös, fehér és királykék", "Casey McQuiston")[0]
+    with open("moly.json", "wt", encoding="utf-8") as out:
+        json.dump(books, out, ensure_ascii=False, indent=4),
+    book = createBook(books["ID"], "Reading", "2026-06-05")
+    d.addBooks([book])
