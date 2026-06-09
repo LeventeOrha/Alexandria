@@ -59,6 +59,7 @@ def searchBook(title: str = "", author: str = "", lang: str = "en"):
         Each element is a book
     """
     params = readSettings()
+    API_KEY = readSettings(params["API_file"])["GB_API"]
     if title == '':
         query = f"inauthor:{author}"
     elif author == "":
@@ -70,7 +71,7 @@ def searchBook(title: str = "", author: str = "", lang: str = "en"):
         "q": query,
         "langRestrict": lang,
         "maxResults": 5,
-        "key": params["GB_API"]
+        "key": API_KEY
     }
 
     resp = requests.get(url, params=params).json()

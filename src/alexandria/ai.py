@@ -10,6 +10,8 @@ books = d.getAllBooks()
 
 ai_settings = u.readSettings(settings["AI_settings"])
 
+API_KEY = u.readSettings(settings["API_file"])["Gemini_API"]
+
 SYSTEM_PROMPT = f"""
 Role:
 {ai_settings["system_prompt"]["role"]}
@@ -25,7 +27,7 @@ tools = []
 for tool in ai_settings["tools"]:
     tools.append(types.Tool(function_declarations=[types.FunctionDeclaration(**tool)]))
 
-client = genai.Client(api_key=settings["Gemini_API"])
+client = genai.Client(api_key=API_KEY)
 
 chat = client.chats.create(
     model=settings["Gemini_model"],
