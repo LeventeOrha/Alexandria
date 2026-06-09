@@ -2,7 +2,7 @@ from google import genai
 from google.genai import types
 import alexandria.utils as u
 import alexandria.data as d
-import alexandria.search as s
+import alexandria.searchGoogle as google
 
 settings = u.readSettings()
 
@@ -42,8 +42,8 @@ TOOLS = {
     "searchBy": d.searchBy,
     "searchByCategory": d.searchByCategory,
     "searchByShelf": d.searchByShelf,
-    "createBook": s.createBook,
-    "searchByID": s.searchByID
+    "createBookGoogle": google.createBook,
+    "searchByIDGoogle": google.searchByID
 }
 
 def generateResponse(user_prompt: str):
@@ -63,9 +63,9 @@ def generateResponse(user_prompt: str):
         call = part.function_call
 
         if call.name in ["removeBook", "updateBook"]:
-            result = TOOLS[call.name](s.Book(**call.args))
+            result = TOOLS[call.name](d.Book(**call.args))
         elif call.name == "addBooks":
-            result = TOOLS[call.name]([s.Book(**b) for b in call.args["books"]])
+            result = TOOLS[call.name]([d.Book(**b) for b in call.args["books"]])
         else:
             result = TOOLS[call.name](**call.args)
 
