@@ -304,6 +304,10 @@ def importCSV(file: str):
 
 
 if __name__ == "__main__":
-    createDatabase()
-    importCSV("book.csv")
-    print(f"{len(getAllBooks())} books successfully imported!")
+    import os
+    if os.path.exists(DATAFILE):
+        exportCSV("books.csv")
+    else:
+        createDatabase()
+        importCSV("books.csv")
+        print(f"{len(getAllBooks())} books successfully imported!")
