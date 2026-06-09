@@ -17,7 +17,7 @@
     },
     "tools": [
         {
-            "name": "searchByID",
+            "name": "searchByIDGoogle",
             "description": "Retrieve full book data using its ID from the internal database.",
             "parameters": {
                 "type": "object",
@@ -31,7 +31,7 @@
                 }
         }, 
         {
-            "name": "createBook",
+            "name": "createBookGoogle",
             "description": "Create a Book instance based on its ID",
             "parameters": {
                 "type": "object",
