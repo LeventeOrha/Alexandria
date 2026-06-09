@@ -141,20 +141,16 @@ def searchBook(title: str = "", author: str = "", lang: str = "hu"):
 
     response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
 
-    response = response.text.split("<table>")[1]
-    response = response.split("</table>")[0]
-    response = response.split('</div>')[2]
-    response = response.split('</td>')[0]
+    response = cleanText(html.unescape(response.text))
 
-    response = response.replace("<p>", "")
+    soup = BeautifulSoup(response, "html.parser")
 
-    response = response.split("</p>")
+    as_ = soup.find_all(class_ = "book_selector")
 
     links = []
-    
-    for a in response:
-        if "href" in a:
-            links.append(a.split('href="')[1].split('"')[0])
+
+    for a in as_:
+        links.append(a.get("href"))
 
     books = []
     for link in links:
@@ -173,5 +169,4 @@ def createBook(ID: str, shelf: str, start: str = "---", end: str = "---"):
     """
 
 if __name__ == "__main__":
-    links = searchBook("Vörös, fehér és királykék", "Casey McQuiston")
-    sparseResults(links)
+    books = searchBook("Vörös, fehér és királykék", "Casey McQuiston")
