@@ -5,7 +5,7 @@ __pycache__/
 *.json
 *.dat
 *.csv
-datafiles/keys.json
+*.key
 
 # Needed settings
 !datafiles/**/*.json
