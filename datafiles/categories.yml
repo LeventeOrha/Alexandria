@@ -1,0 +1,107 @@
+---
+# First comes the types
+novel: 
+  en: Novel
+
+novella:
+  en: Novella
+
+short story:
+  en: Short story
+
+anthology:
+  en: Anthology
+
+graphic novel:
+  en: Graphic Novel
+
+poetry:
+  en: Poetry
+
+play:
+  en: Play
+
+nonfiction:
+  en: Nonfiction
+
+# Then the actual genres
+fantasy:
+  en: Fantasy
+
+sci-fi:
+  en: Science fiction
+
+horror:
+  en: Horror
+
+mystery:
+  en: Mystery
+
+thriller:
+  en: Thriller
+
+crime:
+  en: Crime
+
+romance:
+  en: Romance
+
+adventure:
+  en: Adventure
+
+historical fiction:
+  en: Historical fiction
+
+literary fiction:
+  en: Literary fiction
+
+contemporary fiction:
+  en: Contemporary fiction
+
+speculative fiction:
+  en: Speculative fiction
+
+dystopian:
+  en: Dystopian
+
+humor:
+  en: Humor
+
+biography:
+  en: Biography
+
+memoir:
+  en: Memoir
+
+history:
+  en: History
+
+science:
+  en: Science
+
+philosophy:
+  en: Philosophy
+
+psychology:
+  en: Psychology
+
+politics:
+  en: Politics
+
+buisness:
+  en: Buisness
+
+self-help:
+  en: Self-hep
+
+religion:
+  en: Religion
+
+travel:
+  en: Travel
+
+technology:
+  en: Technology
+
+true crime:
+  en: True Crime
