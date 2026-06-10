@@ -54,11 +54,8 @@ def createSettings() -> dict[str, str]:
     """
     params = {}
 
-    # Google Books API key
-    params["GB_API"] = ""
-
-    # Gemini API key
-    params["Gemini_API"] = ""
+    # API key storage file
+    params["API_file"] = "../../datafiles/API.key"
 
     # Gemini model
     params["Gemini_model"] = "gemini-3.5-flash"
