@@ -1,8 +1,10 @@
 from google import genai
 from google.genai import types
+from dataclasses import asdict
 import alexandria.utils as u
 import alexandria.data as d
 import alexandria.searchGoogle as google
+import alexandria.searchMoly as moly
 
 settings = u.readSettings()
 
@@ -18,9 +20,6 @@ Role:
 
 Rules:
 {"\n -".join(ai_settings["system_prompt"]["rules"])}
-
-{ai_settings["system_prompt"]["conditions"][0]}
-{books}
 """
 
 tools = []
@@ -45,7 +44,10 @@ TOOLS = {
     "searchByCategory": d.searchByCategory,
     "searchByShelf": d.searchByShelf,
     "createBookGoogle": google.createBook,
-    "searchByIDGoogle": google.searchByID
+    "searchByIDGoogle": google.searchByID,
+    "createBookMoly": moly.createBook,
+    "searchByIDMoly": moly.searchById,
+    "getAllBooks": d.getAllBooks
 }
 
 def generateResponse(user_prompt: str):
@@ -71,13 +73,13 @@ def generateResponse(user_prompt: str):
         else:
             result = TOOLS[call.name](**call.args)
 
-        if call.name in ["searchBy", "searchByCategory", "searchByShelf"]:
+        if call.name in ["searchBy", "searchByCategory", "searchByShelf", "getAllBooks"]:
             res = []
             for r in result:
-                res.append(r.asdict())
+                res.append(asdict(r))
             result = res
-        elif call.name == "createBook":
-            result = result.asdict()
+        elif "createBook" in call.name:
+            result = asdict(result)
 
         if result is None:
             result = {"success": True}
