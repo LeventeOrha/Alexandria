@@ -6,6 +6,7 @@ import requests
 import sys
 from alexandria.utils import *
 from alexandria.data import *
+import alexandria.categories as transl
 
 def sparseResults(response: dict):
     """
@@ -115,10 +116,13 @@ def createBook(ID: str, shelf: str, start: str = "---", end: str = "---"):
     book["category"] = []
     book["shelf"] = [shelf]
 
+    categories = []
     for category in info["volumeInfo"]["categories"]:
-        cat = category.split(" / ")[1]
-        if cat not in book["category"]:
-            book["category"].append(cat)
+        cat = category.split(" / ")
+        for c in cat:
+            categories.append(c.strip())
+    print(categories)
+    book["category"] = transl.translateCategories(categories, "en")
 
     book["start"] = start
     book["end"] = end
@@ -152,17 +156,17 @@ if __name__ == "__main__":
         pick = int(pick) - 1
     except ValueError:
         pass
-    cat = input("Which category? ")
+    shelf = input("Which shelf? ")
     start = input("Starting date: ")
 
     try:
         pick = int(pick) -1
-        book = createBook(resp[pick]["ID"], cat, start)
+        book = createBook(resp[pick]["ID"], shelf, start)
     except ValueError:
-        book = createBook(pick, cat, start)
+        book = createBook(pick, shelf, start)
 
     if bookExists(book.ID):
-        a = input(f"This book is already saved. Do you want to update the category and starting date? (y/n)")
+        a = input(f"This book is already saved. Do you want to update the shelf and starting date? (y/n)")
         if a == "y":
             updateBook(book)
     else:
