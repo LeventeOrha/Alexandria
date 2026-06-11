@@ -121,7 +121,6 @@ def createBook(ID: str, shelf: str, start: str = "---", end: str = "---"):
         cat = category.split(" / ")
         for c in cat:
             categories.append(c.strip())
-    print(categories)
     book["category"] = transl.translateCategories(categories, "en")
 
     book["start"] = start
