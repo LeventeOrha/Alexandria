@@ -4,15 +4,12 @@
         "rules": [
             "You may use provided tools",
             "Do NOT invent books",
-            "ONLY use books from the provided list",
+            "ONLY use books from the list available via the tool 'getAllBooks'",
             "Remember previous conversation context",
             "If nothing matched, say so"
         ],
         "tools": [
             "searchByID: Get all book data based on its ID"
-        ],
-        "conditions": [
-            "ONLY recomment books from this list:"
         ]
     },
     "tools": [
@@ -33,6 +30,46 @@
         {
             "name": "createBookGoogle",
             "description": "Create a Book instance based on its ID",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "ID":{
+                            "type": "string",
+                            "description": "The unique book ID"
+                    },
+                    "shelf": {
+                        "type": "string",
+                        "description": "Shelf name where the book should be stored (e.g. 'read', 'wishlist', 'science')"
+                    },
+                    "start" : {
+                        "type": "string",
+                        "description": "Starting date of reading"
+                    },
+                    "end": {
+                        "type": "string",
+                        "description": "Finishing date of reading"
+                    }
+                },
+                "required": ["ID", "shelf"]
+            }
+        },
+        {
+            "name": "searchByIDMoly",
+            "description": "Retrieve full book data using its ID from the internal database - for Hungarian books (ID starts with 'ISBN').",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                        "ID": {
+                            "type": "string",
+                            "description": "The unique book ID"
+                        }
+                    },
+                "required": ["ID"]
+                }
+        }, 
+        {
+            "name": "createBookMoly",
+            "description": "Create a Book instance based on its ID - for Hungarian books (ID starts with 'ISBN').",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -210,6 +247,15 @@
                 }
             },
             "required": ["books"]
+        }
+        },
+        {
+        "name": "getAllBooks",
+        "description": "Read all book data from the database.",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
         }
         }
     ]
