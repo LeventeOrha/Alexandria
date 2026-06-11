@@ -86,11 +86,12 @@ def searchByID(ID: str):
     Search a book by its unique volume ID on Google Books
     """
     params = readSettings()
+    API_KEY = readSettings(params["API_file"])["GB_API"]
     url = f"https://www.googleapis.com/books/v1/volumes/{ID}"
 
     params = {
         "projection": "full",
-        "key": params["GB_API"]
+        "key": API_KEY
     }
 
     response = requests.get(url, params=params)
