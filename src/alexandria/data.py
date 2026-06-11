@@ -255,6 +255,16 @@ def exportCSV(file: str):
             out.write(s)
     return 
 
+def exportYML(file: str):
+    """
+    Write all books from the database to a YAML file (readibilty, debugging)
+    """
+    import yaml
+    books = getAllBooks()
+    with open(file, "wt", encoding="utf-8") as out:
+        yaml.safe_dump([asdict(book) for book in books], out, sort_keys=False, allow_unicode=True)
+    return
+
 def bookExists(book_id: str) -> bool:
     """
     Check if a book (by ID) exists in the database
@@ -288,13 +298,13 @@ def importCSV(file: str):
             book["date"] = parts[3]
             book["start"] = parts[4]
             book["end"] = parts[5]
-            book["shelf"] = parts[6].split(",")
-            book["category"] = parts[7].split(",")
+            book["shelf"] = parts[6].split(", ")
+            book["category"] = parts[7].split(", ")
             book["img"] = parts[8]
             books.append(Book(**book))
 
     for book in books:
-        if bookExists(book.ID) == True:
+        if bookExists(book.ID):
             updateBook(book)
         else:
             addBooks([book])
@@ -306,7 +316,7 @@ def importCSV(file: str):
 if __name__ == "__main__":
     import os
     if os.path.exists(DATAFILE):
-        exportCSV("books.csv")
+        exportYML("books.csv")
     else:
         createDatabase()
         importCSV("books.csv")
