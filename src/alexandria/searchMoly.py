@@ -10,6 +10,7 @@ import json
 from datetime import datetime
 from bs4 import BeautifulSoup
 import alexandria.data as d
+import alexandria.categories as transl
 
 moly = "https://moly.hu"
 
@@ -198,13 +199,15 @@ def createBook(ID: str, shelf: str, start: str = "---", end: str = "---"):
     """
     if "ISBN" in ID:
         b = searchBook(ID.replace("ISBN", ""), "")[0]
+
+    categories = transl.translateCategories(b["category"], "hu")
     
     book = {
         "title": b["title"],
         "author": b["author"],
         "date": b["date"],
         "ID": ID,
-        "category": b["category"],
+        "category": categories,
         "shelf": [shelf],
         "start": start,
         "end": end
@@ -219,8 +222,4 @@ def createBook(ID: str, shelf: str, start: str = "---", end: str = "---"):
 
 
 if __name__ == "__main__":
-    books = searchBook("Vörös, fehér és királykék", "Casey McQuiston")[0]
-    with open("moly.json", "wt", encoding="utf-8") as out:
-        json.dump(books, out, ensure_ascii=False, indent=4),
-    book = createBook(books["ID"], "Reading", "2026-06-05")
-    d.addBooks([book])
+    print(createBook("ISBN9789636756529", "Owned").__repr__())
