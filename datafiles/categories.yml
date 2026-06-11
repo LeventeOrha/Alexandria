@@ -2,106 +2,145 @@
 # First comes the types
 novel: 
   en: Novel
+  hu: Regény
 
 novella:
   en: Novella
+  hu: Novella
 
 short story:
   en: Short story
+  hu: Novella
 
 anthology:
   en: Anthology
+  hu: Antológia
 
 graphic novel:
   en: Graphic Novel
+  hu: Képregény
 
 poetry:
   en: Poetry
+  hu: Költészet
 
 play:
   en: Play
+  hu: Színdarab
 
 nonfiction:
   en: Nonfiction
+  hu: Szakkönyvek
 
 # Then the actual genres
 fantasy:
   en: Fantasy
+  hu: Fantasy
 
 sci-fi:
   en: Science fiction
+  hu: Sci-fi
 
 horror:
   en: Horror
+  hu: Horror
 
 mystery:
   en: Mystery
+  hu: Rejtély
 
 thriller:
   en: Thriller
+  hu: Thriller
 
 crime:
   en: Crime
+  hu: Bűnügy
 
 romance:
   en: Romance
+  hu: Romantikus
 
 adventure:
   en: Adventure
+  hu: Kaland
 
 historical fiction:
   en: Historical fiction
+  hu: Historical fiction
 
 literary fiction:
   en: Literary fiction
+  hu: Szépirodalom
 
 contemporary fiction:
   en: Contemporary fiction
+  hu: Kortárs szépirodalom
 
 speculative fiction:
   en: Speculative fiction
+  hu: Fantasztikus irodalom
 
 dystopian:
   en: Dystopian
+  hu: Disztópikus
 
 humor:
   en: Humor
+  hu: Humor
 
 biography:
   en: Biography
+  hu: Életrajz
 
 memoir:
   en: Memoir
+  hu: Memoir
 
 history:
   en: History
+  hu: Történelem
 
 science:
   en: Science
+  hu: Tudományos
 
 philosophy:
   en: Philosophy
+  hu: Filozófia
 
 psychology:
   en: Psychology
+  hu: Pszichológia
 
 politics:
   en: Politics
+  hu: politika
 
 buisness:
   en: Buisness
+  hu: Üzleti
 
 self-help:
-  en: Self-hep
+  en: Self-help
+  hu: Önsegítő
 
 religion:
   en: Religion
+  hu: Vallás
 
 travel:
   en: Travel
+  hu: Utazás
 
 technology:
   en: Technology
+  hu: Technológia
 
 true crime:
   en: True Crime
+  hu: True Crime
+
+lgbtq+:
+  en: LGBTQ+
+  hu: LMBTQ
