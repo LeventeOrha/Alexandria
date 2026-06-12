@@ -5,14 +5,10 @@ Search a book on the Moly.hu website (Hungarian books)
 import requests
 import html
 import re
-import unicodedata
-import json
 from datetime import datetime
 from bs4 import BeautifulSoup
-import alexandria.data as d
+from alexandria.data import Book, Database
 import alexandria.categories as transl
-
-moly = "https://moly.hu"
 
 hungarian_months = {
     "január": 1,
@@ -49,177 +45,166 @@ def cleanText(text):
     text = ' '.join(text.split())
     return text
 
-def sparseResults(response: str):
-    """
-    Get the data of one book based on its RELATIVE link to moly.hu
+class Moly:
+    base_url = "https://moly.hu"
 
-    Returns:
-    book: `dict`
-        Dictionary containing all important info, with keys: author, title, year, ISBN, all categories, abstract, several image links
-    """
-    url = moly + response
-    response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+    def __init__(self, db: Database, base_url: str = "https://moly.hu"):
+        self.db = db
+        self.moly = base_url
 
-    # Escaping specific HTML characters, codes and invisible unicode characters
-    response = cleanText(html.unescape(response.text))
+    def sparseResults(self, response: str):
+        """
+        Get the data of one book based on its RELATIVE link to moly.hu
 
-    soup = BeautifulSoup(response, "html.parser")
+        Returns:
+        book: `dict`
+            Dictionary containing all important info, with keys: author, title, year, ISBN, all categories, abstract, several image links
+        """
+        url = self.moly + response
+        response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
 
-    book = {}
+        # Escaping specific HTML characters, codes and invisible unicode characters
+        response = cleanText(html.unescape(response.text))
 
-    # Get the author
-    book["author"] = soup.find(class_ = "authors").contents[0].text
+        soup = BeautifulSoup(response, "html.parser")
 
-    # Get the title
-    book["title"] = soup.find(class_ = "head_title").contents[1].contents[0].text.strip()
+        book = {}
 
-    # Get publish dates and ISBN
-    editions = soup.find_all(class_ = "edition")
-    dates = []
-    ISBNS = []
-    for edit in editions:
-        # Get the date
-        date = edit.find("abbr", class_="tooltip")
-        if date is None:
-            continue
-        date = date.get("title").split(": ")[1]
-        dates.append(date)
+        # Get the author
+        book["author"] = soup.find(class_ = "authors").contents[0].text
 
-        # Get the ISBN
-        divs = edit.find_all("div")
-        for div in divs:
-            if "ISBN: " in div.text:
-                ISBNS.append(f"ISBN{div.text.split("ISBN: ")[1].split(" · ")[0]}")
+        # Get the title
+        book["title"] = soup.find(class_ = "head_title").contents[1].contents[0].text.strip()
+
+        # Get publish dates and ISBN
+        editions = soup.find_all(class_ = "edition")
+        dates = []
+        ISBNS = []
+        for edit in editions:
+            # Get the date
+            date = edit.find("abbr", class_="tooltip")
+            if date is None:
+                continue
+            date = date.get("title").split(": ")[1]
+            dates.append(date)
+
+            # Get the ISBN
+            divs = edit.find_all("div")
+            for div in divs:
+                if "ISBN: " in div.text:
+                    ISBNS.append(f"ISBN{div.text.split("ISBN: ")[1].split(" · ")[0]}")
+        
+        # Find the newest date
+        for i in range(len(dates)):
+            dates[i] = parse_hungarian_date(dates[i])
+        newest = max(dates)
+        book["date"] = newest.strftime("%Y-%m-%d")
+
+        # Get the corresponding ISBN
+        book["ID"] = ISBNS[dates.index(newest)]
+
+        # Get ALL categories (sparse later I guess)
+        book["category"] = []
+
+        as_ = soup.find(id="book_tags").find("p").contents
+
+        for a in as_:
+            txt = a.text
+            if txt in ["", " "]:
+                continue
+            book["category"].append(a.text)
+
+        # Get all image links
+        book["imgs"] = []
+
+        imgs = soup.find(id="buyable").find_all(class_ = "zoom")
+        for img in imgs:
+            lnk = self.moly + img["href"]
+            if lnk not in book["imgs"]:
+                book["imgs"].append(lnk)
+
+        # Get abstract
+        book["abs"] = ""
+        abst = soup.find(class_ = "text shrinkable")
+        for p in abst.contents:
+            if len(p.text) > 1: # Ignoring empty paragraphs
+                book["abs"] += f"{p.text}\n"
+        book["abs"] = book["abs"].strip()
+
+        return book
     
-    # Find the newest date
-    for i in range(len(dates)):
-        dates[i] = parse_hungarian_date(dates[i])
-    newest = max(dates)
-    book["date"] = newest.strftime("%Y-%m-%d")
+    def searchBook(self, title: str, author: str, lang: str = "hu"):
+        """
+        Search query a title and author on Moly (for Hungarian books - language ignored)
 
-    # Get the corresponding ISBN
-    book["ID"] = ISBNS[dates.index(newest)]
+        Returns
+        -------
+        links: `list[str]`
+            Each element is a relative link to the actual book's page
+        """
+        url = self.moly + "/kereses?utf8=✓&query=" + title.replace(" ", "+").lower() + "+" + author.replace(" ", "+").lower()
 
-    # Get ALL categories (sparse later I guess)
-    book["category"] = []
+        response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
 
-    as_ = soup.find(id="book_tags").find("p").contents
+        response = cleanText(html.unescape(response.text))
 
-    for a in as_:
-        txt = a.text
-        if txt in ["", " "]:
-            continue
-        book["category"].append(a.text)
+        soup = BeautifulSoup(response, "html.parser")
 
-    # Get all image links
-    book["imgs"] = []
+        as_ = soup.find_all(class_ = "book_selector")
 
-    imgs = soup.find(id="buyable").find_all(class_ = "zoom")
-    for img in imgs:
-        lnk = moly + img["href"]
-        if lnk not in book["imgs"]:
-            book["imgs"].append(lnk)
+        links = []
 
-    # Get abstract
-    book["abs"] = ""
-    abst = soup.find(class_ = "text shrinkable")
-    for p in abst.contents:
-        if len(p.text) > 1: # Ignoring empty paragraphs
-            book["abs"] += f"{p.text}\n"
-    book["abs"] = book["abs"].strip()
+        for a in as_:
+            links.append(a.get("href"))
 
-    return book
+        books = []
+        for link in links:
+            books.append(self.sparseResults(link))
 
-def searchBook(title: str = "", author: str = "", lang: str = "hu"):
-    """
-    Search query a title and author on Moly (for Hungarian books - language ignored)
-
-    Returns
-    -------
-    links: `list[str]`
-        Each element is a relative link to the actual book's page
-    """
-    url = moly + "/kereses?utf8=✓&query=" + title.replace(" ", "+").lower() + "+" + author.replace(" ", "+").lower()
-
-    response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
-
-    response = cleanText(html.unescape(response.text))
-
-    soup = BeautifulSoup(response, "html.parser")
-
-    as_ = soup.find_all(class_ = "book_selector")
-
-    links = []
-
-    for a in as_:
-        links.append(a.get("href"))
-
-    books = []
-    for link in links:
-        books.append(sparseResults(link))
-
-    return books
-
-def normalizeText(s: str):
-    """
-    From a complicated text, make it just English alphabet characters
-    Replace every sign with "+"
-    """
-    # Decompose unicode characters
-    s = unicodedata.normalize("NFKD", s)
-
-    # Remove diacritics (accents)
-    s = "".join(c for c in s if not unicodedata.combining(c))
-
-    # Replace non-alphanumeric runs with "+"
-    s = re.sub(r"[^A-Za-z0-9]+", "-", s)
-
-    # Trim leading/trailing "+"
-    s = s.strip("+")
+        return books
     
-    return s
+    def searchByID(self, ID: str):
+        """
+        Given one ID, get every data of that book
+        """
+        book = self.db.searchBy("ID", ID)[0]
 
-def searchById(ID: str):
-    """
-    Given one ID, get every data of that book
-    """
-    book = d.searchBy("ID", ID)[0]
+        author = transl.normalizeText(book.author)
 
-    author = normalizeText(book.author)
+        title = transl.normalizeText(book.title)
 
-    title = normalizeText(book.title)
+        url = f"/konyvek/{author}-{title}".lower()
 
-    url = f"{moly}/{author}-{title}"
+        return self.sparseResults(url)
 
-    print(url)
+    def createBook(self, ID: str, shelf: str, start: str = "---", end: str = "---"):
+        """
+        Create a new book instance that can be straight saved in the database
+        """
+        if "ISBN" in ID:
+            b = self.searchBook(ID.replace("ISBN", ""), "")[0]
 
-def createBook(ID: str, shelf: str, start: str = "---", end: str = "---"):
-    """
-    Create a new book instance that can be straight saved in the database
-    """
-    if "ISBN" in ID:
-        b = searchBook(ID.replace("ISBN", ""), "")[0]
+        categories = transl.translateCategories(b["category"], "hu")
+        
+        book = {
+            "title": b["title"],
+            "author": b["author"],
+            "date": b["date"],
+            "ID": ID,
+            "category": categories,
+            "shelf": [shelf],
+            "start": start,
+            "end": end
+        }
 
-    categories = transl.translateCategories(b["category"], "hu")
+        for i in range(len(b["imgs"])):
+            print(f"{1+i}) {b["imgs"][i]}")
+        pick = int(input("Which image is the one you want? "))
+        book["img"] = b["imgs"][pick-1]
+
+        return Book(**book)
     
-    book = {
-        "title": b["title"],
-        "author": b["author"],
-        "date": b["date"],
-        "ID": ID,
-        "category": categories,
-        "shelf": [shelf],
-        "start": start,
-        "end": end
-    }
-
-    for i in range(len(b["imgs"])):
-        print(f"{1+i}) {b["imgs"][i]}")
-    pick = int(input("Which image is the one you want? "))
-    book["img"] = b["imgs"][pick-1]
-
-    return d.Book(**book)
-
-
 if __name__ == "__main__":
-    print(createBook("ISBN9789636756529", "Owned").__repr__())
+    db = Database("../../datafiles/books.db")
+    moly = Moly(db)
+    print(moly.searchByID("ISBN9789633999943").__repr__())
