@@ -37,6 +37,10 @@ fantasy:
   en: Fantasy
   hu: Fantasy
 
+fiction:
+  en: Fiction
+  hu: Fikció
+
 sci-fi:
   en: Science fiction
   hu: Sci-fi
@@ -55,7 +59,7 @@ thriller:
 
 crime:
   en: Crime
-  hu: Bűnügy
+  hu: Krimi
 
 romance:
   en: Romance
