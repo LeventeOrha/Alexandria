@@ -5,6 +5,8 @@ Reading categories in from the categories.yml file
 
 import alexandria.utils as u
 import yaml
+import re
+import unicodedata
 
 def readCategories():
     """
@@ -41,3 +43,22 @@ def translateCategories(cats: list, lang: str = "en"):
                 res.append(key)
     
     return res
+
+def normalizeText(s: str):
+    """
+    From a complicated text, make it just English alphabet characters
+    Replace every sign with "+"
+    """
+    # Decompose unicode characters
+    s = unicodedata.normalize("NFKD", s)
+
+    # Remove diacritics (accents)
+    s = "".join(c for c in s if not unicodedata.combining(c))
+
+    # Replace non-alphanumeric runs with "+"
+    s = re.sub(r"[^A-Za-z0-9]+", "-", s)
+
+    # Trim leading/trailing "+"
+    s = s.strip("+")
+    
+    return s
