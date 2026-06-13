@@ -2,16 +2,14 @@ from google import genai
 from google.genai import types
 from dataclasses import asdict
 import yaml
-import alexandria.utils as u
 from alexandria.data import Book, Database
 from alexandria.searchGoogle import Google
 from alexandria.searchMoly import Moly
 
 class AI:
-    def __init__(self, API_file: str, model: str, settings_file: str, db: Database):
-        API_keys = u.readSettings(API_file)
+    def __init__(self, API_keys: dict, model: str, settings: dict, db: Database):
         self.API_KEY = API_keys["Gemini_API"]
-        self.settings = u.readSettings(settings_file)
+        self.settings = settings
         self.model = model
         self.moly = Moly(db)
         self.google = Google(API_keys["GB_API"])
@@ -106,9 +104,12 @@ class AI:
 
 if __name__ == "__main__":
     import traceback
+    import alexandria.utils as u
     params = u.readSettings()
+    API_keys = u.readSettings(params["API_file"])
+    ai_settings = u.readSettings(params["AI_settings"])
     db = Database(params["datafile"])
-    gemini = AI(params["API_file"], params["Gemini_model"], params["AI_settings"], db)
+    gemini = AI(API_keys, params["Gemini_model"], ai_settings, db)
 
     print("Welcome! Type /help to display guide.")
 
