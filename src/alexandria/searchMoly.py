@@ -74,7 +74,7 @@ class Moly:
         book["author"] = soup.find(class_ = "authors").contents[0].text
 
         # Get the title
-        book["title"] = soup.find(class_ = "head_title").contents[1].contents[0].text.strip()
+        book["title"] = soup.find(class_ = "head_title").contents[1].contents[0].text.strip().split(" (")[0]
 
         # Get publish dates and ISBN
         editions = soup.find_all(class_ = "edition")
@@ -133,14 +133,14 @@ class Moly:
 
         return book
     
-    def searchBook(self, title: str, author: str, lang: str = "hu"):
+    def searchBook(self, title: str, author: str, lang: str = "hu") -> list[Book]:
         """
         Search query a title and author on Moly (for Hungarian books - language ignored)
 
         Returns
         -------
-        links: `list[str]`
-            Each element is a relative link to the actual book's page
+        links: `list[Book]`
+            Each element is complete Book object
         """
         url = self.moly + "/kereses?utf8=✓&query=" + title.replace(" ", "+").lower() + "+" + author.replace(" ", "+").lower()
 
@@ -180,9 +180,13 @@ class Moly:
     def createBook(self, ID: str, shelf: str, start: str = "---", end: str = "---"):
         """
         Create a new book instance that can be straight saved in the database
+        Could pass a book dictionary as ID
         """
         if "ISBN" in ID:
             b = self.searchBook(ID.replace("ISBN", ""), "")[0]
+        else:
+            b = ID
+            ID = b["ID"]
 
         categories = transl.translateCategories(b["category"], "hu")
         
@@ -196,11 +200,6 @@ class Moly:
             "start": start,
             "end": end
         }
-
-        for i in range(len(b["imgs"])):
-            print(f"{1+i}) {b["imgs"][i]}")
-        pick = int(input("Which image is the one you want? "))
-        book["img"] = b["imgs"][pick-1]
 
         return Book(**book)
     
