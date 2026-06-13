@@ -5,7 +5,7 @@ Utility functions, used in different codes
 import json
 import os
 
-SETTINGS = "../../datafiles/settings.json"
+SETTINGS = "./datafiles/settings.json"
 
 def checkSettings() -> None:
     if os.path.isfile(SETTINGS):
@@ -55,15 +55,24 @@ def createSettings() -> dict[str, str]:
     params = {}
 
     # API key storage file
-    params["API_file"] = "../../datafiles/API.key"
+    params["API_file"] = "./datafiles/API.key"
 
     # Gemini model
     params["Gemini_model"] = "gemini-3.5-flash"
 
     # Source database
-    params["datafile"] = "../../datafiles/books.db"
+    params["datafile"] = "./datafiles/books.db"
 
     # Settings and starting prompts for AI
-    params["AI_settings"] = "../../datafiles/ai.json"
+    params["AI_settings"] = "./datafiles/ai.json"
+
+    # Categories translation
+    params["categories"] = "./datafiles/categories.yml"
+
+    # Language file for CMD model
+    params["Language_file"] = "./datafiles/cmd_langs.yml"
+
+    # Default language
+    params["Language"] = "hu"
     
     return params
