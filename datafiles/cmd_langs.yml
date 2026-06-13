@@ -1,0 +1,106 @@
+---
+en:
+  APIFileNotFound: "No API key file found. Do you want to create a new one? (y/n) "
+  GoogleBooksAPI: "Paste here Google Books API key: "
+  GeminiAPI: "Paste here Gemini API key: "
+  WelcomeText: "Welcome to Alexandria!"
+  Options: |
+    1) Search a new book
+    2) List a shelf
+    3) Search in my library
+    4) Talk with the librarian
+    5) Settings
+    6) Exit
+  OptionChoose: "What should we do today? "
+  NoSuchOption: "Sorry, no such option available. Please, try again!"
+  Exit: "Glad I could help. Have a nice day!"
+  NewSearchDefLang: "Defaulting to language '%'. Is that fine? (y/n) "
+  NewLangCode: "Write in new language code: "
+  Title: "Title: "
+  Author: "Author: "
+  PickBook: "Which book did you think about? (Ctrl + Click to view images, c to cancel) "
+  PickShelf: "Which shelf? "
+  PickDate: "Do you want to set starting and ending dates? (y/n) "
+  EnterStartingDate: "Enter starting date ('---' to leave empty) "
+  EnterEndingDate: "Enter ending date ('---' to leave empty) "
+  SuccessfulSave: "Book was placed on shelf %."
+  ListBookDetails: "Look at details of "
+  Abstract: 'Abstract'
+  Categories: "Categories"
+  Shelves: "Shelves"
+  StartingDate: "Started on"
+  EndDate: "Finished on"
+  NoSuchBookShelf: "No books found at %"
+  ReturnPrompt: "Press enter to return to the Main menu. "
+  SearchByKey: "What do you want to search by? (category, shelf, title, author) "
+  SearchByValue: "What value do you want to search for? "
+  NoSuchBook: "No such book found."
+  AiWelcome: "Welcome! How can I help you today?"
+  AiGoodBye: "Thank you for the chat! Have a nice day!"
+  AiHelp: |
+    Help requested. Here are the commands you may use:
+    - /help - Display current guide
+    - /exit - End chat and close AI assistant
+    - /save <filename> - Save conversation to <filename>
+  AiError: "Sorry, I don't feel like it today. Come back tomorrow!"
+  AiSaveChat: "Would you still want to save the chat? (y/n)"
+  SettingsOptions: |
+    The following settings could be changed:
+    1) Language (%)
+    2) Gemini model (%)
+  SettingsOptionsChoose: "Which one do you want to change? "
+  ChooseLanguage: "Write the code of the language: "
+  AiModelChange: "New model: "
+
+hu:
+  APIFileNotFound: "Nem található API kulcs fájl. Szeretne újat készíteni? (i/n) "
+  GoogleBooksAPI: "Illessze be a Google Books API kulcsot: "
+  GeminiAPI: "Illessze be a Gemini API kulcsot: "
+  WelcomeText: "Üdv Alexandriában!"
+  Options: |
+    1) Új könyv keresése
+    2) Egy polc megtekintése
+    3) Keresés a könyvtárban
+    4) Beszélgetés a könyvtárossal
+    5) Beállítások
+    6) Kilépés
+  OptionChoose: "Mit csináljunk ma? "
+  NoSuchOption: "Sajnálom, ilyen opció nem elérhető. Kérlem, próbálja újra!"
+  Exit: "Örülök hogy segíthettem. Szép napot!"
+  NewSearchDefLang: "Keresés '%' nyelven. Rendben? (i/n) "
+  NewLangCode: "Adja meg az új nyelv kódját: "
+  Title: "Könyv címe: "
+  Author: "Író: "
+  PickBook: "Melyik könyvre gondolt? (Ctrl + kattintás a kép megtekintéséhez, 'c' - törlés, pl: 2b) "
+  PickShelf: "Melyik polc legyen? "
+  PickDate: "Szeretne kezdeti és vég dátumokat megadni? (i/n) "
+  EnterStartingDate: "Üsse be a kezdés dátumát ('---' hogy üresen maradjon) "
+  EnterEndingDate: "Üsse be a befejezés dátumát ('---' hogy üresen maradjon) "
+  SuccessfulSave: "A könyvet elhelyeztem a % polcon."
+  ListBookDetails: "Melyik részleteit szeretné megtekinteni? "
+  Abstract: "Kivonat"
+  Categories: "Kategóriák"
+  Shelves: "Polcokon"
+  StartingDate: "Elkezdve"
+  EndDate: "Befejezve"
+  NoSuchBookShelf: "Nem található könyv %-on"
+  ReturnPrompt: "Nyomja meg az Entert a főmenübe való visszatéréshez. "
+  SearchByKey: "Mi alapján szeretne keresni? (kategória, polc, cím, író) "
+  SearchByValue: "Mit szeretne keresni? "
+  NoSuchBook: "Nem található ilyen könyv."
+  AiWelcome: "Üdvözlet! Miben lehetek ma a segítségedre?"
+  AiGoodBye: "Örülök hogy segíthettem. További szép napot!"
+  AiHelp: |
+    Segítséget kértél. Az alábbi parancsokat tudod használni:
+    - /help - Jelen leírás megjelenítése
+    - /exit - Beszélgetés lezárása
+    - /save <fájl neve> - beszélgetés elmentése a <fájl neve> helyre
+  AiError: "Sajnálom, valami elromlott. Próbálkozz máskor!"
+  AiSaveChat: "El szeretnéd menteni a beszélgetést? (i/n)"
+  SettingsOptions: |
+    Az alábbi beállításokat lehet megváltoztatni:
+    1) Nyelv (%)
+    2) Gemini model (%)
+  SettingsOptionsChoose: "Melyiket szeretné megváltoztatni? "
+  ChooseLanguage: "Adja meg a kívánt nyelv kódját: "
+  AiModelChange: "Adja meg az új modelt: "
