@@ -37,12 +37,16 @@ class Book:
 class Database:
 
     def __init__(self, datafile: str):
-        if os.path.exists(datafile) == False:
-            raise FileNotFoundError(f"File {datafile} does not exist. Please, check it!")
+        self.is_new = not os.path.exists(datafile)
+
         self.filename = datafile
         self.conn = sqlite3.connect(datafile)
         self.conn.row_factory = sqlite3.Row
         self.cur = self.conn.cursor()
+
+        # If the database didn't exist yet, create a new
+        if self.is_new:
+            self.createDatabase()
 
     def createDatabase(self):
         """
@@ -153,8 +157,15 @@ class Database:
         """
         allowed_columns = [
             "ID", "title", "author", "date",
-            "img", "start", "end"
+            "img", "start", "end", "category", "shelf"
         ]
+
+        if key == "category":
+            books = self.searchByCategory(value)
+            return books
+        elif key == "shelf":
+            books = self.searchByShelf(value)
+            return books
 
         if key not in allowed_columns:
             raise ValueError(f"Invalid column name - {key}")
