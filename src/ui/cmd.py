@@ -1,0 +1,289 @@
+import yaml
+import os
+import json
+import traceback
+from google import genai
+from dataclasses import asdict
+import alexandria.utils as u
+from alexandria.ai import AI
+from alexandria.data import Database, Book
+from alexandria.searchGoogle import Google
+from alexandria.searchMoly import Moly
+
+class CMD:
+    def __init__(self, params: dict):
+        """
+        Create a new Command Line operating book diary
+        Also setting up things if newly installed (first run, database does not exist)
+        """
+        self.db = Database(params["datafile"])
+        self.moly = Moly(self.db)
+
+        # If everything is new, force to set a language
+        self.text = self.readYML(params["Language_file"])
+        while self.db.is_new:
+            if params["Language"] in list(self.text):
+                break
+            params["Language"] = input("Select language: 'en', 'hu': ")
+
+        self.lang = params["Language"]
+        self.text = self.text[params["Language"]]
+
+        # If there is no API key file, create it and write it out
+        if not os.path.exists(params["API_file"]):
+            if input(self.text["APIFileNotFound"]).lower().strip() in ["y", "i"]:
+                with open(params["API_file"], "wt", encoding="utf-8") as out:
+                    API_keys = {}
+                    API_keys["GB_API"] = input(self.text["GoogleBooksAPI"]).strip()
+                    API_keys["Gemini_API"] = input(self.text["GeminiAPI"]).strip()
+                    json.dump(API_keys, out, ensure_ascii=False, indent=4)
+            else:
+                exit()
+
+        API_keys = u.readSettings(params["API_file"])
+        ai_settings = u.readSettings(params["AI_settings"])
+
+        self.google = Google(API_keys["GB_API"])
+        self.ai = AI(API_keys, params["Gemini_model"], ai_settings, self.db)
+
+        if self.db.is_new:
+            u.writeSettings(params)
+
+    def readYML(self, file: str) -> dict:
+        """
+        Reading a .yml/.yaml file
+        """
+        with open(file, 'rt', encoding="utf-8") as inp:
+            text = yaml.safe_load(inp)
+        return text
+    
+    def searchNew(self):
+        """
+        Do a new search of book, based on its title and author
+        Option to change language, as hu defaults to using to moly.hu
+        Other languagues are searched on Google Books
+        """
+        if input(self.text["NewSearchDefLang"].replace("%", self.lang)) == "n":
+            new_lang = input(self.text["NewLangCode"])
+        else:
+            new_lang = self.lang
+
+        title = input(self.text["Title"])
+        author = input(self.text["Author"])
+
+        if new_lang == "hu":
+            books = self.moly.searchBook(title, author)
+            for i in range(len(books)):
+                print(f"{i+1}) {books[i]["title"]} - {books[i]["author"]} ({books[i]["date"]})")
+                for j in range(len(books[i]["imgs"])):
+                    letter = chr(ord('a') + j)
+                    print(f"\t{letter}) {books[i]["imgs"][j]}")
+            
+            pick = input(self.text["PickBook"])
+
+            if pick == "c":
+                return
+            
+            book = books[int(pick[0]) - 1]
+            book["img"] = book["imgs"][ord(pick[1]) - ord('a')]
+
+            shelf = input(self.text["PickShelf"])
+            if input(self.text["PickDate"]) == "i":
+                start = input(self.text["EnterStartingDate"])
+                end = input(self.text["EnterEndingDate"])
+            else:
+                start = "---"
+                end = "---"
+
+            book = self.moly.createBook(book, shelf, start, end)
+
+        else:
+            books = self.google.searchBook(title, author, new_lang)
+
+            for i in range(len(books)):
+                print(f"{i+1}) {books[i]["title"]} - {books[i]["author"]} ({books[i]["date"]}) - {books[i]["img"]}")
+            
+            pick = input(self.text["PickBook"])
+
+            if pick == "c":
+                return
+            
+            book = books[int(pick) - 1]
+
+            shelf = input(self.text["PickShelf"])
+            if input(self.text["PickDate"]) == "i":
+                start = input(self.text["EnterStartingDate"])
+                end = input(self.text["EnterEndingDate"])
+            else:
+                start = "---"
+                end = "---"
+
+            book = self.google.createBook(book, shelf, start, end)
+
+        self.db.addBooks([book])
+        print(self.text["SuccessfulSave"].replace("%", shelf))
+        return
+    
+    def listBooks(self, books: list[Book]):
+        """
+        List out all books from `books`, their title and author
+        Waiting for user to pick one book from them
+        Then listing out all details of that book
+        Prompting if they want to change anything in it
+        """
+        for i, book in enumerate(books):
+            print(f"{i+1}) {book.title} - {book.author}")
+        pick = input(self.text["ListBookDetails"])
+
+        if pick == "c":
+            return
+
+        book = books[int(pick) - 1]
+        book = asdict(book)
+
+        if "ISBN" in book["ID"]:
+            all_data = self.moly.searchByID(book["ID"])
+            book["abstract"] = all_data["abs"]
+        
+        else:
+            all_data = self.google.searchByID(book["ID"])
+            book["abstract"] = all_data["volumeInfo"]["description"]
+
+        print(f"{book['title']} - {book['author']}")
+        print(book['img'])
+        print()
+        print(f"{self.text['Abstract']}:")
+        print(book["abstract"])
+        print()
+        print(f"{self.text["Categories"]}: {", ".join(book["category"])}")
+        print(f"{self.text["Shelves"]}: {", ".join(book["shelf"])}")
+        print(f"{self.text["StartingDate"]} {book["start"]}")
+        print(f"{self.text["EndDate"]} {book["end"]}")
+
+        # TODO - Add option to CHANGE a book
+
+        input(self.text["ReturnPrompt"])
+        return
+
+    def listShelf(self):
+        """
+        Search book on a specific shelf
+        """
+        shelf = input(self.text["PickShelf"])
+        books = self.db.searchByShelf(shelf)
+
+        if len(books) == 0:
+            print(self.text["NoSuchBookShelf"].replace("%", shelf))
+            return
+        
+        self.listBooks(books)
+        return
+
+    def searchInLibrary(self):
+        """
+        Search in the whole library, by any key-value pair
+        """
+        key = input(self.text["SearchByKey"])
+        value = input(self.text["SearchByValue"])
+
+        books = self.db.searchBy(key, value)
+
+        if len(books) == 0:
+            print(self.text["NoSuchBook"])
+            return
+        
+        self.listBooks(books)
+        return
+
+    def talkWithAI(self):
+        """
+        Talk with AI assistant
+        """
+        print(self.text["AiWelcome"])
+
+        while True:
+            user_prompt = input("> ")
+
+            if user_prompt.strip().lower() == "/exit":
+                print(self.text["AiGoodBye"])
+                break
+
+            if user_prompt.strip().lower() == "/help":
+                print(self.text["AiHelp"])
+                continue
+
+            if "/save" in user_prompt.strip().lower():
+                self.ai.saveChat(user_prompt.split(" ")[1])
+                continue
+
+            try:
+                response = self.ai.generateResponse(user_prompt)
+                print(response)
+            except genai.errors.ServerError:
+                print(self.text["AiError"])
+                if input(self.text["AiSaveChat"]) in ["y", "i"]:
+                    self.ai.saveChat("gemini_chat_log.yaml")
+                break
+            except Exception as e:
+                print("Something else went wrong. Check the error please!")
+                if input("Do you want to save the chat log? (y/n) ") == "y":
+                    self.ai.saveChat("gemini_chat_log.yaml")
+                print(e.__repr__())
+                traceback.print_exc()
+                break
+
+    def settings(self):
+        """
+        Display current settings and change them
+        """
+        params = u.readSettings()
+        print(self.text["SettingsOptions"].replace("%", params["Language"], 1).replace("%", params["Gemini_model"]))
+        pick = input(self.text["SettingsOptionsChoose"])
+
+        try:
+            pick = int(pick)
+        except:
+            print(self.text["NoSuchOption"])
+            return
+        if 0 < pick < 2:
+            if pick == 1:
+                self.lang = input(self.text["ChooseLanguage"])
+                params["Language"] = self.lang
+            else:
+                ai_model = input(self.text["AiModelChange"])
+                params["Gemini_model"] = ai_model
+            u.writeSettings(params)
+            return
+        print(self.text["NoSuchOption"])
+        return
+ 
+    def main(self):
+        """
+        Main loop, handles main options and exit
+        """
+        print(self.text["WelcomeText"])
+        while True:
+            print(self.text["Options"])
+            try:
+                answer = int(input(self.text["OptionChoose"]))
+            except ValueError:
+                print(self.text["NoSuchOption"])
+                continue
+
+            if answer == 1:
+                self.searchNew()
+            elif answer == 2:
+                self.listShelf()
+            elif answer == 3:
+                self.searchInLibrary()
+            elif answer == 4:
+                self.talkWithAI()
+            elif answer == 5:
+                self.settings()
+            elif answer == 6:
+                print(self.text["Exit"])
+                break
+            else:
+                print(self.text["NoSuchOption"])
+
+        self.db.close()
