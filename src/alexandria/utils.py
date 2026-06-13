@@ -45,7 +45,7 @@ def writeSettings(params: dict) -> None:
     Write `params` dictionary out into the settings file
     """
     with open(SETTINGS, 'wt', encoding="utf-8") as out:
-        json.dump(params, out, ensure_ascii=False)
+        json.dump(params, out, ensure_ascii=False, indent=4)
     return
 
 def createSettings() -> dict[str, str]:
