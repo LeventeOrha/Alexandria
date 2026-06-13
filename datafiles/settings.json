@@ -1,7 +1,9 @@
 {
-    "API_file": "../../datafiles/API.key",
+    "API_file": "./datafiles/API.key",
     "Gemini_model": "gemini-3.5-flash",
-    "datafile": "../../datafiles/books.db",
-    "AI_settings": "../../datafiles/ai.json",
-    "categories": "../../datafiles/categories.yml"
+    "datafile": "./datafiles/books.db",
+    "AI_settings": "./datafiles/ai.json",
+    "categories": "./datafiles/categories.yml",
+    "Language_file": "./datafiles/cmd_langs.yml",
+    "Language": "en"
 }
