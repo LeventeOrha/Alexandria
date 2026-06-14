@@ -3,8 +3,9 @@ import os
 import json
 import traceback
 from google import genai
-from dataclasses import asdict
+from dataclasses import asdict, fields
 import alexandria.utils as u
+import alexandria.categories as transl
 from alexandria.ai import AI
 from alexandria.data import Database, Book
 from alexandria.searchGoogle import Google
@@ -85,7 +86,7 @@ class CMD:
                 return
             
             book = books[int(pick[0]) - 1]
-            book["img"] = book["imgs"][ord(pick[1]) - ord('a')]
+            img_idx = ord(pick[1]) - ord('a')
 
             shelf = input(self.text["PickShelf"])
             if input(self.text["PickDate"]) == "i":
@@ -95,7 +96,7 @@ class CMD:
                 start = "---"
                 end = "---"
 
-            book = self.moly.createBook(book, shelf, start, end)
+            book = self.moly.createBook(book["ID"], shelf, img_idx, start, end)
 
         else:
             books = self.google.searchBook(title, author, new_lang)
@@ -121,7 +122,7 @@ class CMD:
             book = self.google.createBook(book, shelf, start, end)
 
         self.db.addBooks([book])
-        print(self.text["SuccessfulSave"].replace("%", shelf))
+        print(self.text["SuccessfulSaveShelf"].replace("%", shelf))
         return
     
     def listBooks(self, books: list[Book]):
@@ -141,7 +142,7 @@ class CMD:
         book = books[int(pick) - 1]
         book = asdict(book)
 
-        if "ISBN" in book["ID"]:
+        if "moly.hu" in book["ID"]:
             all_data = self.moly.searchByID(book["ID"])
             book["abstract"] = all_data["abs"]
         
@@ -160,9 +161,22 @@ class CMD:
         print(f"{self.text["StartingDate"]} {book["start"]}")
         print(f"{self.text["EndDate"]} {book["end"]}")
 
-        # TODO - Add option to CHANGE a book
+        # Option to change the data
+        if input(self.text["ModifyBook"]) == "m":
+            key = input(self.text["PropertyToModify"])
+            key = transl.translateProperty(key)
 
-        input(self.text["ReturnPrompt"])
+            value = input(self.text["PropertyValue"])
+            book[key] = value
+
+            # Unpacking the dictionary into a Book class
+            allowed = {f.name for f in fields(Book)}
+            book = Book(**{k: v for k, v in book.items() if k in allowed})
+
+            self.db.updateBook(book)
+
+            print(self.text["SuccesfulSave"])
+
         return
 
     def listShelf(self):
