@@ -8,7 +8,7 @@ import yaml
 import re
 import unicodedata
 
-def readCategories():
+def readCategories() -> dict[str, dict]:
     """
     Read categories and their translations
     """
@@ -19,7 +19,7 @@ def readCategories():
 
     return categories
 
-def translateCategories(cats: list, lang: str = "en"):
+def translateCategories(cats: list, lang: str = "en") -> list[str]:
     """
     Translate a list of categories into what is in the database
 
@@ -28,7 +28,7 @@ def translateCategories(cats: list, lang: str = "en"):
     res: `list[str]`
         Translated AND filtered categories
     """
-    categories = readCategories()
+    categories = readCategories()["categories"]
 
     if lang not in next(iter(categories.values())):
         raise NotImplementedError(f"Language '{lang}' is not available yet. Sorry!")
@@ -62,3 +62,18 @@ def normalizeText(s: str):
     s = s.strip("+")
     
     return s
+
+def translateProperty(key: str, lang: str):
+    """
+    Translate a property from any language to the in-code language
+    """
+    properties = readCategories()["properties"]
+
+    if lang not in next(iter(properties.values())):
+        raise NotImplementedError(f"Language '{lang}' is not available yet. Sorry!")
+    
+    for prop in properties:
+        for i in range(len(properties[prop][lang])):
+            properties[prop][lang][i] = properties[prop][lang][i].lower()
+        if key in properties[prop][lang]:
+            return prop
