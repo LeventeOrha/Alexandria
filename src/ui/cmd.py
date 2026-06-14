@@ -82,7 +82,7 @@ class CMD:
             
             pick = input(self.text["PickBook"])
 
-            if pick == "c":
+            if pick == "c" or len(pick) == 0:
                 return
             
             book = books[int(pick[0]) - 1]
@@ -106,7 +106,7 @@ class CMD:
             
             pick = input(self.text["PickBook"])
 
-            if pick == "c":
+            if pick == "c" or len(pick) == 0:
                 return
             
             book = books[int(pick) - 1]
@@ -136,7 +136,7 @@ class CMD:
             print(f"{i+1}) {book.title} - {book.author}")
         pick = input(self.text["ListBookDetails"])
 
-        if pick == "c":
+        if pick == "c" or len(pick) == 0:
             return
 
         book = books[int(pick) - 1]
