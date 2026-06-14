@@ -23,7 +23,7 @@ en:
   PickDate: "Do you want to set starting and ending dates? (y/n) "
   EnterStartingDate: "Enter starting date ('---' to leave empty) "
   EnterEndingDate: "Enter ending date ('---' to leave empty) "
-  SuccessfulSave: "Book was placed on shelf %."
+  SuccessfulSaveShelf: "Book was placed on shelf %."
   ListBookDetails: "Look at details of "
   Abstract: 'Abstract'
   Categories: "Categories"
@@ -51,6 +51,10 @@ en:
   SettingsOptionsChoose: "Which one do you want to change? "
   ChooseLanguage: "Write the code of the language: "
   AiModelChange: "New model: "
+  ModifyBook: "Press 'm' to modify the book, or Enter to return to the Main menu. "
+  PropertyToModify: "Which property do you want to modify? "
+  PropertyValue: "New value: "
+  SuccessfulSave: "Book saved successfully!"
 
 hu:
   APIFileNotFound: "Nem található API kulcs fájl. Szeretne újat készíteni? (i/n) "
@@ -76,7 +80,7 @@ hu:
   PickDate: "Szeretne kezdeti és vég dátumokat megadni? (i/n) "
   EnterStartingDate: "Üsse be a kezdés dátumát ('---' hogy üresen maradjon) "
   EnterEndingDate: "Üsse be a befejezés dátumát ('---' hogy üresen maradjon) "
-  SuccessfulSave: "A könyvet elhelyeztem a % polcon."
+  SuccessfulSaveShelf: "A könyvet elhelyeztem a % polcon."
   ListBookDetails: "Melyik részleteit szeretné megtekinteni? "
   Abstract: "Kivonat"
   Categories: "Kategóriák"
@@ -104,3 +108,7 @@ hu:
   SettingsOptionsChoose: "Melyiket szeretné megváltoztatni? "
   ChooseLanguage: "Adja meg a kívánt nyelv kódját: "
   AiModelChange: "Adja meg az új modelt: "
+  ModifyBook: "Üssön le 'm'-et a könyv módosításához, vagy Entert a főmenübe való visszatéréshez. "
+  PropertyToModify: "Melyik tulajdonságot szeretné módosítani? "
+  PropertyValue: "Új érték: "
+  SuccessfulSave: "Könyv sikeresen elmentve!"
