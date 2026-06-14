@@ -164,7 +164,7 @@ class CMD:
         # Option to change the data
         if input(self.text["ModifyBook"]) == "m":
             key = input(self.text["PropertyToModify"])
-            key = transl.translateProperty(key)
+            key = transl.translateProperty(key, self.lang)
 
             value = input(self.text["PropertyValue"])
             book[key] = value
@@ -199,6 +199,8 @@ class CMD:
         """
         key = input(self.text["SearchByKey"])
         value = input(self.text["SearchByValue"])
+
+        key = transl.translateProperty(key, self.lang)
 
         books = self.db.searchBy(key, value)
 
