@@ -7,6 +7,12 @@ name = "alexandria"
 version = "0.1.0"
 description = "Personal library to track reading history"
 requires-python = ">=3.10"
+dependencies = [
+    "google-genai",
+    "PyYAML",
+    "requests",
+    "beautifulsoup4",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
