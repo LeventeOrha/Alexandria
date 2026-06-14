@@ -79,7 +79,6 @@ class Moly:
         # Get publish dates and ISBN
         editions = soup.find_all(class_ = "edition")
         dates = []
-        ISBNS = []
         for edit in editions:
             # Get the date
             date = edit.find("abbr", class_="tooltip")
@@ -87,12 +86,6 @@ class Moly:
                 continue
             date = date.get("title").split(": ")[1]
             dates.append(date)
-
-            # Get the ISBN
-            divs = edit.find_all("div")
-            for div in divs:
-                if "ISBN: " in div.text:
-                    ISBNS.append(f"ISBN{div.text.split("ISBN: ")[1].split(" · ")[0]}")
         
         # Find the newest date
         for i in range(len(dates)):
@@ -100,8 +93,8 @@ class Moly:
         newest = max(dates)
         book["date"] = newest.strftime("%Y-%m-%d")
 
-        # Get the corresponding ISBN
-        book["ID"] = ISBNS[dates.index(newest)]
+        # ID is the link
+        book["ID"] = url
 
         # Get ALL categories (sparse later I guess)
         book["category"] = []
@@ -167,26 +160,14 @@ class Moly:
         """
         Given one ID, get every data of that book
         """
-        book = self.db.searchBy("ID", ID)[0]
-
-        author = transl.normalizeText(book.author)
-
-        title = transl.normalizeText(book.title)
-
-        url = f"/konyvek/{author}-{title}".lower()
-
+        url = ID.replace(self.moly, "")
         return self.sparseResults(url)
 
-    def createBook(self, ID: str, shelf: str, start: str = "---", end: str = "---"):
+    def createBook(self, ID: str, shelf: str, img_idx: int = 0, start: str = "---", end: str = "---"):
         """
         Create a new book instance that can be straight saved in the database
-        Could pass a book dictionary as ID
         """
-        if "ISBN" in ID:
-            b = self.searchBook(ID.replace("ISBN", ""), "")[0]
-        else:
-            b = ID
-            ID = b["ID"]
+        b = self.searchByID(ID)
 
         categories = transl.translateCategories(b["category"], "hu")
         
@@ -194,6 +175,7 @@ class Moly:
             "title": b["title"],
             "author": b["author"],
             "date": b["date"],
+            "img": b["imgs"][img_idx],
             "ID": ID,
             "category": categories,
             "shelf": [shelf],
