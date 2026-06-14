@@ -1,150 +1,207 @@
 ---
-# First comes the types
-novel: 
-  en: Novel
-  hu: Regény
+properties:
+  title:
+    en: 
+      - Title
+    hu:
+      - Cím
 
-novella:
-  en: Novella
-  hu: Novella
+  author:
+    en: 
+      - Author
+    hu: 
+      - Író
 
-short story:
-  en: Short story
-  hu: Novella
+  date:
+    en: 
+      - Publish date
+    hu: 
+      - Kiadás
 
-anthology:
-  en: Anthology
-  hu: Antológia
+  img:
+    en: 
+      - Image
+    hu: 
+      - Kép
 
-graphic novel:
-  en: Graphic Novel
-  hu: Képregény
+  ID:
+    en: 
+      - ID
+    hu: 
+      - ID
 
-poetry:
-  en: Poetry
-  hu: Költészet
+  shelf:
+    en: 
+      - Shelf
+    hu: 
+      - Polc
 
-play:
-  en: Play
-  hu: Színdarab
+  category:
+    en: 
+      - Category
+    hu: 
+      - Kategória
 
-nonfiction:
-  en: Nonfiction
-  hu: Szakkönyvek
+  start: 
+    en: 
+      - Start
+    hu: 
+      - Kezdés
+      - Start
 
-# Then the actual genres
-fantasy:
-  en: Fantasy
-  hu: Fantasy
+  end: 
+    en: 
+      - End
+    hu: 
+      - Befejezés
 
-fiction:
-  en: Fiction
-  hu: Fikció
+categories:
+  # First comes the types
+  novel: 
+    en: Novel
+    hu: Regény
 
-sci-fi:
-  en: Science fiction
-  hu: Sci-fi
+  novella:
+    en: Novella
+    hu: Novella
 
-horror:
-  en: Horror
-  hu: Horror
+  short story:
+    en: Short story
+    hu: Novella
 
-mystery:
-  en: Mystery
-  hu: Rejtély
+  anthology:
+    en: Anthology
+    hu: Antológia
 
-thriller:
-  en: Thriller
-  hu: Thriller
+  graphic novel:
+    en: Graphic Novel
+    hu: Képregény
 
-crime:
-  en: Crime
-  hu: Krimi
+  poetry:
+    en: Poetry
+    hu: Költészet
 
-romance:
-  en: Romance
-  hu: Romantikus
+  play:
+    en: Play
+    hu: Színdarab
 
-adventure:
-  en: Adventure
-  hu: Kaland
+  nonfiction:
+    en: Nonfiction
+    hu: Szakkönyvek
 
-historical fiction:
-  en: Historical fiction
-  hu: Historical fiction
+  # Then the actual genres
+  fantasy:
+    en: Fantasy
+    hu: Fantasy
 
-literary fiction:
-  en: Literary fiction
-  hu: Szépirodalom
+  fiction:
+    en: Fiction
+    hu: Fikció
 
-contemporary fiction:
-  en: Contemporary fiction
-  hu: Kortárs szépirodalom
+  sci-fi:
+    en: Science fiction
+    hu: Sci-fi
 
-speculative fiction:
-  en: Speculative fiction
-  hu: Fantasztikus irodalom
+  horror:
+    en: Horror
+    hu: Horror
 
-dystopian:
-  en: Dystopian
-  hu: Disztópikus
+  mystery:
+    en: Mystery
+    hu: Rejtély
 
-humor:
-  en: Humor
-  hu: Humor
+  thriller:
+    en: Thriller
+    hu: Thriller
 
-biography:
-  en: Biography
-  hu: Életrajz
+  crime:
+    en: Crime
+    hu: Krimi
 
-memoir:
-  en: Memoir
-  hu: Memoir
+  romance:
+    en: Romance
+    hu: Romantikus
 
-history:
-  en: History
-  hu: Történelem
+  adventure:
+    en: Adventure
+    hu: Kaland
 
-science:
-  en: Science
-  hu: Tudományos
+  historical fiction:
+    en: Historical fiction
+    hu: Historical fiction
 
-philosophy:
-  en: Philosophy
-  hu: Filozófia
+  literary fiction:
+    en: Literary fiction
+    hu: Szépirodalom
 
-psychology:
-  en: Psychology
-  hu: Pszichológia
+  contemporary fiction:
+    en: Contemporary fiction
+    hu: Kortárs szépirodalom
 
-politics:
-  en: Politics
-  hu: politika
+  speculative fiction:
+    en: Speculative fiction
+    hu: Fantasztikus irodalom
 
-buisness:
-  en: Buisness
-  hu: Üzleti
+  dystopian:
+    en: Dystopian
+    hu: Disztópikus
 
-self-help:
-  en: Self-help
-  hu: Önsegítő
+  humor:
+    en: Humor
+    hu: Humor
 
-religion:
-  en: Religion
-  hu: Vallás
+  biography:
+    en: Biography
+    hu: Életrajz
 
-travel:
-  en: Travel
-  hu: Utazás
+  memoir:
+    en: Memoir
+    hu: Memoir
 
-technology:
-  en: Technology
-  hu: Technológia
+  history:
+    en: History
+    hu: Történelem
 
-true crime:
-  en: True Crime
-  hu: True Crime
+  science:
+    en: Science
+    hu: Tudományos
 
-lgbtq+:
-  en: LGBTQ+
-  hu: LMBTQ
+  philosophy:
+    en: Philosophy
+    hu: Filozófia
+
+  psychology:
+    en: Psychology
+    hu: Pszichológia
+
+  politics:
+    en: Politics
+    hu: politika
+
+  buisness:
+    en: Buisness
+    hu: Üzleti
+
+  self-help:
+    en: Self-help
+    hu: Önsegítő
+
+  religion:
+    en: Religion
+    hu: Vallás
+
+  travel:
+    en: Travel
+    hu: Utazás
+
+  technology:
+    en: Technology
+    hu: Technológia
+
+  true crime:
+    en: True Crime
+    hu: True Crime
+
+  lgbtq+:
+    en: LGBTQ+
+    hu: LMBTQ
