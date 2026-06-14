@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "alexandria"
 version = "0.1.0"
-description = "Your project description"
+description = "Personal library to track reading history"
 requires-python = ">=3.10"
 
 [tool.setuptools.packages.find]
