@@ -161,21 +161,46 @@ class CMD:
         print(f"{self.text["StartingDate"]} {book["start"]}")
         print(f"{self.text["EndDate"]} {book["end"]}")
 
+        change = input(self.text["ModifyBook"]).strip()
+
         # Option to change the data
-        if input(self.text["ModifyBook"]) == "m":
-            key = input(self.text["PropertyToModify"])
-            key = transl.translateProperty(key, self.lang)
+        if change == "m":
+            while True:
+                key = input(self.text["PropertyToModify"])
+                key = transl.translateProperty(key, self.lang)
+
+                allowed = {f.name for f in fields(Book)}
+
+                if key in allowed:
+                    break
+                print(self.text["NoSuchProperty"])
 
             value = input(self.text["PropertyValue"])
             book[key] = value
 
             # Unpacking the dictionary into a Book class
-            allowed = {f.name for f in fields(Book)}
-            book = Book(**{k: v for k, v in book.items() if k in allowed})
+            b = {
+                "title": book["title"],
+                "author": book["author"],
+                "date": book["date"],
+                "img": book["img"],
+                "ID": book["ID"],
+                "shelf": book["shelf"] if type(book["shelf"]) is list else book["shelf"].replace(" ", "").split(","),
+                "category": book["category"] if type(book["category"]) is list else book["category"].replace(" ", "").split(","),
+                "start": book["start"],
+                "end": book["end"]
+            }
+
+            book = Book(**b)
 
             self.db.updateBook(book)
 
-            print(self.text["SuccesfulSave"])
+            print(self.text["SuccessfulSave"])
+        
+        elif change == "d":
+            if input(self.text["DeleteEnsuring"]) in ["y", "i"]:
+                self.db.removeBook(book["ID"])
+                print(self.text["DeleteSuccess"])
 
         return
 
@@ -261,13 +286,32 @@ class CMD:
         except:
             print(self.text["NoSuchOption"])
             return
-        if 0 < pick < 2:
+        if 0 < pick < 6:
             if pick == 1:
                 self.lang = input(self.text["ChooseLanguage"])
                 params["Language"] = self.lang
-            else:
+            elif pick == 2:
                 ai_model = input(self.text["AiModelChange"])
                 params["Gemini_model"] = ai_model
+            elif pick == 3:
+                params["GUI_useage"] = True
+            elif pick == 4:
+                file = input(self.text["ExportFilename"]).strip()
+                if "csv" in file:
+                    self.db.exportCSV(file)
+                else:
+                    self.db.exportYML(file)
+            elif pick == 5:
+                while True:
+                    file = input(self.text["ImportFilename"]).strip()
+                    if os.path.exists(file):
+                        break
+                    print(self.text["FileNotFound"])
+                try:
+                    self.db.importCSV(file)
+                    print(self.text["SuccessfulImport"])
+                except:
+                    print(self.text["ImportError"]) 
             u.writeSettings(params)
             return
         print(self.text["NoSuchOption"])
