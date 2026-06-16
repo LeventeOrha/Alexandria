@@ -10,7 +10,7 @@ class Google:
     def __init__(self, API_key: str):
         self.API_key = API_key
 
-    def sparseResults(self, response: dict) -> list[Book]:
+    def sparseResults(self, response: dict) -> list[dict]:
         """
         Sparse the results of a Google Books search (too many info)
 
