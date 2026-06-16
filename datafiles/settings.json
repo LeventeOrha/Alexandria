@@ -5,5 +5,6 @@
     "AI_settings": "./datafiles/ai.json",
     "categories": "./datafiles/categories.yml",
     "Language_file": "./datafiles/cmd_langs.yml",
-    "Language": "en"
+    "Language": "en",
+    "GUI_useage": false
 }
