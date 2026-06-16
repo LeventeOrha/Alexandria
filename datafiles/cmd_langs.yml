@@ -48,13 +48,24 @@ en:
     The following settings could be changed:
     1) Language (%)
     2) Gemini model (%)
+    3) Switch to graphical interface
+    4) Export library
+    5) Import library
   SettingsOptionsChoose: "Which one do you want to change? "
   ChooseLanguage: "Write the code of the language: "
   AiModelChange: "New model: "
-  ModifyBook: "Press 'm' to modify the book, or Enter to return to the Main menu. "
+  ModifyBook: "Press 'm' to modify the book, 'd' to delete, or Enter to return to the Main menu. "
   PropertyToModify: "Which property do you want to modify? "
   PropertyValue: "New value: "
   SuccessfulSave: "Book saved successfully!"
+  NoSuchProperty: "No such property available. Try again!"
+  ExportFilename: "Write filename to save into (.csv/.yaml) "
+  ImportFilename: "Write filename to import from (.csv): "
+  FileNotFound: "Sorry, this file does not exists. Try again!"
+  ImportError: "The file you provided does not have the expected format. Check out the guide!"
+  SuccessfulImport: "Import successful!"
+  DeleteEnsuring: "Are you sure you want to delete this book? (y/n) "
+  DeleteSuccess: "Book successfully deleted!"
 
 hu:
   APIFileNotFound: "Nem található API kulcs fájl. Szeretne újat készíteni? (i/n) "
@@ -105,10 +116,21 @@ hu:
     Az alábbi beállításokat lehet megváltoztatni:
     1) Nyelv (%)
     2) Gemini model (%)
+    3) Váltás grafikus felület használatára
+    4) Könyvtár exportálása
+    5) Könyvek importálása
   SettingsOptionsChoose: "Melyiket szeretné megváltoztatni? "
   ChooseLanguage: "Adja meg a kívánt nyelv kódját: "
   AiModelChange: "Adja meg az új modelt: "
-  ModifyBook: "Üssön le 'm'-et a könyv módosításához, vagy Entert a főmenübe való visszatéréshez. "
+  ModifyBook: "Üssön le 'm'-et a könyv módosításához, 'd'-t a törléshez, vagy Entert a főmenübe való visszatéréshez. "
   PropertyToModify: "Melyik tulajdonságot szeretné módosítani? "
   PropertyValue: "Új érték: "
   SuccessfulSave: "Könyv sikeresen elmentve!"
+  NoSuchProperty: "Nem érhető el ilyen tulajdonság. Próbálja újra!"
+  ExportFilename: "Fájl neve (.csv/.yaml) "
+  ImportFilename: "Beolvasandó fájl neve (.csv): "
+  FileNotFound: "A fájl nem található. Próbálja újra!"
+  ImportError: "Nem sikerült a beolvasás, tekintse meg a kézikönyvet!"
+  SuccessfulImport: "Sikeresen importálva!"
+  DeleteEnsuring: "Biztosan törölni kívánja? (i/n) "
+  DeleteSuccess: "Könyv sikeresen eltávolítva!"
