@@ -44,7 +44,7 @@ class Google:
 
         return books
     
-    def searchBook(self, title: str = "", author: str = "", lang: str = "en") -> list[Book]:
+    def searchBook(self, title: str = "", author: str = "", lang: str = "en") -> list[dict]:
         """
         Search a book on Google Books
 
