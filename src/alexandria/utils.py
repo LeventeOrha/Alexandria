@@ -74,5 +74,8 @@ def createSettings() -> dict[str, str]:
 
     # Default language
     params["Language"] = "hu"
+
+    # Default GUI option
+    params["GUI_useage"] = False
     
     return params
