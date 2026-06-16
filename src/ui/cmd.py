@@ -89,7 +89,7 @@ class CMD:
             img_idx = ord(pick[1]) - ord('a')
 
             shelf = input(self.text["PickShelf"])
-            if input(self.text["PickDate"]) == "i":
+            if input(self.text["PickDate"]) in ["i", "y"]:
                 start = input(self.text["EnterStartingDate"])
                 end = input(self.text["EnterEndingDate"])
             else:
@@ -112,14 +112,14 @@ class CMD:
             book = books[int(pick) - 1]
 
             shelf = input(self.text["PickShelf"])
-            if input(self.text["PickDate"]) == "i":
+            if input(self.text["PickDate"]) in ["i", "y"]:
                 start = input(self.text["EnterStartingDate"])
                 end = input(self.text["EnterEndingDate"])
             else:
                 start = "---"
                 end = "---"
 
-            book = self.google.createBook(book, shelf, start, end)
+            book = self.google.createBook(book["ID"], shelf, start, end)
 
         self.db.addBooks([book])
         print(self.text["SuccessfulSaveShelf"].replace("%", shelf))
