@@ -215,6 +215,19 @@ class Database:
         
         return res
     
+    def getShelves(self):
+        """
+        List out all available shelves
+        """
+        books = self.getAllBooks()
+        shelves = []
+        for book in books:
+            for shelf in book.shelf:
+                if shelf not in shelves:
+                    shelves.append(shelf)
+
+        return shelves
+    
     def exportCSV(self, filename: str):
         """
         Write all books from the database to a csv file
