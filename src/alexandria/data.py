@@ -215,7 +215,7 @@ class Database:
         
         return res
     
-    def getShelves(self):
+    def getShelves(self) -> list[str]:
         """
         List out all available shelves
         """
@@ -260,10 +260,15 @@ class Database:
         exists = self.cur.fetchone() is not None
         return exists
     
-    def importCSV(self, filename: str):
+    def importCSV(self, filename: str) -> list[Book]:
         """
         From a csv file, import books into the database
         Update them if existing, adding if ID not exist
+
+        Returns
+        -------
+        books: `list[Book]`
+            All books that have been in the given file
         """
         with open(filename, "rt", encoding="utf-8") as inp:
             books = []
