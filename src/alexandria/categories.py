@@ -19,6 +19,16 @@ def readCategories() -> dict[str, dict]:
 
     return categories
 
+def listCategories(lang: str = "en") -> list[str]:
+    """
+    List out all available categories
+    """
+    categories = readCategories()["categories"]
+    cats = []
+    for cat in categories.values():
+        cats.append(cat[lang])
+    return cats
+
 def translateCategories(cats: list, lang: str = "en") -> list[str]:
     """
     Translate a list of categories into what is in the database
