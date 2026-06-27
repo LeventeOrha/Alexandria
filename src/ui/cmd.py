@@ -207,9 +207,19 @@ class CMD:
     def listShelf(self):
         """
         Search book on a specific shelf
+
+        Use "All" or "Mind" to get all books listed, 
+        or leave shelf empty to see available shelves.
         """
-        shelf = input(self.text["PickShelf"])
-        books = self.db.searchByShelf(shelf)
+        shelf = input(self.text["PickShelf"]).strip()
+        if shelf.lower() in ["all", "mind"]:
+            books = self.db.getAllBooks()
+        elif shelf == "":
+            shelves = self.db.getShelves()
+            print(", ".join(shelves))
+            return
+        else:
+            books = self.db.searchByShelf(shelf)
 
         if len(books) == 0:
             print(self.text["NoSuchBookShelf"].replace("%", shelf))
