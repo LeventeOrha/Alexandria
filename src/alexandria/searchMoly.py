@@ -86,12 +86,18 @@ class Moly:
                 continue
             date = date.get("title").split(": ")[1]
             dates.append(date)
-        
-        # Find the newest date
-        for i in range(len(dates)):
-            dates[i] = parse_hungarian_date(dates[i])
-        newest = max(dates)
-        book["date"] = newest.strftime("%Y-%m-%d")
+
+        # If the date could not be extracted like that, use a different approach
+        if len(dates) == 0:
+            for edit in editions:
+                year = str(re.search(r"\b\d{4}\b", edit.text).group())
+                book['date'] = year
+        else:
+            # Find the newest date
+            for i in range(len(dates)):
+                dates[i] = parse_hungarian_date(dates[i])
+            newest = max(dates)
+            book["date"] = newest.strftime("%Y-%m-%d")
 
         # ID is the link
         book["ID"] = url
