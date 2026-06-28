@@ -1,0 +1,76 @@
+/* Book list */
+.list {
+  width: 25vw;
+  height: 98vh;
+  margin-left: 2vw;
+  padding: 0px 15px 0px 15px;
+}
+
+.bookList {
+  height: 10vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  margin-top: 15px;
+  padding: 5px;
+}
+
+.bookList img {
+  height: 10vh;
+  border-radius: 3px;
+}
+
+.titleAuthor {
+  height: 100%;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
+.titleAuthor h1 {
+  font-size: 22px;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+}
+
+.titleAuthor h2 {
+  font-size: 16px;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+}
+
+.current {
+  background-color: rgba(255,255,255,0.4);
+  border-radius: 5px;
+  color: black;
+}
+
+.searchBar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+#searchValue {
+  border-radius: 3px;
+  border: 0px;
+  padding: 2px;
+}
+
+#startSearch {
+  border: 0px;
+  border-radius: 50%;
+  width: 25px;
+  aspect-ratio: 1/1;
+  cursor: pointer;
+  padding: 0;
+}

@@ -1,0 +1,46 @@
+/* Navigation bar */
+
+.nav-holder {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  color: white;
+  padding: 3px 4px 3px 4px;
+  margin-left: 5px;
+  height: 40vh;
+}
+
+nav button {
+  width: 60px;
+  height: 60px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  font-size: large;
+}
+
+nav button:hover {
+  cursor: pointer;
+}
+
+.indicator {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  transition: transform 0.4s ease, left 0.4s ease;
+  z-index: 1;
+  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: none;
+  pointer-events: none;
+}

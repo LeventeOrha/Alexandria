@@ -1,0 +1,44 @@
+/* Data of one book */
+.bookData {
+  width: 50vw;
+  height: 98vh;
+  margin-left: 2vw;
+  padding: 0px;
+}
+
+.bookInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: space-between;
+  padding: 10px;
+  gap: 10px;
+}
+
+.bookInfo img {
+  width: 11vw;
+  border-radius: 5px;
+}
+
+.bookHeader {
+  width: 35vw;
+  color: black;
+  padding-left: 10px;
+}
+
+.details {
+  font-size: large;
+}
+
+.tag {
+  background-color: rgba(255,255,255,0.4);
+  border-radius: 5px;
+  color: black;
+  padding: 2px;
+  margin-right: 5px;
+}
+
+.abstract {
+  margin: 10px;
+  font-size: large;
+}
