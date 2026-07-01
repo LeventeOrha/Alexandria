@@ -8,6 +8,7 @@ body {
   justify-content: start;
   align-items: center;
   color: white;
+  gap: 1.5vw;
 }
 
 /* Look for the glassy appearance */
