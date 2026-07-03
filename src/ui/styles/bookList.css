@@ -2,7 +2,7 @@
 .list {
   width: 25vw;
   height: 98vh;
-  padding: 0px 15px 0px 15px;
+  padding: 0px 5px 0px 15px;
 }
 
 .bookList {
@@ -12,6 +12,7 @@
   justify-content: start;
   align-items: center;
   margin-top: 15px;
+  margin-right: 10px;
   padding: 5px;
 }
 
@@ -72,4 +73,29 @@
   aspect-ratio: 1/1;
   cursor: pointer;
   padding: 0;
+}
+
+.searchResults {
+  max-height: 98vh;
+  overflow: auto;
+}
+
+.searchResults::-webkit-scrollbar {
+    width: 10px;
+}
+
+.searchResults::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 16px 0;          /* keeps it away from the rounded corners */
+}
+
+.searchResults::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.35);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.searchResults::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,.55);
 }
