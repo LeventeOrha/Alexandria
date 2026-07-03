@@ -74,7 +74,7 @@ class Moly:
         book["author"] = soup.find(class_ = "authors").contents[0].text
 
         # Get the title
-        book["title"] = soup.find(class_ = "head_title").contents[1].contents[0].text.strip().split(" (")[0]
+        book["title"] = soup.select_one(".head_title").find("h1").find("span").text.strip().split(" (")[0]
 
         # Get publish dates and ISBN
         editions = soup.find_all(class_ = "edition")
