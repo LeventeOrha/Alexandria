@@ -14,3 +14,55 @@ navButtons.forEach(button => {
 
 // Initial position
 moveIndicator(document.querySelector('.active'));
+
+// Part to change the list of category and shelf
+const shelfOptions = [
+    "Reading",
+    "Read",
+    "To read"
+];
+
+const categoryOptions = [
+    "Fiction",
+    "Science",
+    "History",
+    "Biography"
+];
+
+const propertySelect = document.querySelector('select[name="property"]');
+
+propertySelect.addEventListener("change", updateSearchField);
+
+// Run once on page load
+updateSearchField();
+
+function updateSearchField() {
+    const oldField = document.getElementById("searchValue");
+
+    let newField;
+
+    if (propertySelect.value === "shelf" || propertySelect.value === "category") {
+        newField = document.createElement("select");
+        newField.id = "searchValue";
+        newField.className = "glass";
+
+        const options = propertySelect.value === "shelf"
+            ? shelfOptions
+            : categoryOptions;
+
+        options.forEach(value => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = value;
+            newField.appendChild(option);
+        });
+
+    } else {
+        newField = document.createElement("input");
+        newField.type = "text";
+        newField.id = "searchValue";
+        newField.className = "glass";
+    }
+
+    oldField.replaceWith(newField);
+}
