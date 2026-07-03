@@ -2,7 +2,7 @@ body {
   position: relative;
   margin: 0px;
   padding: 0px;
-  background-image: url(../images/image.jpg);
+  background-image: url(../images/bookshelf_background.jpg);
   display: flex;
   flex-direction: row;
   justify-content: start;
@@ -41,7 +41,7 @@ body {
         linear-gradient(
             180deg,
             rgba(255,255,255,0.35),
-            rgba(255,255,255,0.05) 35%,
+            rgba(255,255,255,0.05) 25%,
             transparent
         );
 
