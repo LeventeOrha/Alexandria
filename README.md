@@ -4,29 +4,20 @@ This project was started because I could not find a program/website that could t
 
 Two search engines have been implemented so far, Google Books (wide variety of books, mostly in English) and Moly.hu, a Hungarian website (I always found every hungarian book there). But let me know if you want more languages!
 
-# Installation
+# Quick installation
 
-First, clone the current repository:
+Simply clone the current repository, enter it, and then run:
 
-`git clone https://github.com/LeventeOrha/Alexandria.git`
+```pip install .```
 
-Then, enter it
-
-`cd Alexandria`
-
-At last, install everything (might require Admin authority):
-
-`pip install .`
-
-This will install everything you need, now, start the program:
-
-`python master.py`
-
+This will install all necessary packages and the main program. Then run `master.py`, 
 and enjoy your own little library! Note that at first, you have to include two API keys for the whole thing to work:
 - [Google Books API key](https://console.cloud.google.com/apis/credentials)
 - [Gemini API key](https://aistudio.google.com/api-keys)
 
 (*I haven't figured out yet how to make it in a way that you don't need this data... Sorry*)
+
+Detailed installation guide can be found in the  [Wiki](https://github.com/LeventeOrha/Alexandria/wiki/Setup), with additional notes on useage and the Hungarian version.
 
 # Features
 
