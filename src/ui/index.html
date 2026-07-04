@@ -45,7 +45,7 @@
         </div>
     </div>
 
-    <div class="bookData glass">
+    <div class="bookData glass" id="aKOHDwAAQBAJ">
         <div class="bookInfo">
             <div class="details">
                 <div class="bookHeader glass">
@@ -53,11 +53,30 @@
                         <h1>Fortuna</h1>
                         <h2>Kristyn Merbeth</h2>
                     </div>
-                    <button id="editBookDetails">Edit</button>
+                    <button id="editBookDetails">Save</button>
                 </div>
-                <p>Categories: <span class="tag">sci-fi</span></p>
-                <p>Shelves: <span class="tag">Owned</span><span class="tag">Reading</span></p>
-                <p>Started on 2026-06-25 <button class="finishButton">Finish</button></p>
+                <p>
+                    Categories: 
+                    <span class="tag">
+                        <span>sci-fi</span>
+                        <button class="removeTag">-</button>
+                    </span>
+                    <button id="addCategory" class="addTag">+</button>
+                </p>
+                <p>
+                    Shelves: 
+                    <span class="tag">
+                        <span>Owned</span>
+                        <button class="removeTag">-</button>
+                    </span>
+                    <span class="tag">
+                        <span>Reading</span>
+                        <button class="removeTag">-</button>
+                    </span>
+                    <button id="addShelf" class="addTag">+</button>
+                </p>
+                <p>Start: <input type="date" value="2026-06-25" class="dateTag"></p>
+                <p>End: <input type="date" class="dateTag"></p>
             </div>
             <img src="https://books.google.com/books/publisher/content?id=aKOHDwAAQBAJ&printsec=frontcover&img=1&zoom=6&edge=curl&imgtk=AFLRE71oTIgVVVf_BIhLPX7Eb8GSL6WCaWQCgjAYcAWfg6RLTPYIHsSlKTvM_uCReMe4WR22dNnxAK542z1F3_PtyGv23Ly3hJ6noUbMLnysdfFlwF3l1p9ge_i_dyt_PA6B1pYcjvNB&source=gbs_api">
         </div>
