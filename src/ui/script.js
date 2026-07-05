@@ -15,21 +15,6 @@ navButtons.forEach(button => {
 // Initial position
 moveIndicator(document.querySelector('.active'));
 
-// Part to change the list of category and shelf
-// TODO - change code here for actual shelves and categories from the database
-const shelfOptions = [
-    "Reading",
-    "Read",
-    "To read"
-];
-
-const categoryOptions = [
-    "Fiction",
-    "Science",
-    "History",
-    "Biography"
-];
-
 const propertySelect = document.querySelector('select[name="property"]');
 
 propertySelect.addEventListener("change", updateSearchField);
@@ -67,36 +52,3 @@ function updateSearchField() {
 
     oldField.replaceWith(newField);
 }
-
-// When editing the shelves and categories, create a select/option before the Add button
-function insertSelect(buttonId, options) {
-  const button = document.getElementById(buttonId);
-
-  const select = document.createElement("select");
-
-  select.className = "tag"
-
-  options.forEach(optionText => {
-    const option = document.createElement("option");
-    option.value = optionText;
-    option.textContent = optionText;
-    select.appendChild(option);
-  });
-
-  button.parentNode.insertBefore(select, button);
-}
-
-document.getElementById("addShelf").addEventListener("click", () => {
-  insertSelect("addShelf", shelfOptions);
-});
-
-document.getElementById("addCategory").addEventListener("click", () => {
-  insertSelect("addCategory", categoryOptions);
-});
-
-// Remove a tag
-document.addEventListener("click", (event) => {
-    if (event.target.classList.contains("removeTag")) {
-        event.target.parentElement.remove();
-    }
-});
