@@ -53,30 +53,25 @@
                         <h1>Fortuna</h1>
                         <h2>Kristyn Merbeth</h2>
                     </div>
-                    <button id="editBookDetails">Save</button>
+                    <button id="editBookDetails">Edit</button>
                 </div>
-                <p>
+                <p class="tagHolder" id="categoryTags">
                     Categories: 
                     <span class="tag">
                         <span>sci-fi</span>
-                        <button class="removeTag">-</button>
                     </span>
-                    <button id="addCategory" class="addTag">+</button>
                 </p>
-                <p>
+                <p class="tagHolder" id="shelfTags">
                     Shelves: 
                     <span class="tag">
                         <span>Owned</span>
-                        <button class="removeTag">-</button>
                     </span>
                     <span class="tag">
                         <span>Reading</span>
-                        <button class="removeTag">-</button>
                     </span>
-                    <button id="addShelf" class="addTag">+</button>
                 </p>
-                <p>Start: <input type="date" value="2026-06-25" class="dateTag"></p>
-                <p>End: <input type="date" class="dateTag"></p>
+                <p id="start">Start: 2026-06-25</p>
+                <p id="end">End: ---</p>
             </div>
             <img src="https://books.google.com/books/publisher/content?id=aKOHDwAAQBAJ&printsec=frontcover&img=1&zoom=6&edge=curl&imgtk=AFLRE71oTIgVVVf_BIhLPX7Eb8GSL6WCaWQCgjAYcAWfg6RLTPYIHsSlKTvM_uCReMe4WR22dNnxAK542z1F3_PtyGv23Ly3hJ6noUbMLnysdfFlwF3l1p9ge_i_dyt_PA6B1pYcjvNB&source=gbs_api">
         </div>
@@ -85,4 +80,5 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <script src="buttons.js"></script>
 </body>
