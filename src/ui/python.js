@@ -20,20 +20,20 @@ class Python {
     // Search inside the database, based on any key and value pair
     // (str, str) -> list[dict[str]]
     searchIn(key, value){
-        return [this.book, this.book]
+        return [{ ...this.book }, { ...this.book }]
     }
 
     // Search a new book online
     // (str, str, str) -> list[dict[str]]
     searchOut(title, author, lang) {
-        return [this.book, this.book]
+        return [{ ...this.book }, { ...this.book }]
     }
 
     // Get details of a book by ID (in database)
     // (str) -> dict[str]
     searchByID(ID) {
-        var result = this.book
-        results["abstract"] = "This would be the abstract here"
+        var result = { ...this.book }
+        result["abstract"] = "This would be the abstract here"
 
         return result
     }
