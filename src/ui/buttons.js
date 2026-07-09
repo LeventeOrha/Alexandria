@@ -153,3 +153,36 @@ editbtn.addEventListener("click", () => {
         editbtn.textContent = "Edit"
     }
 })
+
+// Do a search IN
+function searchIn() {
+    // Get key and value to search
+    const searchKey = document.getElementById("searchKey").value
+    const searchValue = document.getElementById("searchValue").value
+
+    // Perform search in database
+    const books = python.searchIn(searchKey, searchValue)
+
+    // Clear out the searchResults div
+    const searchResults = document.querySelector(".searchResults")
+    searchResults.replaceChildren()
+
+    // Add the search results
+    books.forEach(book => {
+        const div = document.createElement("div")
+        div.className = "bookList"
+
+        const img = document.createElement("img")
+        img.src = book["img"]
+        div.appendChild(img)
+
+        const title = document.createElement("div")
+        title.className = "titleAuthor"
+        title.innerHTML = `<h1>${book["title"]}</h1>\n<h2>${book["author"]}</h2>`
+        div.appendChild(title)
+
+        searchResults.appendChild(div)
+    })
+}
+
+document.getElementById("startSearch").addEventListener("click", searchIn)
