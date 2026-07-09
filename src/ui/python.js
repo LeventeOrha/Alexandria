@@ -39,9 +39,15 @@ class Python {
     }
 
     // Get all categories
-    // () -> list[str]
+    // () -> dict[str] - code name : name in selected language
     getCategories() {
-        return ["Fiction", "Science", "History", "Bibliography"]
+        let categories = {
+            "fiction": "Fiction",
+            "science": "Science",
+            "histroy": "History",
+            "bibliography": "Bibliography"
+        }
+        return categories
     }
 
     // Get all shelves
@@ -66,5 +72,11 @@ class Python {
     // (dict[str]) -> None
     deleteBook(book) {
         const keys = Object.keys(book)
+    }
+
+    // Send and recieve a message to the AI assistant
+    // (str) -> str
+    getAIMessage(user_message){
+        return user_message + "\nHello there!"
     }
 }
