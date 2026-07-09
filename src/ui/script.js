@@ -15,7 +15,7 @@ navButtons.forEach(button => {
 // Initial position
 moveIndicator(document.querySelector('.active'));
 
-const propertySelect = document.querySelector('select[name="property"]');
+const propertySelect = document.querySelector('select[id="searchKey"]');
 
 propertySelect.addEventListener("change", updateSearchField);
 
@@ -27,21 +27,29 @@ function updateSearchField() {
 
     let newField;
 
-    if (propertySelect.value === "shelf" || propertySelect.value === "category") {
+    if (propertySelect.value === "shelf") {
         newField = document.createElement("select");
         newField.id = "searchValue";
         newField.className = "glass";
 
-        const options = propertySelect.value === "shelf"
-            ? shelfOptions
-            : categoryOptions;
-
-        options.forEach(value => {
+        shelfOptions.forEach(value => {
             const option = document.createElement("option");
             option.value = value;
             option.textContent = value;
             newField.appendChild(option);
         });
+
+    } else if (propertySelect.value === "category") {
+        newField = document.createElement("select");
+        newField.id = "searchValue";
+        newField.className = "glass";
+
+        for (const key of Object.keys(categoryOptions)) {
+            const option = document.createElement("option");
+            option.value = key;
+            option.textContent = categoryOptions[key];
+            newField.appendChild(option);
+        } 
 
     } else {
         newField = document.createElement("input");
