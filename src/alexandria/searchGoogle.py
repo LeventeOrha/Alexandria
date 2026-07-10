@@ -80,6 +80,9 @@ class Google:
         if "items" in resp:
             return self.sparseResults(resp)
         else:
+            with open("error.json", "wt", encoding="utf-8") as out:
+                import json
+                json.dump(resp, out, ensure_ascii=False, indent=4)
             return None
         
     def searchByID(self, ID: str) -> dict:
