@@ -3,36 +3,56 @@ class Python {
         // Create the database, moly, google and ai here
 
         // Dummy result (to not type it down again and again)
-        var result = {}
-        result["title"] = "Fortuna"
-        result["author"] = "Kristyn Merbeth"
-        result["date"] = "2019-11-05"
-        result["img"] = "http://books.google.com/books/publisher/content?id=aKOHDwAAQBAJ&printsec=frontcover&img=1&zoom=6&edge=curl&imgtk=AFLRE71oTIgVVVf_BIhLPX7Eb8GSL6WCaWQCgjAYcAWfg6RLTPYIHsSlKTvM_uCReMe4WR22dNnxAK542z1F3_PtyGv23Ly3hJ6noUbMLnysdfFlwF3l1p9ge_i_dyt_PA6B1pYcjvNB&source=gbs_api"
-        result["ID"] = "aKOHDwAAQBAJ"
-        result["shelf"] = ["Reading", "Owned"]
-        result["category"] = ["sci-fi"]
-        result["start"] = "2026-06-25"
-        result["end"] = "---"
+        var fortuna = {}
+        fortuna["title"] = "Fortuna"
+        fortuna["author"] = "Kristyn Merbeth"
+        fortuna["date"] = "2019-11-05"
+        fortuna["img"] = "https://books.google.com/books/publisher/content?id=aKOHDwAAQBAJ&printsec=frontcover&img=1&zoom=6&edge=curl&imgtk=AFLRE71oTIgVVVf_BIhLPX7Eb8GSL6WCaWQCgjAYcAWfg6RLTPYIHsSlKTvM_uCReMe4WR22dNnxAK542z1F3_PtyGv23Ly3hJ6noUbMLnysdfFlwF3l1p9ge_i_dyt_PA6B1pYcjvNB&source=gbs_api"
+        fortuna["ID"] = "aKOHDwAAQBAJ"
+        fortuna["shelf"] = ["Reading", "Owned"]
+        fortuna["category"] = ["sci-fi"]
+        fortuna["start"] = "2026-06-25"
+        fortuna["end"] = "---"
 
-        this.book = result
+        this.fortuna = fortuna
+
+        var martian = {}
+        martian["title"] = "A marsi"
+        martian["author"] = "Andy Weir"
+        martian["date"] = "2024-06-13"
+        martian["img"] = "https://moly.hu/system/covers/big/covers_314900.jpg?1408012841"
+        martian["ID"] = "https://moly.hu/konyvek/andy-weir-a-marsi"
+        martian["shelf"] = ["Read"]
+        martian["category"] = ["novel", "sci-fi", "adventure"]
+        martian["start"] = "2026-06-21"
+        martian["end"] = "2026-06-28"
+
+        this.martian = martian
     }
 
     // Search inside the database, based on any key and value pair
     // (str, str) -> list[dict[str]]
     searchIn(key, value){
-        return [{ ...this.book }, { ...this.book }]
+        return [{ ...this.fortuna }, { ...this.martian }]
     }
 
     // Search a new book online
     // (str, str, str) -> list[dict[str]]
     searchOut(title, author, lang) {
-        return [{ ...this.book }, { ...this.book }]
+        return [{ ...this.fortuna }, { ...this.martian }]
     }
 
     // Get details of a book by ID (in database)
     // (str) -> dict[str]
     searchByID(ID) {
-        var result = { ...this.book }
+        var result
+
+        if (ID == this.fortuna["ID"]){
+            result = { ...this.fortuna }
+        } else {
+            result = { ...this.martian }
+        }
+
         result["abstract"] = "This would be the abstract here"
 
         return result
