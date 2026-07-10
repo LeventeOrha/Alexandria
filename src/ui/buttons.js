@@ -7,9 +7,6 @@ const categoryOptions = python.getCategories()
 
 // All specific button functions
 
-// Edit and save mode for a book's details
-const editbtn = document.getElementById("editBookDetails")
-
 // When editing the shelves and categories, create a select/option before the Add button
 function insertSelect(buttonId, options) {
   const button = document.getElementById(buttonId);
@@ -142,17 +139,110 @@ function saveBook() {
 
 }
 
-// Toggle save and edit
-editbtn.addEventListener("click", () => {
-    if (editbtn.textContent == "Edit") {
-        editBook()
-        editbtn.textContent = "Save"
-    }
-    else {
-        saveBook()
-        editbtn.textContent = "Edit"
-    }
-})
+// Change active book
+function fillBookData(book) {
+    // Select the element to be filled
+    let div = document.querySelector(".bookData")
+
+    // Set the id
+    div.id = book["ID"]
+
+    // Get all details of the book
+    book = python.searchByID(book["ID"])
+
+    // Create the sub elements one by one
+    let bookInfo = document.createElement("div")
+    bookInfo.className = "bookInfo"
+
+    let details = document.createElement("div")
+    details.className ="details"
+
+    let bookHeader = document.createElement("div")
+    bookHeader.classList.add("bookHeader")
+    bookHeader.classList.add("glass")
+    bookHeader.innerHTML = `<div><h1>${book["title"]}</h1><h2>${book["author"]}</h2></div>`
+
+    // Edit button
+    const editbtn = document.createElement("button")
+    editbtn.id = "editBookDetails"
+    editbtn.textContent = "Edit"
+    editbtn.addEventListener("click", () => {
+        if (editbtn.textContent == "Edit") {
+            editBook()
+            editbtn.textContent = "Save"
+        }
+        else {
+            saveBook()
+            editbtn.textContent = "Edit"
+        }
+    })
+
+    // TODO - delete button
+
+    bookHeader.appendChild(editbtn)
+
+    details.appendChild(bookHeader)
+
+    // Category tags
+    let pc = document.createElement("p")
+    pc.classname = "tagHolder"
+    pc.id = "categoryTags"
+    pc.textContent = "Categories: "
+
+    book["category"].forEach((category) => {
+        let span = document.createElement("span")
+        span.className = "tag"
+        span.innerHTML = `<span>${category}</span>`
+        pc.appendChild(span)
+    })
+
+    details.appendChild(pc)
+
+    // Shelf tags
+    let ps = document.createElement("p")
+    ps.classname = "tagHolder"
+    ps.id = "categoryTags"
+    ps.textContent = "Shelves: "
+
+    book["shelf"].forEach((shelf) => {
+        let span = document.createElement("span")
+        span.className = "tag"
+        span.innerHTML = `<span>${shelf}</span>`
+        ps.appendChild(span)
+    })
+
+    details.appendChild(ps)
+
+    // Start date
+    let start = document.createElement("p")
+    start.id = "start"
+    start.textContent = `Start: ${book["start"]}`
+
+    details.appendChild(start)
+
+    // End date
+    let end = document.createElement("p")
+    end.id = "end"
+    end.textContent = `End: ${book["end"]}`
+
+    details.appendChild(end)
+
+    bookInfo.appendChild(details)
+
+    // Image
+    let img = document.createElement("img")
+    img.src = book["img"]
+    bookInfo.appendChild(img)
+
+    div.appendChild(bookInfo)
+
+    // Abstract
+    let abst = document.createElement("div")
+    abst.className = "abstract"
+    abst.innerHTML = book["abstract"]
+
+    div.appendChild(abst)
+}
 
 // Do a search IN
 function searchIn() {
@@ -167,6 +257,9 @@ function searchIn() {
     const searchResults = document.querySelector(".searchResults")
     searchResults.replaceChildren()
 
+    // Clear out bookData at a new search
+    document.querySelector(".bookData").replaceChildren()
+
     // Add the search results
     books.forEach(book => {
         const div = document.createElement("div")
@@ -180,6 +273,20 @@ function searchIn() {
         title.className = "titleAuthor"
         title.innerHTML = `<h1>${book["title"]}</h1>\n<h2>${book["author"]}</h2>`
         div.appendChild(title)
+
+        div.addEventListener("click", function () {
+            // Remove the other "current"
+            document.querySelector(".bookList.current")?.classList.remove("current")
+
+            // Add "current" to this's class list
+            this.classList.add("current")
+
+            // Clear out bookData
+            document.querySelector(".bookData").replaceChildren()
+
+            // Fill the book's data out
+            fillBookData(book)
+        })
 
         searchResults.appendChild(div)
     })
