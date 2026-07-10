@@ -101,6 +101,10 @@ class CMD:
         else:
             books = self.google.searchBook(title, author, new_lang)
 
+            if books is None:
+                print(self.text["SearchNotFound"])
+                return
+
             for i in range(len(books)):
                 print(f"{i+1}) {books[i]["title"]} - {books[i]["author"]} ({books[i]["date"]}) - {books[i]["img"]}")
             
