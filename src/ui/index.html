@@ -2,6 +2,7 @@
 <head>
   <link rel="stylesheet" href="styles/root.css">
   <link rel="stylesheet" href="styles/nav.css">
+  <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/bookList.css">
   <link rel="stylesheet" href="styles/bookData.css">
 </head>
@@ -9,29 +10,45 @@
     <div class="nav-holder">
         <nav class="glass">
             <div class="glass indicator"></div>
-            <button class="navButton" id="homeButton">🏠</button>
+            <button class="navButton active" id="homeButton">🏠</button>
             <button class="navButton" id="searchOnlineButton">🌍</button>
-            <button class="navButton active" id="searchButton">🔍</button>
+            <button class="navButton" id="searchButton">🔍</button>
             <button class="navButton" id="aiButton">🤖</button>
         </nav>
     </div>
 
-    <div class="list glass">
-        <div class="searchBar">
-            <select id="searchKey" class="glass">
-                <option value="title">Title</option>
-                <option value="author">Author</option>
-                <option value="shelf">Shelf</option>
-                <option value="category">Category</option>
-            </select>
-            <input type="text" id="searchValue" class="glass">
-            <input type="submit" value="🔍" id="startSearch" class="glass">
-        </div>
-        <div class="searchResults">
-        </div>
+    <!-- REMOVE glass from main divs -->
+    <div class="main glass" id="homePage">
+
     </div>
 
-    <div class="bookData glass"></div>
+    <div class="main glass lower" id="searchOnline">
+
+    </div>
+
+    <div class="main lower" id="searchInLibrary">
+        <div class="list glass">
+            <div class="searchBar">
+                <select id="searchKey" class="glass">
+                    <option value="title">Title</option>
+                    <option value="author">Author</option>
+                    <option value="shelf">Shelf</option>
+                    <option value="category">Category</option>
+                </select>
+                <input type="text" id="searchValue" class="glass">
+                <input type="submit" value="🔍" id="startSearch" class="glass">
+            </div>
+            <div class="searchResults">
+            </div>
+        </div>
+    
+        <div class="bookData glass"></div>
+    </div>
+
+    <div class="main glass lower" id="talkWithLibrarian">
+
+    </div>
+
     <script src="python.js"></script>
     <script src="script.js"></script>
     <script src="buttons.js"></script>
