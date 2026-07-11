@@ -1,14 +1,26 @@
 // Part to move have the navigation panel and the moving indicator on it
 const navButtons = document.querySelectorAll('nav button');
 const indicator = document.querySelector('.indicator');
+const mainDivs = document.querySelectorAll(".main")
 
 function moveIndicator(button) {
     indicator.style.top = button.offsetTop + 'px';
 }
 
-navButtons.forEach(button => {
-    button.addEventListener('click', () => {
+navButtons.forEach((button, index) => {
+    button.addEventListener("click", () => {
         moveIndicator(button);
+
+        mainDivs.forEach((div, divIndex) => {
+            // Reset classes first
+            div.classList.remove("lower", "higher");
+
+            if (divIndex < index) {
+                div.classList.add("higher");
+            } else if (divIndex > index) {
+                div.classList.add("lower");
+            }
+        });
     });
 });
 
@@ -22,6 +34,7 @@ propertySelect.addEventListener("change", updateSearchField);
 // Run once on page load
 updateSearchField();
 
+// Function to fill out the search part to be a select/option at category/shelf
 function updateSearchField() {
     const oldField = document.getElementById("searchValue");
 
@@ -60,3 +73,21 @@ function updateSearchField() {
 
     oldField.replaceWith(newField);
 }
+
+// Set the distance from the left edge of main divs on startup
+const navHolder = document.querySelector(".nav-holder");
+
+function positionMain() {
+    const navWidth = navHolder.getBoundingClientRect().width;
+    const vw = window.innerWidth * 0.015; // 1.5vw in pixels
+
+    const left = navWidth + vw;
+
+    mainDivs.forEach(div => {
+        div.style.left = `${left}px`;
+    });
+}
+
+positionMain();
+// And at every resize
+window.addEventListener("resize", positionMain);
