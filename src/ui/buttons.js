@@ -181,7 +181,7 @@ function fillBookData(book) {
     
     buttons.appendChild(editbtn)
 
-    // TODO - delete button
+    // Delete button
     const deletebtn = document.createElement("button")
     deletebtn.id = "deleteBook"
     deletebtn.textContent = "Delete"
