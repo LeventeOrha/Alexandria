@@ -47,3 +47,27 @@ body {
 
     pointer-events: none;
 }
+
+.main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5vw;
+    height: 100vh;
+
+    transition: top 0.4s ease;
+
+    width: 80vw;
+
+    position: fixed;
+    top: 0vh;
+}
+
+.lower {
+    top: 100vh;
+}
+
+.higher {
+    top: -100vh;
+}
