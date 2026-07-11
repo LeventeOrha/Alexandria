@@ -117,8 +117,6 @@ function saveBook() {
     // Save the updated book
     python.saveBook(book)
 
-    console.log(book)
-
     // Replace existing select/options with its value
     let selects = document.querySelectorAll("select.tag")
     selects.forEach((select) => {
@@ -162,6 +160,10 @@ function fillBookData(book) {
     bookHeader.classList.add("glass")
     bookHeader.innerHTML = `<div><h1>${book["title"]}</h1><h2>${book["author"]}</h2></div>`
 
+    // Edit and delete buttons
+    const buttons = document.createElement("div")
+    buttons.className = "editButtonHolder"
+
     // Edit button
     const editbtn = document.createElement("button")
     editbtn.id = "editBookDetails"
@@ -176,10 +178,22 @@ function fillBookData(book) {
             editbtn.textContent = "Edit"
         }
     })
+    
+    buttons.appendChild(editbtn)
 
     // TODO - delete button
+    const deletebtn = document.createElement("button")
+    deletebtn.id = "deleteBook"
+    deletebtn.textContent = "Delete"
+    deletebtn.addEventListener("click", () => {
+        python.deleteBook(book)
+        div.replaceChildren() // Clear out the book details
+        document.querySelector(`.bookList#${CSS.escape(book["ID"])}`).remove() // Remove it from the results
+    })
 
-    bookHeader.appendChild(editbtn)
+    buttons.appendChild(deletebtn)
+
+    bookHeader.appendChild(buttons)
 
     details.appendChild(bookHeader)
 
@@ -201,7 +215,7 @@ function fillBookData(book) {
     // Shelf tags
     let ps = document.createElement("p")
     ps.classname = "tagHolder"
-    ps.id = "categoryTags"
+    ps.id = "shelfTags"
     ps.textContent = "Shelves: "
 
     book["shelf"].forEach((shelf) => {
@@ -264,6 +278,7 @@ function searchIn() {
     books.forEach(book => {
         const div = document.createElement("div")
         div.className = "bookList"
+        div.id = book["ID"]
 
         const img = document.createElement("img")
         img.src = book["img"]
