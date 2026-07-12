@@ -76,10 +76,11 @@ class Python {
         return ["Reading", "Read", "To read", "Stopped"]
     }
 
-    // Add a new book to the database
-    // (list[dict[str]]) -> None
-    addBooks(books) {
-        const len = books.length
+    // Add a new books to the database
+    // (ids of all books to be added, shelf to place on)
+    // (list[str], str) -> None
+    addBooks(ids, shelf) {
+        const len = ids.length
     }
 
     // Update a book's data
