@@ -4,6 +4,7 @@
   <link rel="stylesheet" href="styles/nav.css">
   <link rel="stylesheet" href="styles/bookList.css">
   <link rel="stylesheet" href="styles/bookData.css">
+  <link rel="stylesheet" href="styles/searchOnline.css">
 </head>
 <body>
     <div class="nav-holder">
@@ -21,8 +22,28 @@
 
     </div>
 
-    <div class="main glass lower" id="searchOnline">
+    <div class="main lower" id="searchOnline">
+        <div class="onlineHolder glass">
+            <div id="onlineSearchBar">
+                <div class="center">
+                    <input type="text" id="onlineTitle" class="glass" placeholder="Title">
+                    <input type="text" id="onlineAuthor" class="glass" placeholder="Author">
+                    <select id="language" class="glass">
+                        <option value="en">En</option>
+                        <option value="hu">Hu</option>
+                    </select>
+                    <button id="startOnlineSearch" class="glass">🔍</button>
+                </div>
+                <div class="right">
+                    <select id="saveShelf" class="glass">
+                    </select>
+                    <button id="saveBooksOnShelf" class="glass">Save</button>
+                </div>
+            </div>
+            <div id="onlineResults">
 
+            </div>
+        </div>
     </div>
 
     <div class="main lower" id="searchInLibrary">
