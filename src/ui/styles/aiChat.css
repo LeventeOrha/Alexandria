@@ -1,0 +1,130 @@
+#aiChat {
+    height: 98vh;
+    width: 80vw;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#aiHeader {
+    width: 80vw;
+    height: 4vh;
+
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#aiName {
+    text-align: center;
+    font-size: larger;
+}
+
+#aiBody {
+    max-height: 85vh;
+    min-height: 85vh;
+
+    width: 80vw;
+
+    overflow: auto;
+}
+
+#aiBody::-webkit-scrollbar {
+    width: 10px;
+}
+
+#aiBody::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 16px 0;          /* keeps it away from the rounded corners */
+}
+
+#aiBody::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.35);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+#aiBody::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,.55);
+}
+
+#aiNewMessage {
+    width: 78vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    padding: 5px;
+    gap: 5px;
+}
+
+#writeNewMessage {
+    padding: 2px 25px 2px 25px;
+    min-height: 4vh;
+    max-height: 5vh;
+    min-width: 20vw;
+    font-size: larger;
+}
+
+.userMessage {
+    box-sizing: border-box;
+
+    width: 79vw;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+
+    padding: 5px;
+}
+
+.userMessageText {
+    background-color: cyan;
+    color: black;
+
+    padding: 10px;
+
+    border-radius: 10px 10px 5px 10px;
+}
+
+.aiMessage {
+    box-sizing: border-box;
+
+    width: 79vw;
+
+    padding: 5px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+.aiMessageText {
+    background-color: green;
+    color: white;
+
+    padding: 10px;
+
+    border-radius: 10px 10px 10px 5px;
+}
+
+.userMessageText p,
+.aiMessageText p {
+    margin: 0;
+}
+
+#sendNewMessage {
+    border: 0;
+
+    cursor: pointer;
+
+    width: 40px;
+    height: 40px;
+}
