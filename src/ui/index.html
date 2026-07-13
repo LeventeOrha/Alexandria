@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="styles/bookList.css">
   <link rel="stylesheet" href="styles/bookData.css">
   <link rel="stylesheet" href="styles/searchOnline.css">
+  <link rel="stylesheet" href="styles/aiChat.css">
 </head>
 <body>
     <div class="nav-holder">
@@ -65,10 +66,21 @@
         <div class="bookData glass"></div>
     </div>
 
-    <div class="main glass lower" id="talkWithLibrarian">
-
+    <div class="main lower" id="talkWithLibrarian">
+        <div id="aiChat" class="glass">
+            <div id="aiHeader" class="glass">
+                <input type="text" value="Librarian" id="aiName" class="glass">
+            </div>
+            <div id="aiBody">
+            </div>
+            <div id="aiNewMessage" class="">
+                <textarea class="glass" id="writeNewMessage"></textarea>
+                <button id="sendNewMessage" class="glass">📤</button>
+            </div>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="python.js"></script>
     <script src="script.js"></script>
     <script src="buttons.js"></script>
