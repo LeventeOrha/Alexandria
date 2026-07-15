@@ -10,6 +10,7 @@ from alexandria.ai import AI
 from alexandria.data import Database, Book
 from alexandria.searchGoogle import Google
 from alexandria.searchMoly import Moly
+from alexandria.searchOLibrary import OpenLibrary
 
 class CMD:
     def __init__(self, params: dict):
@@ -19,6 +20,7 @@ class CMD:
         """
         self.db = Database(params["datafile"])
         self.moly = Moly(self.db)
+        self.ol = OpenLibrary(self.db)
 
         # If everything is new, force to set a language
         self.text = self.readYML(params["Language_file"])
@@ -101,6 +103,9 @@ class CMD:
         else:
             books = self.google.searchBook(title, author, new_lang)
 
+            if len(books) == 0:
+                books = self.ol.searchBook(title, author, new_lang)
+
             for i in range(len(books)):
                 print(f"{i+1}) {books[i]["title"]} - {books[i]["author"]} ({books[i]["date"]}) - {books[i]["img"]}")
             
@@ -145,6 +150,10 @@ class CMD:
         if "moly.hu" in book["ID"]:
             all_data = self.moly.searchByID(book["ID"])
             book["abstract"] = all_data["abs"]
+
+        elif "OL" in book["ID"]:
+            all_data = self.ol.searchByID(book["ID"])
+            book['abstract'] = "New abstract" # TODO - implement abstract extraction
         
         else:
             all_data = self.google.searchByID(book["ID"])
