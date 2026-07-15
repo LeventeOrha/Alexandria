@@ -79,8 +79,6 @@ class OpenLibrary:
 
         book["img"] = f"{self.covers_id}{resp["covers"][0]}-L.jpg"
 
-        print(url)
-
         book["ID"] = ID
 
         book["category"] = transl.translateCategories(resp["subjects"], "en")
