@@ -458,3 +458,22 @@ sendMessage.addEventListener('click', () => {
     // Put out the answer
     createNewMessage(answer, "ai")
 })
+
+document.getElementById("writeNewMessage").addEventListener('keydown', (e) => {
+    if (e.key != "Enter") return
+    // Get the new text from the user
+    const textarea = document.getElementById("writeNewMessage")
+    var userMessage = textarea.value
+
+    // Clear out text area
+    textarea.value = ""
+
+    // Put out the user message
+    createNewMessage(userMessage, "user")
+
+    // Get the answer
+    const answer = python.getAIMessage(userMessage)
+
+    // Put out the answer
+    createNewMessage(answer, "ai")
+})
