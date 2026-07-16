@@ -103,8 +103,11 @@ class CMD:
         else:
             books = self.google.searchBook(title, author, new_lang)
 
-            if len(books) == 0:
+            if books is None:
                 books = self.ol.searchBook(title, author, new_lang)
+            if books is None:
+                print(self.text["SearchNotFound"])
+                return
 
             for i in range(len(books)):
                 print(f"{i+1}) {books[i]["title"]} - {books[i]["author"]} ({books[i]["date"]}) - {books[i]["img"]}")
@@ -124,7 +127,10 @@ class CMD:
                 start = "---"
                 end = "---"
 
-            book = self.google.createBook(book["ID"], shelf, start, end)
+            if "OL" in book["ID"]:
+                book = self.ol.createBook(book["ID"], shelf, start, end)
+            else:
+                book = self.google.createBook(book["ID"], shelf, start, end)
 
         self.db.addBooks([book])
         print(self.text["SuccessfulSaveShelf"].replace("%", shelf))
