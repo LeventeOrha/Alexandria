@@ -17,25 +17,36 @@ class OpenLibrary:
 
     def sparseResults(self, resp: dict) -> dict[str]:
         """
-        Sparse a book object from a response
+        Sparse a book object from a response - and get each edition as a different book
         """
-        book = {}
+        url = f"{self.url}/{resp["key"]}/editions.json"
+        editions = json.loads(requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=self.timeout).text)
 
-        book["title"] = resp["title"]
-        book["author"] = resp["author_name"][0] if type(resp["author_name"]) is list else resp["author_name"]
+        url = f"{self.url}{resp["key"]}.json"
+        categories = json.loads(requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=self.timeout).text).get("subjects", [])
+        categories = transl.translateCategories(categories, "en")
 
-        book["date"] = resp["first_publish_year"]
+        needed_keys = ["covers", "key", "publish_date", "title", "authors"]
 
-        book["img"] = self.covers_olid + resp["cover_edition_key"] + "-L.jpg"
+        books = []
+        for edition in editions["entries"]:
+            if edition.get("physical_format", "").lower() == "audiobook":
+                continue
+            if all(key in edition for key in needed_keys):
+                book = {}
+                book["img"] = f"{self.covers_id}{edition["covers"][0]}-L.jpg"
+                book["ID"] = edition["key"]
+                book["abs"] = edition.get("description", "No abstract found.")
+                book["date"] = edition["publish_date"]
+                book["title"] = edition["title"]
 
-        book["ID"] = "/books/" + resp["cover_edition_key"]
+                url = f"{self.url}{edition["authors"][0]["key"]}.json"
+                authorData = json.loads(requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=self.timeout).text)
+                book["author"] = authorData.get("personal_name", authorData.get("name", ""))
 
-        url = self.url + book["ID"] + ".json"
-        resp = json.loads(requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=self.timeout).text)
-        categories = resp["subjects"]
-        book["category"] = transl.translateCategories(categories)
-
-        return book
+                books.append(book)
+        
+        return books
 
     def searchBook(self, title: str, author: str, lang: str) -> list[dict[str]]:
         """
@@ -57,7 +68,7 @@ class OpenLibrary:
         else:
             books = []
             for book in response["docs"]:
-                books.append(self.sparseResults(book))
+                books += self.sparseResults(book)
             return books
 
     def searchByID(self, ID: str) -> dict[str]:
@@ -73,7 +84,7 @@ class OpenLibrary:
 
         authorData = self.url + resp["authors"][0]["key"] + ".json"
         authorData = json.loads(requests.get(authorData, headers={"User-Agent": "Mozilla/5.0"}, timeout=self.timeout).text)
-        book["author"] = authorData["name"]
+        book["author"] = authorData.get("personal_name", authorData.get("name", ""))
 
         book["date"] = resp["publish_date"]
 
@@ -81,13 +92,17 @@ class OpenLibrary:
 
         book["ID"] = ID
 
-        book["category"] = transl.translateCategories(resp["subjects"], "en")
+        workID = resp["works"][0]["key"]
+        workData = self.url + workID + ".json"
+        workData = json.loads(requests.get(workData, headers={"User-Agent": "Mozilla/5.0"}, timeout=self.timeout).text)
+
+        book["category"] = transl.translateCategories(workData["subjects"], "en")
 
         return book
 
     def createBook(self, ID: str, shelf: str, start: str = "---", end: str = "---") -> Book:
         b = self.searchByID(ID)
-        b["shelf"] = shelf
+        b["shelf"] = [shelf]
         b["start"] = start
         b["end"] = end
 
