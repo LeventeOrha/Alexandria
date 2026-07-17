@@ -11,6 +11,7 @@ from alexandria.data import Database, Book
 from alexandria.searchGoogle import Google
 from alexandria.searchMoly import Moly
 from alexandria.searchOLibrary import OpenLibrary
+from datetime import date
 
 class CMD:
     def __init__(self, params: dict):
@@ -216,6 +217,29 @@ class CMD:
             if input(self.text["DeleteEnsuring"]) in ["y", "i"]:
                 self.db.removeBook(book["ID"])
                 print(self.text["DeleteSuccess"])
+
+        elif change == "f":
+            if "Reading" in book["shelf"]:
+                book["shelf"].remove("Reading")
+                book["shelf"].append("Read")
+                book["end"] = date.today().isoformat()
+                b = {
+                    "title": book["title"],
+                    "author": book["author"],
+                    "date": book["date"],
+                    "img": book["img"],
+                    "ID": book["ID"],
+                    "shelf": book["shelf"],
+                    "category": book["category"],
+                    "start": book["start"],
+                    "end": book["end"]
+                }
+
+                book = Book(**b)
+
+                self.db.updateBook(book)
+
+                print(self.text["SuccessfulSave"])
 
         return
 
