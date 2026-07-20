@@ -12,7 +12,10 @@
     width: 80vw;
     height: 4vh;
 
-    position: relative;
+    position: absolute;
+    top: 5px;
+    left: 0px;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,12 +27,17 @@
 }
 
 #aiBody {
-    max-height: 85vh;
-    min-height: 85vh;
+    box-sizing: border-box;
+
+    max-height: 98vh;
+    min-height: 98vh;
 
     width: 80vw;
 
     overflow: auto;
+
+    padding-top: 4vh;
+    padding-bottom: 5vh;
 }
 
 #aiBody::-webkit-scrollbar {
@@ -54,6 +62,8 @@
 
 #aiNewMessage {
     width: 78vw;
+    height: 5vh;
+
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -61,6 +71,10 @@
 
     padding: 5px;
     gap: 5px;
+
+    position: absolute;
+    bottom: 5px;
+    right: 0px;
 }
 
 #writeNewMessage {
