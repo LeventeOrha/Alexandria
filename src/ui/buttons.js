@@ -441,7 +441,7 @@ function createNewMessage(content, sender) {
 }
 
 const sendMessage = document.getElementById("sendNewMessage")
-sendMessage.addEventListener('click', () => {
+function sendNewMessage() {
     // Get the new text from the user
     const textarea = document.getElementById("writeNewMessage")
     var userMessage = textarea.value
@@ -457,23 +457,14 @@ sendMessage.addEventListener('click', () => {
 
     // Put out the answer
     createNewMessage(answer, "ai")
-})
 
+    // Scroll down to the bottom
+    aiBody = document.getElementById("aiBody")
+    aiBody.scrollTop = aiBody.scrollHeight
+}
+
+sendMessage.addEventListener('click', sendNewMessage)
 document.getElementById("writeNewMessage").addEventListener('keydown', (e) => {
     if (e.key != "Enter") return
-    // Get the new text from the user
-    const textarea = document.getElementById("writeNewMessage")
-    var userMessage = textarea.value
-
-    // Clear out text area
-    textarea.value = ""
-
-    // Put out the user message
-    createNewMessage(userMessage, "user")
-
-    // Get the answer
-    const answer = python.getAIMessage(userMessage)
-
-    // Put out the answer
-    createNewMessage(answer, "ai")
+    sendNewMessage()
 })
