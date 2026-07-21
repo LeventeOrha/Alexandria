@@ -109,7 +109,8 @@ class Python {
             "gemini-model": "gemini-3.5-flash",
             "aiColor": "#008000",
             "userColor": "#00ffff",
-            "GUI": true
+            "GUI": true,
+            "background": "./images/bookshelf_background.jpg"
         }
         const keys = {
             "lang": {
@@ -140,5 +141,12 @@ class Python {
     // () -> None
     importLibrary() {
         console.log("Import successful!")
+    }
+
+    // Ask user for an image file as a background, returning the filename
+    // () -> str
+    backgroundChange() {
+        console.log("You should pick a new background!")
+        return "background.jpg"
     }
 }
