@@ -100,4 +100,45 @@ class Python {
     getAIMessage(user_message){
         return user_message + "\nHello there!"
     }
+
+    // Get the current settings of the system
+    // () -> dict[str, str], dict[str, dict[str, str]]
+    getSettings() {
+        const params = {
+            "lang": "en",
+            "gemini-model": "gemini-3.5-flash",
+            "aiColor": "#008000",
+            "userColor": "#00ffff",
+            "GUI": true
+        }
+        const keys = {
+            "lang": {
+                "en": "English",
+                "hu": "Hungarian"
+            },
+            "gemini-model": {
+                "gemini-3.5-flash": "3.5 Flash"
+            }
+        }
+        return [params, keys]
+    }
+
+
+    // Save the new settings
+    // (dict[str, str]) -> None
+    saveSettings(params) {
+        console.log(params)
+    }
+
+    // Ask user for a file to SAVE the library into and save it
+    // () -> None
+    exportLibrary() {
+        console.log("Export successful!")
+    }
+
+    // Ask user for input file and read in library
+    // () -> None
+    importLibrary() {
+        console.log("Import successful!")
+    }
 }
