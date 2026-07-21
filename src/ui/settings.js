@@ -24,6 +24,7 @@ selectLanguage.value = params["lang"]
 selectAI.value = params["gemini-model"]
 document.getElementById("aiChatColor").value = params["aiColor"]
 document.getElementById("userChatColor").value = params["userColor"]
+document.getElementById("backgroundImage").textContent = params["background"]
 
 // Save current settings
 function saveSettings() {
@@ -44,6 +45,9 @@ function saveSettings() {
     // Graphical User Interface usage
     params["GUI"] = document.getElementById("guiUsage").checked
 
+    // Get background image
+    params["background"] = document.getElementById("backgroundImage").textContent
+
     python.saveSettings(params)
 }
 document.getElementById("saveSettings").addEventListener("click", saveSettings)
@@ -53,3 +57,9 @@ document.getElementById("exportLibrary").addEventListener("click", python.export
 
 // Import library button function
 document.getElementById("importLibrary").addEventListener("click", python.importLibrary)
+
+// Background changing button
+document.getElementById("backgroundImage").addEventListener("click", () => {
+    const filename = python.backgroundChange()
+    document.getElementById("backgroundImage").textContent = filename
+})
