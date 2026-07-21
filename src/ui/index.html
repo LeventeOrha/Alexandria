@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="styles/bookData.css">
   <link rel="stylesheet" href="styles/searchOnline.css">
   <link rel="stylesheet" href="styles/aiChat.css">
+  <link rel="stylesheet" href="styles/settings.css">
 </head>
 <body>
     <div class="nav-holder">
@@ -15,6 +16,7 @@
             <button class="navButton" id="searchOnlineButton">🌍</button>
             <button class="navButton" id="searchButton">🔍</button>
             <button class="navButton" id="aiButton">🤖</button>
+            <button class="navButton" id="settingsButton">⚙️</button>
         </nav>
     </div>
 
@@ -80,8 +82,63 @@
         </div>
     </div>
 
+    <div class="main lower" id="settingsMain">
+        <table class="glass" id="settingsPanel">
+            <tr>
+                <td>Language: </td>
+                <td>
+                    <select class="glass" id="selectLanguage">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Gemini model:</td>
+                <td>
+                    <select class="glass" id="selectAI">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Librarian chat color:</td>
+                <td>
+                    <input class="glass" id="aiChatColor" type="color">
+                </td>
+            </tr>
+            <tr>
+                <td>User chat color:</td>
+                <td>
+                    <input class="glass" id="userChatColor" type="color">
+                </td>
+            </tr>
+            <tr>
+                <td>Graphical interface:</td>
+                <td>
+                    <label class="switch">
+                        <input type="checkbox" checked id="guiUsage">
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <button id="saveSettings" class="glass">Save</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="exportLibrary" class="glass">Export library</button>
+                </td>
+                <td>
+                    <button id="importLibrary" class="glass">Import library</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="python.js"></script>
     <script src="script.js"></script>
     <script src="buttons.js"></script>
+    <script src="settings.js"></script>
 </body>
