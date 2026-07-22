@@ -99,8 +99,8 @@
 }
 
 .userMessageText {
-    background-color: cyan;
-    color: black;
+    background-color: var(--user-chat-bg);
+    color: var(--user-chat-color);
 
     padding: 10px;
 
@@ -121,8 +121,8 @@
 }
 
 .aiMessageText {
-    background-color: green;
-    color: white;
+    background-color: var(--ai-chat-bg);
+    color: var(--ai-chat-color);
 
     padding: 10px;
 
