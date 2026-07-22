@@ -53,10 +53,10 @@
         <div class="list glass">
             <div class="searchBar">
                 <select id="searchKey" class="glass">
-                    <option value="title">Title</option>
-                    <option value="author">Author</option>
-                    <option value="shelf">Shelf</option>
-                    <option value="category">Category</option>
+                    <option value="title" id="searchKeyTitle">Title</option>
+                    <option value="author" id="searchKeyAuthor">Author</option>
+                    <option value="shelf" id="searchKeyShelf">Shelf</option>
+                    <option value="category" id="searchKeyCategory">Category</option>
                 </select>
                 <input type="text" id="searchValue" class="glass">
                 <input type="submit" value="🔍" id="startSearch" class="glass">
@@ -97,7 +97,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Language: </td>
+                <td id="languageSetting">Language: </td>
                 <td>
                     <select class="glass" id="selectLanguage">
                     </select>
@@ -111,25 +111,25 @@
                 </td>
             </tr>
             <tr>
-                <td>Librarian chat color:</td>
+                <td id="aiChatColorSetting">Librarian chat color:</td>
                 <td>
                     <input class="glass" id="aiChatColor" type="color">
                 </td>
             </tr>
             <tr>
-                <td>User chat color:</td>
+                <td id="userChatColorSetting">User chat color:</td>
                 <td>
                     <input class="glass" id="userChatColor" type="color">
                 </td>
             </tr>
             <tr>
-                <td>Background image:</td>
+                <td id="backgroundImageSetting">Background image:</td>
                 <td>
                     <button class="glass" id="backgroundImage"></button>
                 </td>
             </tr>
             <tr>
-                <td>Graphical interface:</td>
+                <td id="GUISetting">Graphical interface:</td>
                 <td>
                     <label class="switch">
                         <input type="checkbox" checked id="guiUsage">
