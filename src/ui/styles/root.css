@@ -1,8 +1,18 @@
+:root {
+    --user-chat-bg: cyan;
+    --user-chat-color: black;
+
+    --ai-chat-bg: green;
+    --ai-chat-color: white;
+
+    --background-image: url(../images/bookshelf_background.jpg)
+}
+
 body {
   position: relative;
   margin: 0px;
   padding: 0px;
-  background-image: url(../images/bookshelf_background.jpg);
+  background-image: var(--background-image);
   display: flex;
   flex-direction: row;
   justify-content: start;
