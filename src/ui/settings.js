@@ -25,6 +25,8 @@ selectAI.value = params["gemini-model"]
 document.getElementById("aiChatColor").value = params["aiColor"]
 document.getElementById("userChatColor").value = params["userColor"]
 document.getElementById("backgroundImage").textContent = params["background"]
+document.getElementById("googleBooksKey").value = params["GBooksAPIkey"]
+document.getElementById("geminiKey").value = params["GeminiAPI"]
 
 // Save current settings
 function saveSettings() {
@@ -47,6 +49,12 @@ function saveSettings() {
 
     // Get background image
     params["background"] = document.getElementById("backgroundImage").textContent
+
+    // Gemini API key
+    params["GeminiAPI"] = document.getElementById("geminiKey").value
+
+    // Google Books API key
+    params["GBooksAPIkey"] = document.getElementById("googleBooksKey").value
 
     python.saveSettings(params)
 }

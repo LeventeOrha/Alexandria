@@ -110,7 +110,9 @@ class Python {
             "aiColor": "#008000",
             "userColor": "#00ffff",
             "GUI": true,
-            "background": "./images/bookshelf_background.jpg"
+            "background": "./images/bookshelf_background.jpg",
+            "GBooksAPIkey": "AbAc",
+            "GeminiAPI": "GeMiNiKeY"
         }
         const keys = {
             "lang": {
