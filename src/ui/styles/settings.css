@@ -18,6 +18,11 @@
     cursor: pointer;
 }
 
+#backgroundImage, #googleBooksKey, #geminiKey {
+  width: 10vw;
+  padding-left: 8px;
+}
+
 /* The switch - the box around the slider */
 .switch {
   position: relative;
