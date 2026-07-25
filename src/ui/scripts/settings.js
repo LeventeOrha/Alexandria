@@ -1,6 +1,6 @@
 // Set out all available languages and keys
 const selectLanguage = document.getElementById("selectLanguage")
-for (const [key, value] of Object.entries(settingsKeys["lang"])) {
+for (const [key, value] of Object.entries(settingsKeys["Language"])) {
     const option = document.createElement("option");
     option.value = key;          // value attribute
     option.textContent = value;  // visible text
@@ -9,7 +9,7 @@ for (const [key, value] of Object.entries(settingsKeys["lang"])) {
 
 // Put out all available gemini models
 const selectAI = document.getElementById("selectAI")
-for (const [key, value] of Object.entries(settingsKeys["gemini-model"])) {
+for (const [key, value] of Object.entries(settingsKeys["Gemini_model"])) {
     const option = document.createElement("option");
     option.value = key;          // value attribute
     option.textContent = value;  // visible text
@@ -17,8 +17,8 @@ for (const [key, value] of Object.entries(settingsKeys["gemini-model"])) {
 }
 
 // Set current values for all settings
-selectLanguage.value = settings["lang"]
-selectAI.value = settings["gemini-model"]
+selectLanguage.value = settings["Language"]
+selectAI.value = settings["Gemini_model"]
 document.getElementById("aiChatColor").value = settings["aiColor"]
 document.getElementById("userChatColor").value = settings["userColor"]
 document.getElementById("backgroundImage").textContent = settings["background"]
@@ -30,10 +30,10 @@ function saveSettings() {
     const settings = {}
 
     // Get language
-    settings["lang"] = document.getElementById("selectLanguage").value
+    settings["Language"] = document.getElementById("selectLanguage").value
 
     // Get Gemini model
-    settings["gemini-model"] = document.getElementById("selectAI").value
+    settings["Gemini_model"] = document.getElementById("selectAI").value
 
     // Get AI chat color
     settings["aiColor"] = document.getElementById("aiChatColor").value
@@ -42,7 +42,7 @@ function saveSettings() {
     settings["userColor"] = document.getElementById("userChatColor").value
 
     // Graphical User Interface usage
-    settings["GUI"] = document.getElementById("guiUsage").checked
+    settings["GUI_useage"] = document.getElementById("guiUsage").checked
 
     // Get background image
     settings["background"] = document.getElementById("backgroundImage").textContent
