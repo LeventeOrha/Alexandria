@@ -6,7 +6,7 @@
     "categories": "./datafiles/categories.yml",
     "Language_file": "./datafiles/cmd_langs.yml",
     "Language": "en",
-    "GUI_useage": true,
+    "GUI_useage": false,
     "GUI_text_file": "./datafiles/gui_langs.yml",
     "aiColor": "#008000",
     "userColor": "#00ffff",
