@@ -2,16 +2,12 @@
 
 // Shortcut API connection
 // With safeguard, using actual python when available, otherwise the dummy js class
-// let python;
+let python = new Python(); // start with dummy
 
-// function initializePython() {
-//     python = window.pywebview?.api ?? new Python();
-// }
-
-// window.addEventListener("DOMContentLoaded", initializePython);
-// window.addEventListener("pywebviewready", initializePython);
-
-const python = new Python()
+window.addEventListener('pywebviewready', () => {
+    python = window.pywebview.api;
+    console.log("Switched to real API");
+});
 
 // Get all settings now
 const [settings, settingsKeys] = python.getSettings()
@@ -44,7 +40,7 @@ document.documentElement.style.setProperty("--user-chat-color", getTextColor(set
 document.documentElement.style.setProperty("--ai-chat-color", getTextColor(settings["aiColor"]))
 
 // Get language-fitting text
-const langText = python.getText(settings["lang"])
+const langText = python.getText(settings["Language"])
 
 // Fill up the HTML text first
 // Placeholders first
