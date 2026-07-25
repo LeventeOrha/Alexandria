@@ -105,21 +105,21 @@ class Python {
     // () -> dict[str, str], dict[str, dict[str, str]]
     getSettings() {
         const params = {
-            "lang": "hu",
-            "gemini-model": "gemini-3.5-flash",
+            "Language": "hu",
+            "Gemini_model": "gemini-3.5-flash",
             "aiColor": "#008000",
             "userColor": "#00ffff",
-            "GUI": true,
+            "GUI-useage": true,
             "background": "../images/bookshelf_background.jpg",
             "GBooksAPIkey": "AbAc",
             "GeminiAPI": "GeMiNiKeY"
         }
         const keys = {
-            "lang": {
+            "Language": {
                 "en": "English",
                 "hu": "Hungarian"
             },
-            "gemini-model": {
+            "Gemini_model": {
                 "gemini-3.5-flash": "3.5 Flash"
             }
         }
@@ -220,5 +220,11 @@ class Python {
     backgroundChange() {
         console.log("You should pick a new background!")
         return "background.jpg"
+    }
+
+    // Check if this is a new user (Newly created database)
+    // () -> bool
+    isNewUser() {
+        return false
     }
 }
