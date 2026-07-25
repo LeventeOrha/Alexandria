@@ -1,0 +1,83 @@
+---
+en:
+  AiMessages:
+    NoAIConnection: "No AI agent found. Add an API key first in the settings!"
+    FailedAIMessage: "Something went wrong. Try again another time!"
+  placeholders:
+    onlineTitle: Title
+    onlineAuthor: Author
+  textContents: 
+    saveBooksOnShelf: Save
+    searchKeyTitle: Title
+    searchKeyAuthor: Author
+    searchKeyShelf: Shelf
+    searchKeyCategory: Category
+    languageSetting: "Language: "
+    aiChatColorSetting: "Librarian chat color: "
+    userChatColorSetting: "User chat color: "
+    backgroundImageSetting: "Background image: "
+    GUISetting: Graphical interface
+    saveSettings: Save
+    exportLibrary: Export library
+    importLibrary: Import library
+  inCodeOptions:
+    bookStart: Start
+    bookEnd: End
+    edit: Edit
+    delete: Delete
+    save: Save
+    categories: Categories
+    shelves: Shelves
+    new: New
+  exportLibraryTo: "Export library to: "
+  successfulExport: "Export successful"
+  failedExport: "Export failed"
+  importLibraryFrom: "Import library from: "
+  successfulImport: Import successful
+  failedImport: Import falied
+  backgroundImage: "Use this as background: "
+
+hu:
+  AiMessages:
+    NoAIConnection: "Nem található MI segéd. Adjon hozzá API kulcsot a beállításokban!"
+    FailedAIMessage: "Valami félrement. Próbálja meg máskor!"
+  placeholders:
+    onlineTitle: "Cím"
+    onlineAuthor: "Író"
+  textContents:
+    saveBooksOnShelf: "Mentés"
+    searchKeyTitle: "Cím"
+    searchKeyAuthor: "Író"
+    searchKeyShelf: "Polc"
+    searchKeyCategory: "Kategória"
+    languageSetting: "Nyelv:"
+    aiChatColorSetting: "Könyváros színe:"
+    userChatColorSetting: "Felhasználó színe:"
+    backgroundImageSetting: "Háttérkép:"
+    GUISetting: "Vizuális felület"
+    saveSettings: "Mentés"
+    exportLibrary: "Könyvtár exportálása"
+    importLibrary: "Könyvtár importálása"
+  inCodeOptions:
+    bookStart: "Kezdve"
+    bookEnd: "Befejezve"
+    edit: "Szerkesztés"
+    delete: "Törlés"
+    save: "Mentés"
+    categories: "Kategóriák"
+    shelves: "Polcok"
+    new: "Új"
+  exportLibraryTo: "Könyvtár exportálása ide: "
+  successfulExport: "Exportálás sikeres"
+  failedExport: "Sikertelen exportálás"
+  importLibraryFrom: "Könyvtár importálása innen: "
+  successfulImport: "Sikeres beolvasás"
+  failedImport: "A beolvasás meghiúsult"
+  backgroundImage: "Háttérkép: "
+
+Options:
+  Language:
+    en: English
+    hu: Hungarian
+  Gemini_model:
+    gemini-3.5-flash: 3.5 Flash
