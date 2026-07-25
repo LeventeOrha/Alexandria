@@ -4,6 +4,7 @@ from tkinter import filedialog
 import os
 from dataclasses import asdict
 import yaml
+import json
 
 from alexandria.data import Book, Database
 import alexandria.utils as au
@@ -203,10 +204,19 @@ class API:
         """
         Save the new settings
         """
-        # Merge the two params dict, fusing the new info into the old
-        self.params = self.params | params
+        # Merge the two params dict, fusing the new info into the old - discarding new keys
+        for key in self.params.keys() & params.keys():
+            self.params[key] = params[key]
 
-        # Save these parameters
+        # Save API keys
+        self.api_keys["GB_API"] = params["GBooksAPIkey"]
+        self.api_keys["Gemini_API"] = params["GeminiAPI"]
+
+        # Write them out into the file
+        with open(self.params["API_file"], "wt", encoding="utf-8") as out:
+            json.dump(self.api_keys, out, ensure_ascii=False, indent=4)
+
+        # Save the parameters
         au.writeSettings(self.params)
         return
 
