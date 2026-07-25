@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles/searchOnline.css">
   <link rel="stylesheet" href="styles/aiChat.css">
   <link rel="stylesheet" href="styles/settings.css">
+  <link rel="stylesheet" href="styles/homePage.css">
 </head>
 <body>
     <div class="nav-holder">
@@ -21,8 +22,33 @@
     </div>
 
     <!-- REMOVE glass from main divs -->
-    <div class="main glass" id="homePage">
-
+    <div class="main" id="homePage">
+        <div id="currentReading" class="glass">
+            <div id="currentHeader">
+                Reading
+            </div>
+            <div id="currentBody">
+                <button id="leftArrow" class="glass">left</button>
+                <div id="currentList">
+                    <div class="currentBook">
+                        <img src="./images/wooden_background.jpg">
+                        <h1>Background image</h1>
+                        <h2>By Me</h2>
+                    </div>
+                    <div class="currentBook">
+                        <img src="./images/wooden_background.jpg">
+                        <h1>Background image</h1>
+                        <h2>By Me</h2>
+                    </div>
+                    <div class="currentBook">
+                        <img src="./images/wooden_background.jpg">
+                        <h1>Background image</h1>
+                        <h2>By Me</h2>
+                    </div>
+                </div>
+                <button id="rightArrow" class="glass">right</button>
+            </div>
+        </div>
     </div>
 
     <div class="main lower" id="searchOnline">
@@ -158,6 +184,7 @@
     <script src="scripts/python.js"></script>
     <script src="scripts/onLoad.js"></script>
     <script src="scripts/nav.js"></script>
+    <script src="scripts/homePage.js"></script>
     <script src="scripts/searchOnline.js"></script>
     <script src="scripts/bookData.js"></script>
     <script src="scripts/aiChat.js"></script>
