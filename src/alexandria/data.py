@@ -40,7 +40,7 @@ class Database:
         self.is_new = not os.path.exists(datafile)
 
         self.filename = datafile
-        self.conn = sqlite3.connect(datafile)
+        self.conn = sqlite3.connect(datafile, check_same_thread=False)
         self.conn.row_factory = sqlite3.Row
         self.cur = self.conn.cursor()
 
