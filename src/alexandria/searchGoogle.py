@@ -4,45 +4,73 @@ Do a Google Books search
 
 import requests
 import alexandria.categories as transl
-from alexandria.data import Book
+from alexandria.data import Book, Database
 
 class Google:
-    def __init__(self, API_key: str):
+    def __init__(self, API_key: str, db: Database):
         self.API_key = API_key
+        self.db = db
 
-    def sparseResults(self, response: dict) -> list[dict]:
+    def searchByIDOnline(self, ID: str) -> dict:
+        """
+        Search a book by its unique volume ID on Google Books
+        """
+        url = f"https://www.googleapis.com/books/v1/volumes/{ID}"
+
+        params = {
+            "projection": "full",
+            "key": self.API_key
+        }
+
+        response = requests.get(url, params=params)
+        data = response.json()
+
+        return data
+
+    def sparseResults(self, data: dict) -> list[dict]:
         """
         Sparse the results of a Google Books search (too many info)
 
         Parameters
         ----------
-        response: `dict`
-            Response of a Google Books API request
+        data: `dict`
+            Response of a Google Books API request (one of "items")
         
         Returns
         -------
-        books: `list`
-            Dictionary of each book, keys are the titles, with the following
-            data: title, author, publish date, image link, Google Books ID
+        book: `dict`
+            Dictionary of the book, keys are the titles, with the following
+            data: title, author, publish date, image link, Google Books ID, abstract, categories
         """
 
-        books = []
+        book = {}
 
-        for data in response["items"]:
-            book = {}
-            book["title"] = data["volumeInfo"].get("title")
-            book["author"] = data["volumeInfo"].get("authors")
-            book["date"] = data["volumeInfo"].get("publishedDate")
-            if "imageLinks" in data["volumeInfo"]:
-                book["img"] = data["volumeInfo"]["imageLinks"].get("thumbnail", None)
-            else:
-                book["img"] = None
-            book["ID"] = data["id"]
-            book["lang"] = data["volumeInfo"]["language"]
+        book["ID"] = data["id"]
 
-            books.append(book)
+        full_data = self.searchByIDOnline(book["ID"])["volumeInfo"]
 
-        return books
+        book["title"] = full_data["title"]
+
+        book["author"] = full_data["authors"][0]
+
+        book["date"] = full_data["publishedDate"]
+
+        # As the image sizes are, if alphabetically ordered, are decreasing with each key
+        # I rather keep the first one, theoretically the biggest
+        book["img"] = full_data["imageLinks"][sorted(full_data["imageLinks"].keys())[0]]
+
+        categories = full_data["categories"]
+        cats = []
+        for cat in categories:
+            cat = cat.split("/")
+            cat = [c.strip() for c in cat]
+            cats += cat
+
+        book["category"] = transl.translateCategories(cats, "en")
+
+        book["abs"] = full_data.get("description", "")
+
+        return book
     
     def searchBook(self, title: str = "", author: str = "", lang: str = "en") -> list[dict]:
         """
@@ -78,54 +106,42 @@ class Google:
         resp = requests.get(url, params=params).json()
 
         if "items" in resp:
-            return self.sparseResults(resp)
+            results = []
+            for book in resp["items"]:
+                results.append(self.sparseResults(book))
+            return results
         else:
             return None
-        
+
     def searchByID(self, ID: str) -> dict:
         """
-        Search a book by its unique volume ID on Google Books
+        Given an ID, merge the online info (with abstract) with the local info (shelves, ...)
         """
-        url = f"https://www.googleapis.com/books/v1/volumes/{ID}"
-
-        params = {
-            "projection": "full",
-            "key": self.API_key
-        }
-
-        response = requests.get(url, params=params)
-        data = response.json()
-
-        return data
+        book_online = self.sparseResults({"id": ID})
+        if self.db.bookExists(ID):
+            book_stored = self.db.searchBy("ID", ID)[0] # One element list
+            book_online["shelf"] = book_stored.shelf
+            book_online["start"] = book_stored.start
+            book_online["end"] = book_stored.end
+        return book_online
     
     def createBook(self, ID: str, shelf: str, start: str = "---", end: str = "---") -> Book:
         """
         Create a new Book instance from an ID and put on a shelf
         """
-        info = self.searchByID(ID)
+        b = self.searchByID(ID)
 
-        book = {}
-        book["title"] = info["volumeInfo"]["title"]
-        book["author"] = info["volumeInfo"]["authors"][0]
-        book["date"] = info["volumeInfo"]["publishedDate"]
-
-        # As the image sizes are, if alphabetically ordered, are decreasing with each key
-        # I rather keep the first one, theoretically the biggest
-        book["img"] = info["volumeInfo"]["imageLinks"][sorted(info["volumeInfo"]["imageLinks"].keys())[0]]
-
-        book["ID"] = ID
-        book["category"] = []
-        book["shelf"] = [shelf]
-
-        categories = []
-        for category in info["volumeInfo"]["categories"]:
-            cat = category.split(" / ")
-            for c in cat:
-                categories.append(c.strip())
-        book["category"] = transl.translateCategories(categories, "en")
-
-        book["start"] = start
-        book["end"] = end
+        book = {
+            "title": b["title"],
+            "author": b["author"],
+            "date": b["date"],
+            "img": b["img"],
+            "ID": ID,
+            "category": b["category"],
+            "shelf": [shelf],
+            "start": start,
+            "end": end
+        }
 
         book = Book(**book)
 
