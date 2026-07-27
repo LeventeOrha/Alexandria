@@ -1,4 +1,5 @@
 class Python {
+    // Class to handle API connection easier
     constructor(){
         // Create the database, moly, google and ai here
 
@@ -32,95 +33,139 @@ class Python {
 
     // Search inside the database, based on any key and value pair
     // (str, str) -> list[dict[str]]
-    searchIn(key, value){
-        return [{ ...this.fortuna }, { ...this.martian }]
+    async searchIn(key, value){
+        let result
+
+        if (window.pywebview?.api) {
+            result = await window.pywebview.api.searchIn(key, value)
+        }
+        else {
+            result = [{ ...this.fortuna }, { ...this.martian }]
+        }
+        return result
     }
 
     // Search a new book online
     // (str, str, str) -> list[dict[str]]
-    searchOut(title, author, lang) {
-        return [{ ...this.fortuna }, { ...this.martian }]
+    async searchOut(title, author, lang) {
+        let result
+
+        if (window.pywebview?.api) {
+            result = await window.pywebview.api.searchOut(title, author, lang)
+        }
+        else {
+            result = [{ ...this.fortuna }, { ...this.martian }]
+        }
+        return result
     }
 
     // Get details of a book by ID (in database)
     // (str) -> dict[str]
-    searchByID(ID) {
-        var result
+    async searchByID(ID) {
+        let result
 
-        if (ID == this.fortuna["ID"]){
-            result = { ...this.fortuna }
-        } else {
-            result = { ...this.martian }
+        if (window.pywebview?.api) {
+            result = await window.pywebview.api.searchByID(ID)
         }
-
-        result["abstract"] = "This would be the abstract here"
-
+        else {
+            result = [{ ...this.fortuna }, { ...this.martian }]
+        }
         return result
     }
 
     // Get all categories
     // () -> dict[str] - code name : name in selected language
-    getCategories() {
-        let categories = {
-            "fiction": "Fiction",
-            "science": "Science",
-            "histroy": "History",
-            "bibliography": "Bibliography"
+    async getCategories() {
+        let result
+
+        if (window.pywebview?.api) {
+            result = await window.pywebview.api.getCategories()
         }
-        return categories
+        else {
+            result = {
+                "fiction": "Fiction",
+                "science": "Science",
+                "histroy": "History",
+                "bibliography": "Bibliography"
+            }
+        }
+        return result
     }
 
     // Get all shelves
     // () -> list[str]
-    getShelves() {
-        return ["Reading", "Read", "To read", "Stopped"]
+    async getShelves() {
+       let result
+
+        if (window.pywebview?.api) {
+            result = await window.pywebview.api.getShelves()
+        }
+        else {
+            result = ["Reading", "Read"]
+        }
+        return result
     }
 
     // Add a new books to the database
     // (ids of all books to be added, shelf to place on)
     // (list[str], str) -> None
-    addBooks(ids, shelf) {
-        const len = ids.length
+    async addBooks(ids, shelf) {
+        await window.pywebview.api.addBooks(ids, shelf)
     }
 
     // Update a book's data
     // (dict[str]) -> None
-    saveBook(book) {
-        const keys = Object.keys(book)
+    async saveBook(book) {
+        await window.pywebview.api.saveBook(book)
     }
 
     // Delete a book
     // (dict[str]) -> None
-    deleteBook(book) {
-        const keys = Object.keys(book)
+    async deleteBook(book) {
+        await window.pywebview.api.deleteBook(book)
     }
 
     // Send and recieve a message to the AI assistant
     // (str) -> str
-    getAIMessage(user_message){
-        return user_message + "\nHello there!"
+    async getAIMessage(user_message){
+        let result
+
+        if (window.pywebview?.api) {
+            result = await window.pywebview.api.getAIMessage(user_message)
+        }
+        else {
+            result = "Sorry, something went wrong. Try again!"
+        }
+        return result
     }
 
     // Get the current settings of the system
     // () -> dict[str, str], dict[str, dict[str, str]]
-    getSettings() {
-        const params = {
-            "Language": "hu",
-            "Gemini_model": "gemini-3.5-flash",
-            "aiColor": "#008000",
-            "userColor": "#00ffff",
-            "GUI-useage": true,
-            "background": "../images/bookshelf_background.jpg",
-            "GBooksAPIkey": "AbAc",
-            "GeminiAPI": "GeMiNiKeY"
+    async getSettings() {
+        let params, keys
+
+        if (window.pywebview?.api) {
+            [params, keys] = await window.pywebview.api.getSettings()
         }
-        const keys = {
-            "Language": {
-                "en": "English",
-                "hu": "Hungarian"
-            },
-            "Gemini_model": {
-                "gemini-3.5-flash": "3.5 Flash"
+        else {
+            params = {
+                "Language": "hu",
+                "Gemini_model": "gemini-3.5-flash",
+                "aiColor": "#008000",
+                "userColor": "#00ffff",
+                "GUI-useage": true,
+                "background": "../images/bookshelf_background.jpg",
+                "GBooksAPIkey": "AbAc",
+                "GeminiAPI": "GeMiNiKeY"
+            }
+            keys = {
+                "Language": {
+                    "en": "English",
+                    "hu": "Hungarian"
+                },
+                "Gemini_model": {
+                    "gemini-3.5-flash": "3.5 Flash"
+                }
             }
         }
         return [params, keys]
@@ -128,103 +173,125 @@ class Python {
 
     // Read in given language text
     // (str) -> dict[str: str]
-    getText(lang) {
-        const text = {
-            "hu": {
-                "placeholders": {
-                    "onlineTitle": "Cím",
-                    "onlineAuthor": "Író",
+    async getText(lang) {
+        if (window.pywebview?.api) {
+            let result
+            result = await window.pywebview.api.getText(lang)
+            return result
+        }
+        else {
+            const text = {
+                "hu": {
+                    "placeholders": {
+                        "onlineTitle": "Cím",
+                        "onlineAuthor": "Író",
+                    },
+                    "textContents": {
+                        "saveBooksOnShelf": "Mentés",
+                        "searchKeyTitle": "Cím",
+                        "searchKeyAuthor": "Író",
+                        "searchKeyShelf": "Polc",
+                        "searchKeyCategory": "Kategória",
+                        "languageSetting": "Nyelv:",
+                        "aiChatColorSetting": "Könyváros színe:",
+                        "userChatColorSetting": "Felhasználó színe:",
+                        "backgroundImageSetting": "Háttérkép:",
+                        "GUISetting": "Vizuális felület",
+                        "saveSettings": "Mentés",
+                        "exportLibrary": "Könyvtár exportálása", 
+                        "importLibrary": "Könyvtár importálása",
+                    },
+                    "inCodeOptions": {
+                        "bookStart": "Kezdve",
+                        "bookEnd": "Befejezve",
+                        "edit": "Szerkesztés",
+                        "delete": "Törlés",
+                        "save": "Mentés",
+                        "categories": "Kategóriák",
+                        "shelves": "Polcok",
+                        "new": "Új"
+                    }
                 },
-                "textContents": {
-                    "saveBooksOnShelf": "Mentés",
-                    "searchKeyTitle": "Cím",
-                    "searchKeyAuthor": "Író",
-                    "searchKeyShelf": "Polc",
-                    "searchKeyCategory": "Kategória",
-                    "languageSetting": "Nyelv:",
-                    "aiChatColorSetting": "Könyváros színe:",
-                    "userChatColorSetting": "Felhasználó színe:",
-                    "backgroundImageSetting": "Háttérkép:",
-                    "GUISetting": "Vizuális felület",
-                    "saveSettings": "Mentés",
-                    "exportLibrary": "Könyvtár exportálása", 
-                    "importLibrary": "Könyvtár importálása",
-                },
-                "inCodeOptions": {
-                    "bookStart": "Kezdve",
-                    "bookEnd": "Befejezve",
-                    "edit": "Szerkesztés",
-                    "delete": "Törlés",
-                    "save": "Mentés",
-                    "categories": "Kategóriák",
-                    "shelves": "Polcok",
-                    "new": "Új"
-                }
-            },
-            "en": {
-                "placeholders": {
-                    "onlineTitle": "Title",
-                    "onlineAuthor": "Author",
-                },
-                "textContents": {
-                    "saveBooksOnShelf": "Save",
-                    "searchKeyTitle": "Title",
-                    "searchKeyAuthor": "Author",
-                    "searchKeyShelf": "Shelf",
-                    "searchKeyCategory": "Category",
-                    "languageSetting": "Language:",
-                    "aiChatColorSetting": "Librarian chat color:",
-                    "userChatColorSetting": "User chat color:",
-                    "backgroundImageSetting": "Background image:",
-                    "GUISetting": "Graphical interface",
-                    "saveSettings": "Save",
-                    "exportLibrary": "Export library", 
-                    "importLibrary": "Import library",
-                },
-                "inCodeOptions": {
-                    "bookStart": "Start",
-                    "bookEnd": "End",
-                    "edit": "Edit",
-                    "delete": "Delete",
-                    "save": "Save",
-                    "categories": "Categories",
-                    "shelves": "Shelves",
-                    "new": "New"
+                "en": {
+                    "placeholders": {
+                        "onlineTitle": "Title",
+                        "onlineAuthor": "Author",
+                    },
+                    "textContents": {
+                        "saveBooksOnShelf": "Save",
+                        "searchKeyTitle": "Title",
+                        "searchKeyAuthor": "Author",
+                        "searchKeyShelf": "Shelf",
+                        "searchKeyCategory": "Category",
+                        "languageSetting": "Language:",
+                        "aiChatColorSetting": "Librarian chat color:",
+                        "userChatColorSetting": "User chat color:",
+                        "backgroundImageSetting": "Background image:",
+                        "GUISetting": "Graphical interface",
+                        "saveSettings": "Save",
+                        "exportLibrary": "Export library", 
+                        "importLibrary": "Import library",
+                    },
+                    "inCodeOptions": {
+                        "bookStart": "Start",
+                        "bookEnd": "End",
+                        "edit": "Edit",
+                        "delete": "Delete",
+                        "save": "Save",
+                        "categories": "Categories",
+                        "shelves": "Shelves",
+                        "new": "New"
+                    }
                 }
             }
+            return text[lang]
         }
-        return text[lang]
     }
 
 
     // Save the new settings
     // (dict[str, str]) -> None
-    saveSettings(params) {
-        console.log(params)
+    async saveSettings(params) {
+        await window.pywebview.api.saveSettings(params)
     }
 
     // Ask user for a file to SAVE the library into and save it
     // () -> None
-    exportLibrary() {
-        console.log("Export successful!")
+    async exportLibrary() {
+        await window.pywebview.api.exportLibrary()
     }
 
     // Ask user for input file and read in library
     // () -> None
-    importLibrary() {
-        console.log("Import successful!")
+    async importLibrary() {
+        await window.pywebview.api.importLibrary()
     }
 
     // Ask user for an image file as a background, returning the filename
     // () -> str
-    backgroundChange() {
-        console.log("You should pick a new background!")
-        return "background.jpg"
+    async backgroundChange() {
+       let result
+
+       if (window.pywebview?.api) {
+        result = await window.pywebview.api.backgroundChange()
+       }
+       else {
+        result = "./images/bookshelf_background.jpg"
+       }
+       return result
     }
 
     // Check if this is a new user (Newly created database)
     // () -> bool
-    isNewUser() {
-        return false
+    async isNewUser() {
+        let result
+
+        if (window.pywebview?.api) {
+            result = await window.pywebview.api.isNewUser()
+        }
+        else {
+            result = false
+        }
+        return result
     }
 }
