@@ -25,7 +25,7 @@ navButtons.forEach((button, index) => {
 });
 
 // If this is a new user, force them onto the settings page
-if (python.isNewUser()) {
+if (window.python.isNewUser()) {
     document.getElementById("homeButton").classList.remove("active")
     document.getElementById("settingsButton").classList.add("active")
 }
