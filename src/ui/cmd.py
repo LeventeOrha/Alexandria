@@ -78,18 +78,14 @@ class CMD:
         if new_lang == "hu":
             books = self.moly.searchBook(title, author)
             for i in range(len(books)):
-                print(f"{i+1}) {books[i]["title"]} - {books[i]["author"]} ({books[i]["date"]})")
-                for j in range(len(books[i]["imgs"])):
-                    letter = chr(ord('a') + j)
-                    print(f"\t{letter}) {books[i]["imgs"][j]}")
+                print(f"{i+1}) {books[i]["title"]} - {books[i]["author"]} ({books[i]["date"]}) - {books[i]["img"]}")
             
             pick = input(self.text["PickBook"])
 
-            if pick == "c" or len(pick) == 0:
+            if pick == "c" or len(pick) < 1:
                 return
             
-            book = books[int(pick[0]) - 1]
-            img_idx = ord(pick[1]) - ord('a')
+            book = books[int(pick) - 1]
 
             shelf = input(self.text["PickShelf"])
             if input(self.text["PickDate"]) in ["i", "y"]:
@@ -99,7 +95,7 @@ class CMD:
                 start = "---"
                 end = "---"
 
-            book = self.moly.createBook(book["ID"], shelf, img_idx, start, end)
+            book = self.moly.createBook(book["ID"], shelf, book["img"], start, end)
 
         else:
             books = self.google.searchBook(title, author, new_lang)
