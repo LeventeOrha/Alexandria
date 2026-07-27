@@ -74,7 +74,7 @@ class Moly:
         book["author"] = soup.find(class_ = "authors").contents[0].text
 
         # Get the title
-        book["title"] = soup.find(class_ = "head_title").contents[1].contents[0].text.strip().split(" (")[0]
+        book["title"] = soup.find(class_ = "head_title").find_all('h1', recursive=False)[0].contents[0].text.strip().split(" (")[0]
 
         # Get publish dates and ISBN
         editions = soup.find_all(class_ = "edition")
@@ -103,7 +103,7 @@ class Moly:
         # ID is the link
         book["ID"] = url
 
-        # Get ALL categories (sparse later I guess)
+        # Get ALL categories
         book["category"] = []
 
         as_ = soup.find(id="book_tags").find("p").contents
@@ -113,6 +113,8 @@ class Moly:
             if txt in ["", " "]:
                 continue
             book["category"].append(a.text)
+
+        book["category"] = transl.translateCategories(book["category"]) # Sparsing categories
 
         # Get all image links
         book["imgs"] = []
@@ -131,7 +133,20 @@ class Moly:
                 book["abs"] += f"{p.text}\n"
         book["abs"] = book["abs"].strip()
 
-        return book
+        books = []
+        for i in range(len(book["imgs"])):
+            edition = {
+                "title": book["title"],
+                "author": book["author"],
+                "date": book["date"],
+                "ID": url,
+                "category": book['category'],
+                "img": book["imgs"][i],
+                "abs": book["abs"]
+            }
+            books.append(edition)
+
+        return books
     
     def searchBook(self, title: str, author: str, lang: str = "hu") -> list[Book]:
         """
@@ -159,22 +174,31 @@ class Moly:
 
         books = []
         for link in links:
-            books.append(self.sparseResults(link))
+            books += self.sparseResults(link)
 
         return books
     
-    def searchByID(self, ID: str):
+    def searchByID(self, ID: str, img: str = ""):
         """
         Given one ID, get every data of that book
         """
         url = ID.replace(self.moly, "")
-        return self.sparseResults(url)
+        book_online = self.sparseResults(url)[0]
+        if self.db.bookExists(ID):
+            book_stored = self.db.searchBy("ID", ID)[0] # It will always return a one-element list
+            book_online["img"] = book_stored.img
+            book_online["shelf"] = book_stored.shelf
+            book_online["start"] = book_stored.start
+            book_online["end"] = book_stored.end
+        else:
+            book_online["img"] = img
+        return book_online
 
-    def createBook(self, ID: str, shelf: str, img_idx: int = 0, start: str = "---", end: str = "---"):
+    def createBook(self, ID: str, shelf: str, img_link: str, start: str = "---", end: str = "---"):
         """
         Create a new book instance that can be straight saved in the database
         """
-        b = self.searchByID(ID)
+        b = self.searchByID(ID, img_link)
 
         categories = transl.translateCategories(b["category"], "hu")
         
@@ -182,7 +206,7 @@ class Moly:
             "title": b["title"],
             "author": b["author"],
             "date": b["date"],
-            "img": b["imgs"][img_idx],
+            "img": b["img"],
             "ID": ID,
             "category": categories,
             "shelf": [shelf],
