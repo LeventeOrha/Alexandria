@@ -25,7 +25,7 @@ function createNewMessage(content, sender) {
 }
 
 const sendMessage = document.getElementById("sendNewMessage")
-function sendNewMessage() {
+async function sendNewMessage() {
     // Get the new text from the user
     const textarea = document.getElementById("writeNewMessage")
     var userMessage = textarea.value
@@ -37,7 +37,7 @@ function sendNewMessage() {
     createNewMessage(userMessage, "user")
 
     // Get the answer
-    const answer = python.getAIMessage(userMessage)
+    const answer = await window.python.getAIMessage(userMessage)
 
     // Put out the answer
     createNewMessage(answer, "ai")
