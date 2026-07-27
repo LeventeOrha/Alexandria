@@ -47,7 +47,7 @@ class CMD:
         API_keys = u.readSettings(params["API_file"])
         ai_settings = u.readSettings(params["AI_settings"])
 
-        self.google = Google(API_keys["GB_API"])
+        self.google = Google(API_keys["GB_API"], self.db)
         self.ai = AI(API_keys, params["Gemini_model"], ai_settings, self.db)
 
         if self.db.is_new:
@@ -160,7 +160,7 @@ class CMD:
         
         else:
             all_data = self.google.searchByID(book["ID"])
-            book["abstract"] = all_data["volumeInfo"]["description"]
+            book["abstract"] = all_data["abs"]
 
         print(f"{book['title']} - {book['author']}")
         print(book['img'])

@@ -61,7 +61,7 @@ class API:
         self.api_keys = au.readSettings(self.params["API_file"])
 
         # Create Google Books API
-        self.gb = Google(self.api_keys["GB_API"])
+        self.gb = Google(self.api_keys["GB_API"], self.db)
 
         # Create AI agent (Gemini throws error if there is no key)
         self.ai = AI(self.api_keys, self.params["Gemini_model"], self.ai_settings, self.db)

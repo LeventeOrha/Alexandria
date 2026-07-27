@@ -12,7 +12,7 @@ class AI:
         self.settings = settings
         self.model = model
         self.moly = Moly(db)
-        self.google = Google(API_keys["GB_API"])
+        self.google = Google(API_keys["GB_API"], db)
         self.db = db
 
         self.system_prompt = f"Role: \n{self.settings["system_prompt"]["role"]}\n"
