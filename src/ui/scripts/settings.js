@@ -1,6 +1,6 @@
 // Set out all available languages and keys
 const selectLanguage = document.getElementById("selectLanguage")
-for (const [key, value] of Object.entries(settingsKeys["Language"])) {
+for (const [key, value] of Object.entries(window.app.settingsKeys["Language"])) {
     const option = document.createElement("option");
     option.value = key;          // value attribute
     option.textContent = value;  // visible text
@@ -9,7 +9,7 @@ for (const [key, value] of Object.entries(settingsKeys["Language"])) {
 
 // Put out all available gemini models
 const selectAI = document.getElementById("selectAI")
-for (const [key, value] of Object.entries(settingsKeys["Gemini_model"])) {
+for (const [key, value] of Object.entries(window.app.settingsKeys["Gemini_model"])) {
     const option = document.createElement("option");
     option.value = key;          // value attribute
     option.textContent = value;  // visible text
@@ -17,16 +17,16 @@ for (const [key, value] of Object.entries(settingsKeys["Gemini_model"])) {
 }
 
 // Set current values for all settings
-selectLanguage.value = settings["Language"]
-selectAI.value = settings["Gemini_model"]
-document.getElementById("aiChatColor").value = settings["aiColor"]
-document.getElementById("userChatColor").value = settings["userColor"]
-document.getElementById("backgroundImage").textContent = settings["background"]
-document.getElementById("googleBooksKey").value = settings["GBooksAPIkey"]
-document.getElementById("geminiKey").value = settings["GeminiAPI"]
+selectLanguage.value = window.app.settings["Language"]
+selectAI.value = window.app.settings["Gemini_model"]
+document.getElementById("aiChatColor").value = window.app.settings["aiColor"]
+document.getElementById("userChatColor").value = window.app.settings["userColor"]
+document.getElementById("backgroundImage").textContent = window.app.settings["background"]
+document.getElementById("googleBooksKey").value = window.app.settings["GBooksAPIkey"]
+document.getElementById("geminiKey").value = window.app.settings["GeminiAPI"]
 
 // Save current settings
-function saveSettings() {
+async function saveSettings() {
     const settings = {}
 
     // Get language
@@ -53,18 +53,18 @@ function saveSettings() {
     // Google Books API key
     settings["GBooksAPIkey"] = document.getElementById("googleBooksKey").value
 
-    python.saveSettings(settings)
+    await window.python.saveSettings(settings)
 }
 document.getElementById("saveSettings").addEventListener("click", saveSettings)
 
 // Export library button function
-document.getElementById("exportLibrary").addEventListener("click", python.exportLibrary)
+document.getElementById("exportLibrary").addEventListener("click", window.python.exportLibrary)
 
 // Import library button function
-document.getElementById("importLibrary").addEventListener("click", python.importLibrary)
+document.getElementById("importLibrary").addEventListener("click", window.python.importLibrary)
 
 // Background changing button
 document.getElementById("backgroundImage").addEventListener("click", () => {
-    const filename = python.backgroundChange()
+    const filename = window.python.backgroundChange()
     document.getElementById("backgroundImage").textContent = filename
 })
