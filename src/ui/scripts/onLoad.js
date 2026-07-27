@@ -1,21 +1,9 @@
 // Functions to run at the start of the app
 
-// Shortcut API connection
-// With safeguard, using actual python when available, otherwise the dummy js class
-let python = new Python(); // start with dummy
-
-window.addEventListener('pywebviewready', () => {
-    python = window.pywebview.api;
-    console.log("Switched to real API");
-});
-
-// Get all settings now
-const [settings, settingsKeys] = python.getSettings()
-
 // Set background image and chat colors
-document.documentElement.style.setProperty("--user-chat-bg", settings["userColor"]) // User message color
-document.documentElement.style.setProperty("--ai-chat-bg", settings["aiColor"]) // AI message color
-document.documentElement.style.setProperty("--background-image", `url(${settings["background"]})`) // Background image
+document.documentElement.style.setProperty("--user-chat-bg", window.app.settings["userColor"]) // User message color
+document.documentElement.style.setProperty("--ai-chat-bg", window.app.settings["aiColor"]) // AI message color
+document.documentElement.style.setProperty("--background-image", `url(${window.app.settings["background"]})`) // Background image
 
 // Set ai message text colors based on their backgrounds
 function getTextColor(hex) {
@@ -36,30 +24,19 @@ function getTextColor(hex) {
 
     return brightness > 128 ? "#000000" : "#FFFFFF"
 }
-document.documentElement.style.setProperty("--user-chat-color", getTextColor(settings["userColor"]))
-document.documentElement.style.setProperty("--ai-chat-color", getTextColor(settings["aiColor"]))
-
-// Get language-fitting text
-const langText = python.getText(settings["Language"])
+document.documentElement.style.setProperty("--user-chat-color", getTextColor(window.app.settings["userColor"]))
+document.documentElement.style.setProperty("--ai-chat-color", getTextColor(window.app.settings["aiColor"]))
 
 // Fill up the HTML text first
 // Placeholders first
-for (const [key, value] of Object.entries(langText["placeholders"])) {
+for (const [key, value] of Object.entries(window.app.langText["placeholders"])) {
     document.getElementById(key).placeholder = value
 }
 
 // textContents next
-for (const [key, value] of Object.entries(langText["textContents"])) {
+for (const [key, value] of Object.entries(window.app.langText["textContents"])) {
     document.getElementById(key).textContent = value
 }
-
-// "Export" in-code text into this dict
-const inCodeText = langText["inCodeOptions"]
-
-// Get shelves and categories
-var shelfOptions = python.getShelves()
-shelfOptions.push(inCodeText["new"])
-const categoryOptions = python.getCategories()
 
 // Set the distance from the left edge of main divs on startup
 const navHolder = document.querySelector(".nav-holder");
@@ -84,7 +61,7 @@ window.addEventListener("resize", positionMain);
 document.addEventListener("change", function (event) {
   const select = event.target;
 
-  if (select.tagName === "SELECT" && select.value === inCodeText["new"]) {
+  if (select.tagName === "SELECT" && select.value === window.app.inCodeText["new"]) {
     const input = document.createElement("input");
 
     // Preserve id and class
