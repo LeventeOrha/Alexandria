@@ -14,7 +14,7 @@ function updateSearchField() {
         newField.id = "searchValue";
         newField.className = "glass";
 
-        shelfOptions.forEach(value => {
+        window.app.shelfOptions.forEach(value => {
             const option = document.createElement("option");
             option.value = value;
             option.textContent = value;
@@ -26,10 +26,10 @@ function updateSearchField() {
         newField.id = "searchValue";
         newField.className = "glass";
 
-        for (const key of Object.keys(categoryOptions)) {
+        for (const key of Object.keys(window.app.categoryOptions)) {
             const option = document.createElement("option");
             option.value = key;
-            option.textContent = categoryOptions[key];
+            option.textContent = window.app.categoryOptions[key];
             newField.appendChild(option);
         } 
 
@@ -88,7 +88,7 @@ function editBook() {
     addCategory.className = "addTag"
     addCategory.id = "addCategory"
     addCategory.addEventListener("click", () => {
-        insertSelect("addCategory", categoryOptions);
+        insertSelect("addCategory", window.app.categoryOptions);
     })
 
     document.getElementById("categoryTags").appendChild(addCategory)
@@ -99,7 +99,7 @@ function editBook() {
     addShelf.className = "addTag"
     addShelf.id = "addShelf"
     addShelf.addEventListener("click", () => {
-        insertSelect("addShelf", shelfOptions);
+        insertSelect("addShelf", window.app.shelfOptions);
     })
 
     document.getElementById("shelfTags").appendChild(addShelf)
@@ -108,23 +108,23 @@ function editBook() {
     const startDate = document.getElementById("start")
     // TODO - change it here to actual date parsing and not this "quick" solution
     let date = startDate.textContent.split(" ")[1]
-    startDate.innerHTML = `${inCodeText["bookStart"]}: <input type="date" value="${date}" class="dateTag" id="startDate">`
+    startDate.innerHTML = `${window.app.inCodeText["bookStart"]}: <input type="date" value="${date}" class="dateTag" id="startDate">`
 
     // Change end to input
     const endDate = document.getElementById("end")
     date = endDate.textContent.split(" ")[1]
     if (date == "---"){
-        endDate.innerHTML = `${inCodeText["bookEnd"]}: <input type="date" class="dateTag" id="endDate">`
+        endDate.innerHTML = `${window.app.inCodeText["bookEnd"]}: <input type="date" class="dateTag" id="endDate">`
     }
     else {
-        endDate.innerHTML = `${inCodeText["bookEnd"]}: <input type="date" value="${date}" class="dateTag" id="endDate">`
+        endDate.innerHTML = `${window.app.inCodeText["bookEnd"]}: <input type="date" value="${date}" class="dateTag" id="endDate">`
     }
 }
 
 // Save mode
-function saveBook() {
+async function saveBook() {
     // Get the book's all data from the database
-    let book = python.searchByID(document.querySelector(".bookData").id)
+    let book = await window.python.searchByID(document.querySelector(".bookData").id)
 
     // Remove "removeTag" buttons
     let removes = document.querySelectorAll(".removeTag")
@@ -156,7 +156,7 @@ function saveBook() {
     book["end"] = document.getElementById("endDate").value
 
     // Save the updated book
-    python.saveBook(book)
+    window.python.saveBook(book)
 
     // Replace existing select/options with its value
     let selects = document.querySelectorAll("select.tag")
@@ -189,7 +189,7 @@ function saveBook() {
 }
 
 // Change active book
-function fillBookData(book) {
+async function fillBookData(book) {
     // Select the element to be filled
     let div = document.querySelector(".bookData")
 
@@ -197,7 +197,8 @@ function fillBookData(book) {
     div.id = book["ID"]
 
     // Get all details of the book
-    book = python.searchByID(book["ID"])
+    book = await window.python.searchByID(book["ID"])
+    console.log(JSON.stringify(book, null, 2))
 
     // Create the sub elements one by one
     let bookInfo = document.createElement("div")
@@ -218,15 +219,15 @@ function fillBookData(book) {
     // Edit button
     const editbtn = document.createElement("button")
     editbtn.id = "editBookDetails"
-    editbtn.textContent = inCodeText["edit"]
+    editbtn.textContent = window.app.inCodeText["edit"]
     editbtn.addEventListener("click", () => {
-        if (editbtn.textContent == inCodeText["edit"]) {
+        if (editbtn.textContent == window.app.inCodeText["edit"]) {
             editBook()
-            editbtn.textContent = inCodeText["save"]
+            editbtn.textContent = window.app.inCodeText["save"]
         }
         else {
             saveBook()
-            editbtn.textContent = inCodeText["edit"]
+            editbtn.textContent = window.app.inCodeText["edit"]
         }
     })
     
@@ -235,9 +236,9 @@ function fillBookData(book) {
     // Delete button
     const deletebtn = document.createElement("button")
     deletebtn.id = "deleteBook"
-    deletebtn.textContent = inCodeText["delete"]
-    deletebtn.addEventListener("click", () => {
-        python.deleteBook(book)
+    deletebtn.textContent = window.app.inCodeText["delete"]
+    deletebtn.addEventListener("click", async () => {
+        await window.python.deleteBook(book)
         div.replaceChildren() // Clear out the book details
         document.querySelector(`.bookList#${CSS.escape(book["ID"])}`).remove() // Remove it from the results
     })
@@ -252,9 +253,11 @@ function fillBookData(book) {
     let pc = document.createElement("p")
     pc.classname = "tagHolder"
     pc.id = "categoryTags"
-    pc.textContent = `${inCodeText["categories"]}: `
+    pc.textContent = `${window.app.inCodeText["categories"]}: `
 
-    book["category"].forEach((category) => {
+    const category = book['category']
+
+    category.forEach((category) => {
         let span = document.createElement("span")
         span.className = "tag"
         span.innerHTML = `<span>${category}</span>`
@@ -267,9 +270,13 @@ function fillBookData(book) {
     let ps = document.createElement("p")
     ps.classname = "tagHolder"
     ps.id = "shelfTags"
-    ps.textContent = `${inCodeText["shelves"]}: `
+    ps.textContent = `${window.app.inCodeText["shelves"]}: `
 
-    book["shelf"].forEach((shelf) => {
+    console.log(book['shelf'])
+
+    const shelf = book["shelf"]
+
+    shelf.forEach((shelf) => {
         let span = document.createElement("span")
         span.className = "tag"
         span.innerHTML = `<span>${shelf}</span>`
@@ -281,14 +288,14 @@ function fillBookData(book) {
     // Start date
     let start = document.createElement("p")
     start.id = "start"
-    start.textContent = `${inCodeText["bookStart"]}: ${book["start"]}`
+    start.textContent = `${window.app.inCodeText["bookStart"]}: ${book["start"]}`
 
     details.appendChild(start)
 
     // End date
     let end = document.createElement("p")
     end.id = "end"
-    end.textContent = `${inCodeText["bookEnd"]}: ${book["end"]}`
+    end.textContent = `${window.app.inCodeText["bookEnd"]}: ${book["end"]}`
 
     details.appendChild(end)
 
@@ -310,13 +317,14 @@ function fillBookData(book) {
 }
 
 // Do a search IN
-function searchIn() {
+async function searchIn() {
     // Get key and value to search
     const searchKey = document.getElementById("searchKey").value
     const searchValue = document.getElementById("searchValue").value
 
     // Perform search in database
-    const books = python.searchIn(searchKey, searchValue)
+    const books = await window.python.searchIn(searchKey, searchValue)
+    console.log(books)
 
     // Clear out the searchResults div
     const searchResults = document.querySelector(".searchResults")
@@ -340,7 +348,7 @@ function searchIn() {
         title.innerHTML = `<h1>${book["title"]}</h1>\n<h2>${book["author"]}</h2>`
         div.appendChild(title)
 
-        div.addEventListener("click", function () {
+        div.addEventListener("click", async function () {
             // Remove the other "current"
             document.querySelector(".bookList.current")?.classList.remove("current")
 
@@ -351,7 +359,7 @@ function searchIn() {
             document.querySelector(".bookData").replaceChildren()
 
             // Fill the book's data out
-            fillBookData(book)
+            await fillBookData(book)
         })
 
         searchResults.appendChild(div)
