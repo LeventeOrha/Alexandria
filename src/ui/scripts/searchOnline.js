@@ -1,6 +1,6 @@
 // Do an online search
 const startOnlineSearch = document.getElementById("startOnlineSearch")
-startOnlineSearch.addEventListener("click", () => {
+startOnlineSearch.addEventListener("click", async () => {
     const title = document.getElementById("onlineTitle").value
     const author = document.getElementById("onlineAuthor").value
 
@@ -8,7 +8,7 @@ startOnlineSearch.addEventListener("click", () => {
     const lang = document.getElementById("language").value
 
     // Perform the online search
-    const books = python.searchOut(title, author, lang)
+    const books = await window.python.searchOut(title, author, lang)
 
     // Get the placeholder to put the results in
     const results = document.getElementById("onlineResults")
@@ -50,7 +50,7 @@ startOnlineSearch.addEventListener("click", () => {
 
 // On page load, place in all available shelves in this select/option
 const saveShelf = document.getElementById("saveShelf")
-shelfOptions.forEach((shelf) => {
+window.app.shelfOptions.forEach((shelf) => {
     const option = document.createElement("option")
     option.value = shelf
     option.textContent = shelf
@@ -58,7 +58,7 @@ shelfOptions.forEach((shelf) => {
 })
 
 // Save new books on a shelf button
-document.getElementById("saveBooksOnShelf").addEventListener("click", () => {
+document.getElementById("saveBooksOnShelf").addEventListener("click", async () => {
     const shelf = document.getElementById("saveShelf").value
     var ids = []
     document.querySelectorAll(".pickBook").forEach(checkbox => {
@@ -66,5 +66,5 @@ document.getElementById("saveBooksOnShelf").addEventListener("click", () => {
             ids.push(checkbox.closest("div").id)
         }
     })
-    python.addBooks(ids, shelf)
+    await window.python.addBooks(ids, shelf)
 })
