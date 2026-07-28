@@ -86,6 +86,30 @@
 .abstract {
   margin: 10px;
   font-size: large;
+  max-height: 48vh;
+  overflow: auto;
+  box-sizing: border-box;
+  padding-bottom: 3vh;
+}
+
+.abstract::-webkit-scrollbar {
+    width: 10px;
+}
+
+.abstract::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 16px 0;          /* keeps it away from the rounded corners */
+}
+
+.abstract::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.35);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.abstract::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,.55);
 }
 
 .dateTag {
