@@ -292,7 +292,7 @@ class API:
             self.params["background"] = filePath
             return filePath
 
-def main(params: dict):
+def main(params: dict, debug: bool = False):
     api = API(params)
 
     window = webview.create_window(
@@ -304,4 +304,4 @@ def main(params: dict):
         js_api = api
     )
 
-    webview.start(debug=True) # For debugging tools
+    webview.start(debug=debug) # For debugging tools

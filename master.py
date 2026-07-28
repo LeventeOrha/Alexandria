@@ -9,7 +9,7 @@ if params["GUI_useage"]:
     u.writeSettings(params)
     raise NotImplementedError("Graphical user interface not implemented yet. Defaulting to terminal useage.")
 elif "-d" in sys.argv: # Debugging "mode"
-    main(params)
+    main(params, True)
 else:
     cmd = CMD(params)
     cmd.main()
