@@ -1,6 +1,7 @@
 // Do an online search
 const startOnlineSearch = document.getElementById("startOnlineSearch")
 startOnlineSearch.addEventListener("click", async () => {
+    document.body.style.cursor = "wait"
     const title = document.getElementById("onlineTitle").value
     const author = document.getElementById("onlineAuthor").value
     console.log(`Search started with title: ${title} & author: ${author}.`)
@@ -20,6 +21,7 @@ startOnlineSearch.addEventListener("click", async () => {
         const h1 = document.createElement("h1")
         h1.textContent = window.app.inCodeText["NoSearchResults"]
         results.appendChild(h1)
+        document.body.style.cursor = "default"
         return
     }
 
@@ -57,6 +59,7 @@ startOnlineSearch.addEventListener("click", async () => {
         results.appendChild(div)
     })
     console.log("Search finished.")
+    document.body.style.cursor = "default"
 })
 
 // On page load, place in all available shelves in this select/option
