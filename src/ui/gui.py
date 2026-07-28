@@ -144,9 +144,9 @@ class API:
             if "moly" in ID:
                 book = self.moly.createBook(ID, shelf, 0)
             elif "OL" in ID:
-                book = self.ol.searchByID(ID, shelf)
+                book = self.ol.createBook(ID, shelf)
             else:
-                book = self.gb.searchByID(ID, shelf)
+                book = self.gb.createBook(ID, shelf)
             books.append(book)
         self.db.addBooks(books)
         return
