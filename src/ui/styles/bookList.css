@@ -79,6 +79,8 @@
 .searchResults {
   max-height: 98vh;
   overflow: auto;
+  padding-bottom: 5vh;
+  box-sizing: border-box;
 }
 
 .searchResults::-webkit-scrollbar {
