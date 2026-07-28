@@ -57,7 +57,7 @@ class Google:
 
         # As the image sizes are, if alphabetically ordered, are decreasing with each key
         # I rather keep the first one, theoretically the biggest
-        book["img"] = full_data["imageLinks"][sorted(full_data["imageLinks"].keys())[0]]
+        book["img"] = full_data["imageLinks"][sorted(full_data["imageLinks"].keys())[0]].replace("http:", "https:")
 
         categories = full_data["categories"]
         cats = []
