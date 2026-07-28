@@ -311,7 +311,7 @@ async function fillBookData(book) {
     // Abstract
     let abst = document.createElement("div")
     abst.className = "abstract"
-    abst.innerHTML = book["abstract"]
+    abst.innerHTML = book["abs"]
 
     div.appendChild(abst)
 }
