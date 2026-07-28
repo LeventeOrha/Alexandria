@@ -57,16 +57,23 @@ class Google:
 
         # As the image sizes are, if alphabetically ordered, are decreasing with each key
         # I rather keep the first one, theoretically the biggest
-        book["img"] = full_data["imageLinks"][sorted(full_data["imageLinks"].keys())[0]].replace("http:", "https:")
+        image_links = full_data.get("imageLinks", None) # Preparation IF the book doesn't have a cover for some reason
+        if image_links is not None:
+            book["img"] = image_links[sorted(image_links.keys())[0]].replace("http:", "https:")
+        else:
+            book["img"] = ""
 
-        categories = full_data["categories"]
-        cats = []
-        for cat in categories:
-            cat = cat.split("/")
-            cat = [c.strip() for c in cat]
-            cats += cat
+        categories = full_data.get("categories", None) # There might not be categories
+        if categories is not None:
+            cats = []
+            for cat in categories:
+                cat = cat.split("/")
+                cat = [c.strip() for c in cat]
+                cats += cat
 
-        book["category"] = transl.translateCategories(cats, "en")
+            book["category"] = transl.translateCategories(cats, "en")
+        else:
+            book["category"] = []
 
         book["abs"] = full_data.get("description", "")
 
@@ -123,6 +130,8 @@ class Google:
             book_online["shelf"] = book_stored.shelf
             book_online["start"] = book_stored.start
             book_online["end"] = book_stored.end
+            book_online["img"] = book_stored.img # If the SearchByIDOnline returns the wrong image
+            book_online["category"] = book_stored.category # To have the in-saved categories show here
         return book_online
     
     def createBook(self, ID: str, shelf: str, start: str = "---", end: str = "---") -> Book:
