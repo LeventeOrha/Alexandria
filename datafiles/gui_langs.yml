@@ -29,6 +29,7 @@ en:
     categories: Categories
     shelves: Shelves
     new: New
+    NoSearchResults: "No books found."
   exportLibraryTo: "Export library to: "
   successfulExport: "Export successful"
   failedExport: "Export failed"
@@ -67,6 +68,7 @@ hu:
     categories: "Kategóriák"
     shelves: "Polcok"
     new: "Új"
+    NoSearchResults: "Nem található ilyen könyv."
   exportLibraryTo: "Könyvtár exportálása ide: "
   successfulExport: "Exportálás sikeres"
   failedExport: "Sikertelen exportálás"
