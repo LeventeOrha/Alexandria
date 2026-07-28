@@ -3,6 +3,7 @@ const startOnlineSearch = document.getElementById("startOnlineSearch")
 startOnlineSearch.addEventListener("click", async () => {
     const title = document.getElementById("onlineTitle").value
     const author = document.getElementById("onlineAuthor").value
+    console.log(`Search started with title: ${title} & author: ${author}.`)
 
     // Get the language to search
     const lang = document.getElementById("language").value
@@ -12,6 +13,15 @@ startOnlineSearch.addEventListener("click", async () => {
 
     // Get the placeholder to put the results in
     const results = document.getElementById("onlineResults")
+
+    // Put in a "No result found" message if there are no results
+    if (books === null) {
+        console.log("No results.")
+        const h1 = document.createElement("h1")
+        h1.textContent = window.app.inCodeText["NoSearchResults"]
+        results.appendChild(h1)
+        return
+    }
 
     // Clear out earlier results
     results.replaceChildren()
@@ -46,6 +56,7 @@ startOnlineSearch.addEventListener("click", async () => {
 
         results.appendChild(div)
     })
+    console.log("Search finished.")
 })
 
 // On page load, place in all available shelves in this select/option
