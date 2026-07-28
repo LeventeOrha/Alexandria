@@ -96,7 +96,17 @@ class OpenLibrary:
         workData = self.url + workID + ".json"
         workData = json.loads(requests.get(workData, headers={"User-Agent": "Mozilla/5.0"}, timeout=self.timeout).text)
 
-        book["category"] = transl.translateCategories(workData["subjects"], "en")
+        book["category"] = transl.translateCategories(workData.get("subjects", []), "en") # Safeguarding if there is no "subjects"
+
+        book["shelf"] = []
+        book["start"] = "---"
+        book["end"] = "---"
+
+        if self.db.bookExists(ID):
+            book_stored = self.db.searchBy("ID", ID)[0]
+            book["shelf"] = book_stored.shelf
+            book["start"] = book_stored.start
+            book["end"] = book_stored.end
 
         return book
 
