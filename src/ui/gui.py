@@ -151,11 +151,26 @@ class API:
         self.db.addBooks(books)
         return
     
-    def saveBook(self, book: dict[str]) -> None:
+    def saveBook(self, b: dict[str]) -> None:
         """
         Update a book's data
         """
-        self.db.updateBook(Book(**book))
+
+        book = {
+            "title": b["title"],
+            "author": b["author"],
+            "date": b["date"],
+            "img": b["img"],
+            "ID": b["ID"],
+            "category": b["category"],
+            "shelf": b["shelf"],
+            "start": b["start"],
+            "end": b["end"]
+        }
+
+        book = Book(**book)
+
+        self.db.updateBook(book)
         return
 
     def deleteBook(self, book: dict[str]) -> None:
