@@ -190,6 +190,7 @@ class Moly:
             book_online["shelf"] = book_stored.shelf
             book_online["start"] = book_stored.start
             book_online["end"] = book_stored.end
+            book_online["category"] = book_stored.category
         else:
             book_online["img"] = img
         return book_online
