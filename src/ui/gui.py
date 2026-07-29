@@ -128,7 +128,7 @@ class API:
         """
         return self.db.getShelves()
 
-    def addBooks(self, ids: list[str], shelf: str) -> None:
+    def addBooks(self, ids: list[str], shelf: str, imgs: list[str]) -> None:
         """
         Add new books to the database
 
@@ -140,9 +140,11 @@ class API:
             Shelf to place these books on
         """
         books = []
-        for ID in ids:
+        for i in range(len(ids)):
+            ID = ids[i]
+            img = imgs[i]
             if "moly" in ID:
-                book = self.moly.createBook(ID, shelf, 0)
+                book = self.moly.createBook(ID, shelf, img)
             elif "OL" in ID:
                 book = self.ol.createBook(ID, shelf)
             else:

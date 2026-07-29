@@ -34,6 +34,7 @@ startOnlineSearch.addEventListener("click", async () => {
         div.classList.add("onlineResult")
         div.classList.add("glass")
         div.id = book["ID"]
+        div.dataset.img = book["img"]
 
         const check = document.createElement("input")
         check.type = "checkbox"
@@ -75,10 +76,13 @@ window.app.shelfOptions.forEach((shelf) => {
 document.getElementById("saveBooksOnShelf").addEventListener("click", async () => {
     const shelf = document.getElementById("saveShelf").value
     var ids = []
+    var imgs = []
     document.querySelectorAll(".pickBook").forEach(checkbox => {
         if (checkbox.checked) {
             ids.push(checkbox.closest("div").id)
+            imgs.push(checkbox.closest("div").dataset.img)
         }
     })
-    await window.python.addBooks(ids, shelf)
+    await window.python.addBooks(ids, shelf, imgs)
+    console.log("Save successful!")
 })

@@ -108,9 +108,9 @@ class Python {
 
     // Add a new books to the database
     // (ids of all books to be added, shelf to place on)
-    // (list[str], str) -> None
-    async addBooks(ids, shelf) {
-        await window.pywebview.api.addBooks(ids, shelf)
+    // (list[str], str, list[str]) -> None
+    async addBooks(ids, shelf, imgs) {
+        await window.pywebview.api.addBooks(ids, shelf, imgs)
     }
 
     // Update a book's data
