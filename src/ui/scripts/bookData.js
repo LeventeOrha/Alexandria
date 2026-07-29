@@ -66,6 +66,23 @@ function insertSelect(buttonId, options) {
   button.parentNode.insertBefore(select, button);
 }
 
+function insertSelectDict(buttonId, options) {
+    const button = document.getElementById(buttonId);
+
+    const select = document.createElement("select");
+
+    select.className = "tag"
+
+    for (const [key, value] of Object.entries(options)) {
+        const option = document.createElement("option")
+        option.value = key
+        option.textContent = value
+        select.appendChild(option)
+    }
+
+    button.parentNode.insertBefore(select, button)
+}
+
 // Edit mode
 function editBook() {
     // Add the remove button to each tag
@@ -88,7 +105,7 @@ function editBook() {
     addCategory.className = "addTag"
     addCategory.id = "addCategory"
     addCategory.addEventListener("click", () => {
-        insertSelect("addCategory", window.app.categoryOptions);
+        insertSelectDict("addCategory", window.app.categoryOptions); // Create new function that handles categories as a dict!! TODO
     })
 
     document.getElementById("categoryTags").appendChild(addCategory)
