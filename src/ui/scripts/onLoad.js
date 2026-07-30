@@ -1,5 +1,20 @@
 // Functions to run at the start of the app
 
+// Fill out the select on the homepage of the available settings
+function fillShelvesHomePage() {
+    const select = document.getElementById("currentList")
+    select.replaceChildren() // Empty it out first
+
+    for (let i = 0; i < window.app.shelfOptions.length - 1; i++) { // Skip the last element ("New" anyways)
+        const option = document.createElement("option")
+        option.value = window.app.shelfOptions[i]
+        option.textContent = window.app.shelfOptions[i]
+
+        select.appendChild(option)
+    }
+}
+fillShelvesHomePage()
+
 // Set background image and chat colors
 document.documentElement.style.setProperty("--user-chat-bg", window.app.settings["userColor"]) // User message color
 document.documentElement.style.setProperty("--ai-chat-bg", window.app.settings["aiColor"]) // AI message color
