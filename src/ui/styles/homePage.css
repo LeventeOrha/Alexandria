@@ -3,43 +3,76 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-
-    width: 20vw;
 }
 
-#currentBody {
+#currentHeader {
+    padding: 10px;
+}
+
+.carousel {
+    width: 15vw;
+    height: 40vh;
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    scroll-marker-group: after;
+    border-radius: 10px;
+    anchor-name: --carousel;
+    scroll-behavior: smooth;
+    margin-bottom: 5px;
+    margin: 10px;
+    margin-bottom: 30px;
 }
 
-.hidden {
+.carousel::-webkit-scrollbar {
     display: none;
 }
 
-#currentList {
-    display: flex;
-
-    width: 15vw;
-    overflow-x: hidden;
+.slide::scroll-marker {
+    content: "";
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #ccc;
 }
 
-.currentBook {
+.slide::scroll-marker:target-current {
+    background: #222;
+}
+
+.carousel::scroll-marker-group {
+    position: absolute;
+    position-anchor: --carousel;
+    bottom: 8px;
+    left: anchor(center);
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+}
+
+.slide {
     flex: 0 0 100%;
+    scroll-snap-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: transform 0.3s ease;
+    justify-content: center;
+    font-size: 2rem;
+    padding: 2px;
 }
 
-.currentBook img {
-    max-width: 10vw;
-    max-height: 25vh;
-    border-radius: 5px;
+.slide img {
+    width: 10vw;
+    border-radius: 7px;
+    margin-bottom: 2px;
 }
 
-.currentBook h1, .currentBook h2 {
-    padding: 0;
+.slide h1 {
     margin: 0;
+    font-size: 18px;
+}
+
+.slide h2 {
+    margin: 0;
+    font-size: medium;
 }
