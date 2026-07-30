@@ -1,22 +1,33 @@
-const currentList = document.getElementById("currentList");
-const books = document.querySelectorAll(".currentBook");
+// Fill out the carousel at currentReading
+async function fillCurrentReading(shelf) {
+    const books = await window.python.searchIn("shelf", shelf)
 
-let currentIndex = 0;
+    const carousel = document.getElementById("currentBody")
+    carousel.replaceChildren() // Empty it out
+    books.forEach(book => {
+        const slide = document.createElement("div")
+        slide.className = "slide"
 
-function updateCurrent() {
-    currentList.style.transform = `translateX(-${currentIndex * 100}%)`;
+        const img = document.createElement("img")
+        img.src = book["img"]
+        slide.appendChild(img)
+
+        const title = document.createElement("h1")
+        title.textContent = book["title"]
+        slide.appendChild(title)
+
+        const author = document.createElement("h2")
+        author.textContent = book["author"]
+        slide.appendChild(author)
+
+        carousel.appendChild(slide)
+    });
 }
 
-document.getElementById("rightArrow").addEventListener("click", () => {
-    if (currentIndex < books.length - 1) {
-        currentIndex++;
-        updateCurrent();
-    }
-});
+const currentSelect = document.getElementById("currentList")
+currentSelect.addEventListener("change", () => {
+    fillCurrentReading(currentSelect.value)
+})
 
-document.getElementById("leftArrow").addEventListener("click", () => {
-    if (currentIndex > 0) {
-        currentIndex--;
-        updateCurrent();
-    }
-});
+// Do it on load for the default shelf
+fillCurrentReading("Reading")
