@@ -209,6 +209,7 @@ async function saveBook() {
 async function fillBookData(book) {
     // Select the element to be filled
     let div = document.querySelector(".bookData")
+    div.replaceChildren() // Clear it out just to be sure
 
     // Set the id
     div.id = book["ID"]
