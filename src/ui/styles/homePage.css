@@ -77,3 +77,8 @@
     margin: 0;
     font-size: medium;
 }
+
+#calendar {
+    width: 30vw;
+    height: 50vh;
+}
