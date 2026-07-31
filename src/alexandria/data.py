@@ -42,7 +42,6 @@ class Database:
         self.filename = datafile
         self.conn = sqlite3.connect(datafile, check_same_thread=False)
         self.conn.row_factory = sqlite3.Row
-        self.cur = self.conn.cursor()
 
         # If the database didn't exist yet, create a new
         if self.is_new:
@@ -52,7 +51,8 @@ class Database:
         """
         Create an empty database with these keys
         """
-        self.cur.execute("""
+        cur = self.conn.cursor()
+        cur.execute("""
         CREATE TABLE IF NOT EXISTS books (
             ID TEXT PRIMARY KEY,
             title TEXT,
@@ -95,7 +95,8 @@ class Database:
             data.append((book.ID, book.title, book.author, book.date, book.img,
                          json.dumps(book.shelf), json.dumps(book.category), book.start, book.end))
             
-        self.cur.executemany("""
+        cur = self.conn.cursor()
+        cur.executemany("""
         INSERT OR IGNORE INTO books
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, data)
@@ -111,7 +112,8 @@ class Database:
         data["shelf"] = json.dumps(book.shelf)
         data["category"] = json.dumps(book.category)
 
-        self.cur.execute("""
+        cur = self.conn.cursor()
+        cur.execute("""
         UPDATE books
         SET
             title = :title,
@@ -132,7 +134,8 @@ class Database:
         """
         Remove book with given ID
         """
-        self.cur.execute("""
+        cur = self.conn.cursor()
+        cur.execute("""
         DELETE FROM books
         WHERE ID = ?
         """, (ID,))
@@ -170,12 +173,13 @@ class Database:
         if key not in allowed_columns:
             raise ValueError(f"Invalid column name - {key}")
         
-        self.cur.execute(
+        cur = self.conn.cursor()
+        cur.execute(
             f"SELECT * FROM books WHERE LOWER({key}) LIKE LOWER(?)",
             (f"%{value}%",)
         )
 
-        rows = self.cur.fetchall()
+        rows = cur.fetchall()
 
         return [self.rowToBook(row) for row in rows]
 
@@ -183,9 +187,10 @@ class Database:
         """
         Get all books from the database
         """
-        self.cur.execute("SELECT * FROM books")
+        cur = self.conn.cursor()
+        cur.execute("SELECT * FROM books")
 
-        rows = self.cur.fetchall()
+        rows = cur.fetchall()
 
         return [self.rowToBook(row) for row in rows]
     
@@ -256,8 +261,9 @@ class Database:
         """
         Check if book with ID exists
         """
-        self.cur.execute("SELECT 1 FROM books WHERE ID = ? LIMIT 1", (ID,))
-        exists = self.cur.fetchone() is not None
+        cur = self.conn.cursor()
+        cur.execute("SELECT 1 FROM books WHERE ID = ? LIMIT 1", (ID,))
+        exists = cur.fetchone() is not None
         return exists
     
     def importCSV(self, filename: str) -> list[Book]:
