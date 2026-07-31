@@ -86,10 +86,10 @@
 .abstract {
   margin: 10px;
   font-size: large;
-  max-height: 48vh;
+  max-height: 45vh;
   overflow: auto;
   box-sizing: border-box;
-  padding-bottom: 3vh;
+  padding-bottom: 6vh;
 }
 
 .abstract::-webkit-scrollbar {
