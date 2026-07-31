@@ -167,10 +167,10 @@ async function saveBook() {
     book["shelf"] = shelf
 
     // Starting date
-    book["start"] = document.getElementById("startDate").value
+    book["start"] = document.getElementById("startDate").value || "---" // If empty, use the conventional sign
 
     // End date
-    book["end"] = document.getElementById("endDate").value
+    book["end"] = document.getElementById("endDate").value || "---"
 
     // Save the updated book
     window.python.saveBook(book)
