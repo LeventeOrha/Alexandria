@@ -5,6 +5,8 @@ import os
 from dataclasses import asdict
 import yaml
 import json
+from datetime import date
+import copy
 
 from alexandria.data import Book, Database
 import alexandria.utils as au
@@ -308,6 +310,25 @@ class API:
         if filePath.rsplit(".", 1)[1] in ["png", "jpg", "jpeg", "svg"]:
             self.params["background"] = filePath
             return filePath
+
+    def getHistory(self) -> list[dict[str, str]]:
+        """
+        From all the books, filter out where there is "start", and set empty end to today
+        """
+        today = date.today().isoformat()
+
+        books = self.db.getAllBooks()
+
+        result = []
+
+        for book in books:
+            if book.start == "---":
+                continue
+            if book.end == "---":
+                book.end = today
+            result.append(asdict(book))
+
+        return result
 
 def main(params: dict, debug: bool = False):
     api = API(params)

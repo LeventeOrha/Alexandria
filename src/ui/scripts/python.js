@@ -294,4 +294,18 @@ class Python {
         }
         return result
     }
+
+    //Get a list of all books that have at least "start"
+    // () -> list[dict[str, str]]
+    async getHistory() {
+        let result
+
+        if (window.pywebview?.api) {
+            result = await window.pywebview.api.getHistory()
+        }
+        else {
+            result = [{...this.fortuna}, {...this.martian}]
+        }
+        return result
+    }
 }
