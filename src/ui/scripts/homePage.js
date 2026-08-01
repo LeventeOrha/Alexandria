@@ -93,15 +93,6 @@ document.getElementById("currentReading").addEventListener("click", (event) => {
     document.getElementById("startSearch").click()
 })
 
-// Get the most dense color of an image at imgLink
-async function getColor(imgLink) {
-
-    // Prefer a strong UI color
-    const color = "#16e654"
-
-    return color;
-}
-
 function addOneDay(dateString) {
     const d = new Date(dateString);
     d.setDate(d.getDate() + 1);
@@ -114,16 +105,15 @@ async function createCalender() {
 
     const events = await Promise.all(
         books.map(async item => {
-            const color = await getColor(item.img);
 
             return {
                 title: item.title,
                 start: item.start,
                 end: addOneDay(item.end),
                 allDay: true,
-                backgroundColor: color,
-                borderColor: color,
-                textColor: "white"
+                backgroundColor: item.color,
+                borderColor: item.color,
+                textColor: getTextColor(item.color)
             };
         })
     );
