@@ -14,6 +14,7 @@ class Book:
     ID: str
     shelf: List[str]
     category: List[str]
+    color: str
     start: str
     end: str
 
@@ -29,6 +30,7 @@ class Book:
         s += f"\tID: {self.ID}\n"
         s += f"\tshelf: {self.shelf}\n"
         s += f"\tcategory: {self.category}\n"
+        s += f"\tcolor: {self.color}\n"
         s += f"\tstart: {self.start}\n"
         s += f"\tend: {self.end}\n"
         return s
@@ -61,6 +63,7 @@ class Database:
             img TEXT,
             shelf TEXT,
             category TEXT,
+            color TEXT,
             start TEXT,
             end TEXT
         )
@@ -93,12 +96,12 @@ class Database:
         data = []
         for book in books:
             data.append((book.ID, book.title, book.author, book.date, book.img,
-                         json.dumps(book.shelf), json.dumps(book.category), book.start, book.end))
+                         json.dumps(book.shelf), json.dumps(book.category), book.color, book.start, book.end))
             
         cur = self.conn.cursor()
         cur.executemany("""
         INSERT OR IGNORE INTO books
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, data)
 
         self.conn.commit()
@@ -122,6 +125,7 @@ class Database:
             img = :img,
             shelf = :shelf,
             category = :category,
+            color = :color,
             start = :start,
             end = :end
         WHERE ID = :ID
@@ -160,7 +164,7 @@ class Database:
         """
         allowed_columns = [
             "ID", "title", "author", "date",
-            "img", "start", "end", "category", "shelf"
+            "img", "start", "end", "category", "shelf", "color"
         ]
 
         if key == "category":
@@ -239,10 +243,12 @@ class Database:
         """
         books =self.getAllBooks()
         with open(filename, "wt", encoding="utf-8") as out:
+            out.write("# ID; Title; Author; Publish date; Start date; End date; Shelves; Categories; Color; Image\n")
             for book in books:
                 s = f"{book.ID};{book.title};{book.author};{book.date};{book.start};{book.end};"
                 s += f"{", ".join(book.shelf)};"
                 s += f"{", ".join(book.category)};"
+                s += f"{book.color};"
                 s += f"{book.img}\n"
                 out.write(s)
         return {"success": True}
@@ -279,6 +285,7 @@ class Database:
         with open(filename, "rt", encoding="utf-8") as inp:
             books = []
             for line in inp:
+                if "Categories" in line: continue # Skip the first line
                 book = {}
                 parts = line.strip().split(";")
                 book["ID"] = parts[0]
@@ -289,7 +296,8 @@ class Database:
                 book["end"] = parts[5]
                 book["shelf"] = parts[6].split(", ")
                 book["category"] = parts[7].split(", ")
-                book["img"] = parts[8]
+                book["color"] = parts[8]
+                book["img"] = parts[9]
                 books.append(Book(**book))
 
         new_books = []
