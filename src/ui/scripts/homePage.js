@@ -123,6 +123,13 @@ async function createCalender() {
         {
             initialView: "dayGridMonth",
             height: "auto",
+            locale: window.app.settings["Language"],
+            fixedWeekCount: false,
+            firstDay: 1,
+            dayHeaders: true,
+            dayHeaderFormat: {
+                weekday: "short"   // Mon, Tue, Wed...
+            },
             events
         }
     )
