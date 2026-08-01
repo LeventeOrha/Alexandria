@@ -9,6 +9,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from alexandria.data import Book, Database
 import alexandria.categories as transl
+from alexandria.img import getColor
 
 hungarian_months = {
     "január": 1,
@@ -210,6 +211,7 @@ class Moly:
             "img": b["img"],
             "ID": ID,
             "category": categories,
+            "color": getColor(b["img"]),
             "shelf": [shelf],
             "start": start,
             "end": end

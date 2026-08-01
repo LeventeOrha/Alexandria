@@ -6,6 +6,7 @@ import json
 import requests
 from alexandria.data import Book, Database
 import alexandria.categories as transl
+from alexandria.img import getColor
 
 class OpenLibrary:
     def __init__(self, db: Database):
@@ -113,6 +114,7 @@ class OpenLibrary:
 
     def createBook(self, ID: str, shelf: str, start: str = "---", end: str = "---") -> Book:
         b = self.searchByID(ID)
+        b["color"] = getColor(b["img"])
         b["shelf"] = [shelf]
         b["start"] = start
         b["end"] = end

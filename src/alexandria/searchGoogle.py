@@ -5,6 +5,7 @@ Do a Google Books search
 import requests
 import alexandria.categories as transl
 from alexandria.data import Book, Database
+from alexandria.img import getColor
 
 class Google:
     def __init__(self, API_key: str, db: Database):
@@ -147,6 +148,7 @@ class Google:
             "img": b["img"],
             "ID": ID,
             "category": b["category"],
+            "color": getColor(b["img"]),
             "shelf": [shelf],
             "start": start,
             "end": end
