@@ -79,6 +79,11 @@
 }
 
 #calendar {
-    width: 30vw;
-    height: 50vh;
+    width: 32vw;
+    padding: 12px;
+}
+
+.fc-col-header-cell-cushion {
+    color: black;
+    text-decoration: none;
 }
