@@ -167,6 +167,7 @@ class API:
             "img": b["img"],
             "ID": b["ID"],
             "category": b["category"],
+            "color": b["color"],
             "shelf": b["shelf"],
             "start": b["start"],
             "end": b["end"]
