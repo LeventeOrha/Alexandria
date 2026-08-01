@@ -133,6 +133,7 @@ class Google:
             book_online["end"] = book_stored.end
             book_online["img"] = book_stored.img # If the SearchByIDOnline returns the wrong image
             book_online["category"] = book_stored.category # To have the in-saved categories show here
+            book_online["color"] = book_stored.color
         return book_online
     
     def createBook(self, ID: str, shelf: str, start: str = "---", end: str = "---") -> Book:

@@ -109,6 +109,7 @@ class OpenLibrary:
             book["start"] = book_stored.start
             book["end"] = book_stored.end
             book["category"] = book_stored.category
+            book["color"] = book_stored.color
 
         return book
 
