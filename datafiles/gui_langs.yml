@@ -30,6 +30,7 @@ en:
     shelves: Shelves
     new: New
     NoSearchResults: "No books found."
+    SuccessfulSave: "Saving successful"
   exportLibraryTo: "Export library to: "
   successfulExport: "Export successful"
   failedExport: "Export failed"
@@ -69,6 +70,7 @@ hu:
     shelves: "Polcok"
     new: "Új"
     NoSearchResults: "Nem található ilyen könyv."
+    SuccessfulSave: "Sikeres mentés"
   exportLibraryTo: "Könyvtár exportálása ide: "
   successfulExport: "Exportálás sikeres"
   failedExport: "Sikertelen exportálás"
