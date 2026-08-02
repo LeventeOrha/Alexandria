@@ -30,6 +30,7 @@ window.addEventListener("pywebviewready", async () => {
     const categoryOptions = await window.python.getCategories()
     window.app.categoryOptions = categoryOptions
 
+    await loadScript("scripts/messages.js")
     await loadScript("scripts/onLoad.js")
     await loadScript("scripts/nav.js")
     await loadScript("scripts/homePage.js")

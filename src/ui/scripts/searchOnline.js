@@ -85,4 +85,5 @@ document.getElementById("saveBooksOnShelf").addEventListener("click", async () =
     })
     await window.python.addBooks(ids, shelf, imgs)
     console.log("Save successful!")
+    notify(window.app.inCodeText["SuccessfulSave"])
 })

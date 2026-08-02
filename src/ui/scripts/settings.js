@@ -54,6 +54,8 @@ async function saveSettings() {
     settings["GBooksAPIkey"] = document.getElementById("googleBooksKey").value
 
     await window.python.saveSettings(settings)
+
+    notify(window.app.inCodeText["SuccessfulSave"])
 }
 document.getElementById("saveSettings").addEventListener("click", saveSettings)
 

@@ -203,6 +203,8 @@ async function saveBook() {
         input.replaceWith(span);
     });
 
+    notify(window.app.inCodeText["SuccessfulSave"])
+
 }
 
 // Change active book
