@@ -6,7 +6,7 @@ from dataclasses import asdict
 import yaml
 import json
 from datetime import date
-import copy
+import sqlite3
 
 from alexandria.data import Book, Database
 import alexandria.utils as au
@@ -15,6 +15,72 @@ from alexandria.searchMoly import Moly
 from alexandria.searchOLibrary import OpenLibrary
 from alexandria.ai import AI
 import alexandria.categories as acats
+
+class Shelves:
+    def __init__(self, source: str):
+        self.source = source
+
+        self.createTable()
+
+    def createTable(self):
+        """
+        Create an empty shelf storage
+        """
+        conn = sqlite3.connect(self.source)
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+
+        cur.execute("""
+        CREATE TABLE IF NOT EXISTS shelves (
+            ID TEXT PRIMARY KEY,
+            shelf TEXT,
+            direction INT
+        )
+        """)
+
+        conn.commit()
+        conn.close()
+        
+    def listShelf(self, shelf: str):
+        """
+        Get books on this shelf
+        """
+        conn = sqlite3.connect(self.source)
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+
+        cur.execute(
+        """
+        SELECT * FROM shelves WHERE shelf LIKE LOWER(?)
+        """, (shelf, )
+        )
+
+        rows = cur.fetchall()
+        data = [dict(row) for row in rows]
+
+        conn.close()
+
+        return data
+
+    def saveShelf(self, data: list):
+        """
+        Save a shelf's data
+        """
+        conn = sqlite3.connect(self.source)
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+
+        cur.execute("""
+            INSERT INTO shelves (ID, shelf, direction)
+            VALUES (:ID, :shelf, :direction)
+            ON CONFLICT(ID) DO UPDATE SET
+                shelf = excluded.shelf,
+                direction = excluded.direction
+        """, data)
+
+        conn.commit()
+        conn.close()
+
 
 class API:
     def __init__(self, params: dict):
@@ -39,6 +105,7 @@ class API:
 
         # Creating sub-classes (database, searches)
         self.db = Database(params["datafile"])
+        self.shelves = Shelves(params["datafile"])
         self.moly = Moly(self.db)
         self.ol = OpenLibrary(self.db)
 
@@ -330,6 +397,57 @@ class API:
             result.append(asdict(book))
 
         return result
+
+    def listShelf(self, shelf: str) -> list[dict[str]]:
+        """
+        Get full data of books that are on this shelf,
+        including their directional data (spine (0) or cover (1))
+        """
+        books = self.shelves.listShelf(shelf)
+
+        for i in range(len(books)):
+            book = self.searchByID(books[i]["ID"])
+            book["direction"] = books[i]["direction"]
+            books[i] = book
+
+        return books
+
+    def updateShelf(self, shelf: str) -> None:
+        """
+        Update the shelves database, from the actual database
+        """
+        books = self.searchIn("shelf", shelf)
+        saved = self.shelves.listShelf(shelf)
+
+        # Get the IDs from the database
+        books_ids = [item["ID"] for item in books]
+
+        # Remove non-existent elements from the shelves
+        saved = [item for item in saved if item["ID" in books_ids]]
+
+        # Get the common IDs out
+        shelf_ids = [item["ID"] for item in saved]
+
+        # Add new item from the database
+        for item in books:
+            if item["ID"] not in shelf_ids:
+                saved.append({
+                    "ID": item["ID"],
+                    "shelf": shelf,
+                    "direction": 0
+                })
+        self.shelves.saveShelf(saved)
+
+    def rotateBook(self, shelf: str, ID: str) -> None:
+        """
+        Rotate a book - toggle direction
+        """
+        books = self.shelves.listShelf(shelf)
+        for book in books:
+            if book["ID"] == ID:
+                book["direction"] = 1 - book["direction"] # Toggle the value
+        self.shelves.saveShelf(books)
+
 
 def main(params: dict, debug: bool = False):
     api = API(params)
