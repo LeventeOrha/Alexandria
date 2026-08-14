@@ -70,7 +70,7 @@ class Shelves:
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
 
-        cur.execute("""
+        cur.executemany("""
             INSERT INTO shelves (ID, shelf, direction)
             VALUES (:ID, :shelf, :direction)
             ON CONFLICT(ID) DO UPDATE SET
@@ -423,7 +423,7 @@ class API:
         books_ids = [item["ID"] for item in books]
 
         # Remove non-existent elements from the shelves
-        saved = [item for item in saved if item["ID" in books_ids]]
+        saved = [item for item in saved if item["ID"] in books_ids]
 
         # Get the common IDs out
         shelf_ids = [item["ID"] for item in saved]
