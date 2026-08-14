@@ -136,3 +136,64 @@ async function createCalender() {
     calendar.render()
 }
 createCalender()
+
+// Fill out a shelf (that given div (ID))
+async function fillShelf(divID) {
+    // Get the element itself
+    const div = document.getElementById(divID)
+
+    // Get the body
+    const body = div.querySelector(".shelfBody")
+
+    // Empty it out
+    body.replaceChildren()
+
+    // Get the needed shelf
+    const shelf = div.querySelector("select").value
+    console.log(shelf)
+
+    // Update the database first
+    await window.python.updateShelf(shelf)
+
+    // Get the books
+    const books = await window.python.listShelf(shelf)
+    console.log(JSON.stringify(books, null, 2))
+
+    const MAX_HEIGHT = 250
+
+    // Place them in
+    books.forEach(b => {
+        if (b["direction"] == 0) { // Spine shown
+            const book = document.createElement("div")
+            book.id = b["ID"]
+            book.textContent = b["title"]
+            book.className = "spine"
+            book.style.backgroundColor = b["color"]
+            book.style.color = getTextColor(b["color"])
+
+            // Add it so the dimensions can be measured
+            body.appendChild(book)
+
+            // Measure the minimum height needed
+            const minHeight = 2 * book.scrollHeight
+
+            // Pick a random height
+            const height = minHeight + Math.random() * (MAX_HEIGHT - minHeight)
+
+            // Set it
+            book.style.height = `${height}px`
+        }
+        else { // Cover image shown
+            const book = document.createElement("img")
+            book.id = b["ID"]
+            book.src = b["img"]
+            book.className = "cover"
+            body.appendChild(book)
+        }
+    })
+}
+
+document.getElementById("refreshToRead").addEventListener("click", () => {
+    fillShelf("toReadShelf")
+})
+fillShelf("toReadShelf")
