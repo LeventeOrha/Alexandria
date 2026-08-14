@@ -87,3 +87,21 @@
     color: black;
     text-decoration: none;
 }
+
+.spine {
+    writing-mode: vertical-rl;
+    padding: 2px;
+    box-sizing: border-box;
+    max-height: 250px;
+}
+
+.shelfBody {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    padding: 15px;
+}
+
+.shelf {
+    padding: 5px;
+}
