@@ -18,9 +18,9 @@ async function notify(message) {
 
     notif.classList.remove("visible")
     await new Promise(requestAnimationFrame)
-    notif.textContent = ""
+    holder.classList.remove("visible")
 
     await sleep(0.15)
 
-    holder.classList.remove("visible")
+    notif.textContent = ""
 }
