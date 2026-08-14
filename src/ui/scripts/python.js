@@ -106,6 +106,36 @@ class Python {
         return result
     }
 
+    // Get all books on a specific shelf with their display direction
+    // (str) -> list[dict[str]]
+    async listShelf(shelf) {
+        let result
+
+        if (window.pywebview?.api) {
+            result = await window.pywebview.api.listShelf(shelf)
+        }
+        else {
+            result = [{ ...this.fortuna }, { ...this.martian }]
+        }
+        return result
+    }
+
+    // Update the shelf database based on the books db
+    // (str) -> None
+    async updateShelf(shelf) {
+       if (window.pywebview?.api) {
+            await window.pywebview.api.updateShelf(shelf)
+       }
+    }
+
+    // Rotate a book (toggle its direction)
+    // (str, str) -> None
+    async rotateBook(shelf, ID) {
+        if (window.pywebview?.api) {
+            await window.pywebview.api.rotateBook(shelf, ID)
+        }
+    }
+
     // Add a new books to the database
     // (ids of all books to be added, shelf to place on)
     // (list[str], str, list[str]) -> None
