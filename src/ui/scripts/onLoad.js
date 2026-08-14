@@ -62,9 +62,11 @@ function positionMain() {
     const vw = window.innerWidth * 0.015; // 1.5vw in pixels
 
     const left = navWidth + vw;
+    const width = window.innerWidth - navWidth - vw; // Also set the width to the "maximum"
 
     mainDivs.forEach(div => {
         div.style.left = `${left}px`;
+        div.style.width = `${width}px`;
     });
 }
 
