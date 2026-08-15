@@ -197,3 +197,8 @@ document.getElementById("refreshToRead").addEventListener("click", () => {
     fillShelf("toReadShelf")
 })
 fillShelf("toReadShelf")
+
+document.getElementById("refreshOwned").addEventListener("click", () => {
+    fillShelf("ownedShelf")
+})
+fillShelf("ownedShelf")
