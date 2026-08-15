@@ -29,15 +29,6 @@
     </div>
 
     <div class="main" id="homePage">
-        <div id="currentReading" class="glass">
-            <div id="currentHeader">
-                <select id="currentList" class="glass">
-                </select>
-            </div>
-            <div id="currentBody" class="carousel">
-            </div>
-        </div>
-        <div id="calendar" class="glass"></div>
         <div class="glass shelf" id="toReadShelf">
             <div class="header">
                 <select class="glass">
@@ -48,6 +39,25 @@
             </div>
             <div class="shelfBody"></div>
         </div>
+        <div id="currentReading" class="glass">
+            <div id="currentHeader">
+                <select id="currentList" class="glass">
+                </select>
+            </div>
+            <div id="currentBody" class="carousel">
+            </div>
+        </div>
+        <div class="glass shelf" id="ownedShelf">
+            <div class="header">
+                <select class="glass">
+                    <option value="Owned">Owned</option>
+                </select>
+                <button id="refreshOwned">🔄️</button>
+                <button id="editOwned">✏️</button>
+            </div>
+            <div class="shelfBody"></div>
+        </div>
+        <div id="calendar" class="glass"></div>
     </div>
 
     <div class="main lower" id="searchOnline">
