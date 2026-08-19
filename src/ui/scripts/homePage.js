@@ -137,6 +137,85 @@ async function createCalender() {
 }
 createCalender()
 
+// Edit mode true or false toggle switch
+window.app.editMode = false
+function toggleEditMode() {
+    window.app.editMode = !window.app.editMode
+}
+// Add it to the buttons
+document.getElementById("editOwned").addEventListener("click", toggleEditMode)
+document.getElementById("editToRead").addEventListener("click", toggleEditMode)
+
+const MAX_HEIGHT = 250
+
+// Create a spine book (book: dict[str], body: parent element) -> div element
+function createSpine(b, body) {
+    const book = document.createElement("div")
+    book.id = b["ID"]
+    book.textContent = b["title"]
+    book.className = "spine"
+    book.style.backgroundColor = b["color"]
+    book.style.color = getTextColor(b["color"])
+
+    // Add it so the dimensions can be measured
+    body.appendChild(book)
+
+    // Measure the minimum height needed
+    const minHeight = 2 * book.scrollHeight
+
+    // Pick a random height
+    const height = minHeight + Math.random() * (MAX_HEIGHT - minHeight)
+
+    // Set it
+    book.style.height = `${height}px`
+
+    return book
+}
+
+// Create a cover book (book: dict[str], body: parent element) -> img element
+function createCover(b, body) {
+    const book = document.createElement("img")
+    book.id = b["ID"]
+    book.src = b["img"]
+    book.className = "cover"
+    book.style.height = MAX_HEIGHT
+    body.appendChild(book)
+
+    return book
+}
+
+async function shelfFunction(book, shelf, b) {
+    if (window.app.editMode) {
+        rotateBook(book, shelf, b["ID"])
+    }
+    else {
+        document.querySelector(".searchResults").replaceChildren()
+        document.getElementById("searchButton").click() // Switch to search page
+        await fillBookData(b)
+    }
+}
+
+// Rotate one book based on if they are spine or cover
+async function rotateBook(book, shelf, ID) {
+    window.python.rotateBook(shelf, ID)
+    b = await window.python.searchByID(ID)
+    parent = book.parentElement
+
+    let element
+    if (book.tagName == "DIV") {
+        // It is a spine
+        element = createCover(b, parent)
+    }
+    else if (book.tagName == "IMG") {
+        // It is a cover
+        element = createSpine(b, parent)
+    }
+
+    element.addEventListener("click", async () => {shelfFunction(book, shelf, b)})
+
+    book.remove()
+}
+
 // Fill out a shelf (that given div (ID))
 async function fillShelf(divID) {
     // Get the element itself
@@ -157,39 +236,17 @@ async function fillShelf(divID) {
 
     // Get the books
     const books = await window.python.listShelf(shelf)
-    console.log(JSON.stringify(books, null, 2))
-
-    const MAX_HEIGHT = 250
 
     // Place them in
     books.forEach(b => {
+        var book
         if (b["direction"] == 0) { // Spine shown
-            const book = document.createElement("div")
-            book.id = b["ID"]
-            book.textContent = b["title"]
-            book.className = "spine"
-            book.style.backgroundColor = b["color"]
-            book.style.color = getTextColor(b["color"])
-
-            // Add it so the dimensions can be measured
-            body.appendChild(book)
-
-            // Measure the minimum height needed
-            const minHeight = 2 * book.scrollHeight
-
-            // Pick a random height
-            const height = minHeight + Math.random() * (MAX_HEIGHT - minHeight)
-
-            // Set it
-            book.style.height = `${height}px`
+            book = createSpine(b, body)
         }
         else { // Cover image shown
-            const book = document.createElement("img")
-            book.id = b["ID"]
-            book.src = b["img"]
-            book.className = "cover"
-            body.appendChild(book)
+            book = createCover(b, body)
         }
+        book.addEventListener("click", async () => {shelfFunction(book, shelf, b)})
     })
 }
 
