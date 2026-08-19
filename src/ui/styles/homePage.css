@@ -97,10 +97,13 @@
     padding: 2px;
     box-sizing: border-box;
     max-height: 250px;
+    cursor: pointer;
 }
 
 .cover {
     color: black;
+    height: 250px;
+    cursor: pointer;
 }
 
 .shelfBody {
