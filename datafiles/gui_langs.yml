@@ -20,6 +20,8 @@ en:
     saveSettings: Save
     exportLibrary: Export library
     importLibrary: Import library
+    toReadShelfLabel: "Big shelf:"
+    ownedShelfLabel: "Small shelf:"
   inCodeOptions:
     bookStart: Start
     bookEnd: End
@@ -60,6 +62,8 @@ hu:
     saveSettings: "Mentés"
     exportLibrary: "Könyvtár exportálása"
     importLibrary: "Könyvtár importálása"
+    toReadShelfLabel: "Nagy polc:"
+    ownedShelfLabel: "Kis polc:"
   inCodeOptions:
     bookStart: "Kezdve"
     bookEnd: "Befejezve"
