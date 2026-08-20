@@ -31,11 +31,12 @@
     <div class="main" id="homePage">
         <div class="glass shelf" id="toReadShelf">
             <div class="header">
-                <select class="glass">
-                    <option value="To read">To read</option>
-                </select>
-                <button id="refreshToRead">🔄️</button>
-                <button id="editToRead">✏️</button>
+                <h1></h1>
+                <button id="refreshToRead" class="glass refresh">🔄️</button>
+                <label class="switch2">
+                    <input type="checkbox" id="editToRead">
+                    <span class="slider2 round2"></span>
+                </label>
             </div>
             <div class="shelfBody"></div>
         </div>
@@ -49,11 +50,12 @@
         </div>
         <div class="glass shelf" id="ownedShelf">
             <div class="header">
-                <select class="glass">
-                    <option value="Owned">Owned</option>
-                </select>
-                <button id="refreshOwned">🔄️</button>
-                <button id="editOwned">✏️</button>
+                <h1></h1>
+                <button id="refreshOwned" class="refresh glass">🔄️</button>
+                <label class="switch2">
+                    <input type="checkbox" id="editOwned">
+                    <span class="slider2 round2"></span>
+                </label>
             </div>
             <div class="shelfBody"></div>
         </div>
@@ -161,6 +163,18 @@
                 <td id="backgroundImageSetting">Background image:</td>
                 <td>
                     <button class="glass" id="backgroundImage"></button>
+                </td>
+            </tr>
+            <tr>
+                <td id="toReadShelfLabel">Big shelf:</td>
+                <td>
+                    <select id="toReadShelves" class="glass"></select>
+                </td>
+            </tr>
+            <tr>
+                <td id="ownedShelfLabel">Small shelf:</td>
+                <td>
+                    <select id="ownedShelves" class="glass"></select>
                 </td>
             </tr>
             <tr>
