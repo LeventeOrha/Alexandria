@@ -24,6 +24,8 @@ document.getElementById("userChatColor").value = window.app.settings["userColor"
 document.getElementById("backgroundImage").textContent = window.app.settings["background"]
 document.getElementById("googleBooksKey").value = window.app.settings["GBooksAPIkey"]
 document.getElementById("geminiKey").value = window.app.settings["GeminiAPI"]
+document.getElementById("toReadShelves").value = window.app.settings["toReadShelf"]
+document.getElementById("ownedShelves").value = window.app.settings["ownedShelf"]
 
 // Save current settings
 async function saveSettings() {
@@ -52,6 +54,12 @@ async function saveSettings() {
 
     // Google Books API key
     settings["GBooksAPIkey"] = document.getElementById("googleBooksKey").value
+
+    // Big shelf name
+    settings["toReadShelf"] = document.getElementById("toReadShelves").value
+
+    // Small shelf name
+    settings["ownedShelf"] = document.getElementById("ownedShelves").value
 
     await window.python.saveSettings(settings)
 
