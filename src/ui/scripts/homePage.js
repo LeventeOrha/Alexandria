@@ -211,9 +211,9 @@ async function rotateBook(book, shelf, ID) {
         element = createSpine(b, parent)
     }
 
-    element.addEventListener("click", async () => {shelfFunction(book, shelf, b)})
+    element.addEventListener("click", async () => {shelfFunction(element, shelf, b)})
 
-    book.remove()
+    book.replaceWith(element)
 }
 
 // Fill out a shelf (that given div (ID))
@@ -228,8 +228,10 @@ async function fillShelf(divID) {
     body.replaceChildren()
 
     // Get the needed shelf
-    const shelf = div.querySelector("select").value
-    console.log(shelf)
+    const shelf = window.app.settings[divID]
+
+    // Update the name of the shelf
+    div.querySelector("h1").textContent = window.app.settings[divID]
 
     // Update the database first
     await window.python.updateShelf(shelf)
