@@ -74,7 +74,7 @@ document.getElementById("exportLibrary").addEventListener("click", window.python
 document.getElementById("importLibrary").addEventListener("click", window.python.importLibrary)
 
 // Background changing button
-document.getElementById("backgroundImage").addEventListener("click", () => {
-    const filename = window.python.backgroundChange()
+document.getElementById("backgroundImage").addEventListener("click", async () => {
+    const filename = await window.python.backgroundChange()
     document.getElementById("backgroundImage").textContent = filename
 })
