@@ -5,7 +5,9 @@
     --ai-chat-bg: green;
     --ai-chat-color: white;
 
-    --background-image: url(../images/bookshelf_background.jpg)
+    --background-image: url(../images/bookshelf_background.jpg);
+
+    --cover-cursor: pointer;
 }
 
 body {

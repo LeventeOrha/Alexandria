@@ -97,7 +97,7 @@
     padding: 2px;
     box-sizing: border-box;
     max-height: 250px;
-    cursor: pointer;
+    cursor: var(--cover-cursor, pointer);
 
     box-sizing: border-box;
 }
@@ -109,7 +109,7 @@
 .cover {
     color: black;
     height: 250px;
-    cursor: pointer;
+    cursor: var(--cover-cursor, pointer);
     box-sizing: border-box;
 }
 
