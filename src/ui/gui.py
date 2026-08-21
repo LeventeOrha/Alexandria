@@ -41,18 +41,23 @@ class Shelves:
         conn.commit()
         conn.close()
         
-    def listShelf(self, shelf: str):
+    def listShelf(self, shelf: str) -> list[dict]:
         """
-        Get books on this shelf
+        Get full data of books that are on this shelf,
+        including their directional data (spine (0) or cover (1))
         """
         conn = sqlite3.connect(self.source)
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
 
         cur.execute(
-        """
-        SELECT * FROM shelves WHERE shelf LIKE LOWER(?)
-        """, (shelf, )
+            """
+            SELECT books.ID, books.title, books.color, books.img, shelves.direction, shelves.shelf
+            FROM shelves
+            JOIN books ON books.ID = shelves.ID
+            WHERE shelves.shelf LIKE LOWER(?)
+            """,
+            (shelf,)
         )
 
         rows = cur.fetchall()
@@ -405,10 +410,10 @@ class API:
         """
         books = self.shelves.listShelf(shelf)
 
-        for i in range(len(books)):
-            book = self.searchByID(books[i]["ID"])
-            book["direction"] = books[i]["direction"]
-            books[i] = book
+        # for i in range(len(books)):
+        #     book = self.searchByID(books[i]["ID"])
+        #     book["direction"] = books[i]["direction"]
+        #     books[i] = book
 
         return books
 
@@ -446,6 +451,7 @@ class API:
         for book in books:
             if book["ID"] == ID:
                 book["direction"] = 1 - book["direction"] # Toggle the value
+            book["shelf"] = shelf
         self.shelves.saveShelf(books)
 
 
