@@ -140,7 +140,14 @@ createCalender()
 // Edit mode true or false toggle switch
 window.app.editMode = false
 function toggleEditMode() {
-    window.app.editMode = !window.app.editMode
+    if (window.app.editMode) {
+        window.app.editMode = false
+        document.documentElement.style.setProperty('--cover-cursor', 'pointer')
+    }
+    else {
+        window.app.editMode = true
+        document.documentElement.style.setProperty('--cover-cursor', "url('../images/rotatecursor.png'), default")
+    }
 }
 // Add it to the buttons
 document.getElementById("editOwned").addEventListener("click", toggleEditMode)
