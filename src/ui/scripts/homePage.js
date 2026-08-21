@@ -204,7 +204,7 @@ async function shelfFunction(book, shelf, b) {
 
 // Rotate one book based on if they are spine or cover
 async function rotateBook(book, shelf, ID) {
-    window.python.rotateBook(shelf, ID)
+    await window.python.rotateBook(shelf, ID)
     b = await window.python.searchByID(ID)
     parent = book.parentElement
 
@@ -238,7 +238,7 @@ async function fillShelf(divID) {
     const shelf = window.app.settings[divID]
 
     // Update the name of the shelf
-    div.querySelector("h1").textContent = window.app.settings[divID]
+    div.querySelector("h1").textContent = shelf
 
     // Update the database first
     await window.python.updateShelf(shelf)
