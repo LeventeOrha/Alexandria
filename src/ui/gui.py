@@ -137,8 +137,11 @@ class API:
         # Create Google Books API
         self.gb = Google(self.api_keys["GB_API"], self.db)
 
-        # Create AI agent (Gemini throws error if there is no key)
-        self.ai = AI(self.api_keys, self.params["Gemini_model"], self.ai_settings, self.db)
+        # Create AI agent (Gemini throws error if there is no key) -> No error message, simply the chat is not working
+        try:
+            self.ai = AI(self.api_keys, self.params["Gemini_model"], self.ai_settings, self.db)
+        except:
+            pass
 
     def isNewUser(self) -> bool:
         """
