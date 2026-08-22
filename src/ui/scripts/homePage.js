@@ -99,41 +99,48 @@ function addOneDay(dateString) {
     return d.toISOString().split("T")[0];
 }
 
+let calendar;
+
 async function createCalender() {
-    const books = await window.python.getHistory()
-    console.log(books)
+    const books = await window.python.getHistory();
 
-    const events = await Promise.all(
-        books.map(async item => {
+    const events = books.map(item => ({
+        title: item.title,
+        start: item.start,
+        end: addOneDay(item.end),
+        allDay: true,
+        backgroundColor: item.color,
+        borderColor: item.color,
+        textColor: getTextColor(item.color)
+    }));
 
-            return {
-                title: item.title,
-                start: item.start,
-                end: addOneDay(item.end),
-                allDay: true,
-                backgroundColor: item.color,
-                borderColor: item.color,
-                textColor: getTextColor(item.color)
-            };
-        })
-    );
+    if (!calendar) {
+        calendar = new FullCalendar.Calendar(
+            document.getElementById("calendar"),
+            {
+                initialView: "dayGridMonth",
+                height: "auto",
+                locale: window.app.settings["Language"],
+                fixedWeekCount: false,
+                firstDay: 1,
+                dayHeaders: true,
+                dayHeaderFormat: {
+                    weekday: "short"
+                },
+                dayCellClassNames: function(arg) {
+                    if (arg.isToday) {
+                        return ["today-bold"];
+                    }
+                    return [];
+                }
+            }
+        );
 
-    const calendar = new FullCalendar.Calendar(
-        document.getElementById("calendar"),
-        {
-            initialView: "dayGridMonth",
-            height: "auto",
-            locale: window.app.settings["Language"],
-            fixedWeekCount: false,
-            firstDay: 1,
-            dayHeaders: true,
-            dayHeaderFormat: {
-                weekday: "short"   // Mon, Tue, Wed...
-            },
-            events
-        }
-    )
-    calendar.render()
+        calendar.render();
+    }
+
+    calendar.removeAllEvents();
+    calendar.addEventSource(events);
 }
 createCalender()
 
@@ -150,8 +157,7 @@ function toggleEditMode() {
     }
 }
 // Add it to the buttons
-document.getElementById("editOwned").addEventListener("click", toggleEditMode)
-document.getElementById("editToRead").addEventListener("click", toggleEditMode)
+document.getElementById("editMode").addEventListener("click", toggleEditMode)
 
 const MAX_HEIGHT = 250
 
@@ -259,12 +265,17 @@ async function fillShelf(divID) {
     })
 }
 
-document.getElementById("refreshToRead").addEventListener("click", () => {
-    fillShelf("toReadShelf")
-})
 fillShelf("toReadShelf")
-
-document.getElementById("refreshOwned").addEventListener("click", () => {
-    fillShelf("ownedShelf")
-})
 fillShelf("ownedShelf")
+
+document.getElementById("refreshButton").addEventListener("click", () => {
+    // Refresh the shelves
+    fillShelf("toReadShelf")
+    fillShelf("ownedShelf")
+
+    // Refresh the current reading carousel
+    fillCurrentReading(currentSelect.value)
+
+    // Refresh calender
+    createCalender()
+})
