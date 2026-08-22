@@ -11,6 +11,7 @@ from alexandria.data import Database, Book
 from alexandria.searchGoogle import Google
 from alexandria.searchMoly import Moly
 from alexandria.searchOLibrary import OpenLibrary
+from alexandria.img import getColor
 from datetime import date
 
 class CMD:
@@ -199,6 +200,7 @@ class CMD:
                 "ID": book["ID"],
                 "shelf": book["shelf"] if type(book["shelf"]) is list else book["shelf"].replace(" ", "").split(","),
                 "category": book["category"] if type(book["category"]) is list else book["category"].replace(" ", "").split(","),
+                "color": getColor(book["img"]),
                 "start": book["start"],
                 "end": book["end"]
             }
