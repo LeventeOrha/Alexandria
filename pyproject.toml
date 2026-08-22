@@ -12,6 +12,8 @@ dependencies = [
     "PyYAML",
     "requests",
     "beautifulsoup4",
+    "opencv-python",
+    "pywebview"
 ]
 
 [tool.setuptools.packages.find]
