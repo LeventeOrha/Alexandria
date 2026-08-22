@@ -153,14 +153,27 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+    font-size: 20px;
+    margin: 0;
 }
 
-.header h1 {
-    font-size: 20px;
+.today-bold .fc-daygrid-day-number {
+    font-weight: bold;
 }
 
 .refresh {
     cursor: pointer;
+}
+
+#homeButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-content: end;
+    margin-top: auto;
+    padding: 8px;
+    grid-column: 4;
+    grid-row: 2;
 }
 
 /* Small version */
