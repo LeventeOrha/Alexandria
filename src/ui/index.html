@@ -29,15 +29,15 @@
     </div>
 
     <div class="main" id="homePage">
+        <div class="glass" id="homeButtons">
+            <button id="refreshButton" class="glass refresh">🔄️</button>
+            <label class="switch2">
+                <input type="checkbox" id="editMode">
+                <span class="slider2 round2"></span>
+            </label>
+        </div>
         <div class="glass shelf" id="toReadShelf">
-            <div class="header">
-                <h1></h1>
-                <button id="refreshToRead" class="glass refresh">🔄️</button>
-                <label class="switch2">
-                    <input type="checkbox" id="editToRead">
-                    <span class="slider2 round2"></span>
-                </label>
-            </div>
+            <h1 class="header"></h1>
             <div class="shelfBody"></div>
         </div>
         <div id="currentReading" class="glass">
@@ -49,14 +49,7 @@
             </div>
         </div>
         <div class="glass shelf" id="ownedShelf">
-            <div class="header">
-                <h1></h1>
-                <button id="refreshOwned" class="refresh glass">🔄️</button>
-                <label class="switch2">
-                    <input type="checkbox" id="editOwned">
-                    <span class="slider2 round2"></span>
-                </label>
-            </div>
+            <h1 class="header"></h1>
             <div class="shelfBody"></div>
         </div>
         <div id="calendar" class="glass"></div>
