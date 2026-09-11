@@ -45,17 +45,16 @@ startOnlineSearch.addEventListener("click", async () => {
         img.src = book['img']
         div.appendChild(img)
 
-        const h1 = document.createElement("h1")
-        h1.textContent = book["title"]
-        div.appendChild(h1)
-
-        const h2 = document.createElement("h2")
-        h2.textContent = book["author"]
-        div.appendChild(h2)
-
         const span = document.createElement("span")
         span.textContent = book["date"]
         div.appendChild(span)
+
+        // Click anywhere in the div to check the checkbox
+        div.addEventListener("click", (event) => {
+            if (event.target !== check) {
+                check.checked = !check.checked
+            }
+        })
 
         results.appendChild(div)
     })
