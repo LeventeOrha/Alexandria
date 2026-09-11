@@ -12,6 +12,8 @@
     z-index: 9999;
 
     padding-top: 30px;
+
+    pointer-events: none;
 }
 
 .message-holder.visible {
