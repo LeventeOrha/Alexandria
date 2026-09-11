@@ -50,11 +50,11 @@ class Google:
 
         full_data = self.searchByIDOnline(book["ID"])["volumeInfo"]
 
-        book["title"] = full_data["title"]
+        book["title"] = full_data.get("title", "")
 
-        book["author"] = full_data["authors"][0]
+        book["author"] = full_data.get("authors", [""])[0]
 
-        book["date"] = full_data["publishedDate"]
+        book["date"] = full_data.get("publishedDate", "")
 
         # As the image sizes are, if alphabetically ordered, are decreasing with each key
         # I rather keep the first one, theoretically the biggest
