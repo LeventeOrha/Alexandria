@@ -69,7 +69,8 @@
 
 .onlineResult {
     width: 12vw;
-    min-height: 40vh;
+    padding-top: 10px;
+    padding-bottom: 10px;
 
     position: relative;
 
