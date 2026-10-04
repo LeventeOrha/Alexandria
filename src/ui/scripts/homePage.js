@@ -1,6 +1,4 @@
 // Fill out the carousel at currentReading
-const currentSelect = document.getElementById("currentList")
-
 async function fillCurrentReading(shelf) {
     const books = await window.python.searchIn("shelf", shelf)
 
@@ -44,15 +42,11 @@ async function fillCurrentReading(shelf) {
 
         carousel.appendChild(slide)
     });
-    currentSelect.value = shelf
+    document.getElementById("currentReading").querySelector("h1").textContent = shelf
 }
 
-currentSelect.addEventListener("change", () => {
-    fillCurrentReading(currentSelect.value)
-})
-
 // Do it on load for the default shelf
-fillCurrentReading("Reading")
+fillCurrentReading(window.app.settings["currentShelf"])
 
 // Attatch scrolling to the carousel
 const currentBody = document.getElementById("currentBody")

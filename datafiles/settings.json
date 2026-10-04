@@ -12,5 +12,6 @@
     "userColor": "#00ffff",
     "background": "../images/bookshelf_background.jpg",
     "toReadShelf": "To read",
-    "ownedShelf": "Owned"
+    "ownedShelf": "Owned",
+    "currentShelf": "Reading"
 }

@@ -3,6 +3,7 @@
 // Fill out the select on the homepage of the available settings
 function fillShelves(ID) {
     const select = document.getElementById(ID)
+    console.log(ID)
     select.replaceChildren() // Empty it out first
 
     for (let i = 0; i < window.app.shelfOptions.length - 1; i++) { // Skip the last element ("New" anyways)
@@ -13,9 +14,9 @@ function fillShelves(ID) {
         select.appendChild(option)
     }
 }
-fillShelves("currentList")
 fillShelves("toReadShelves")
 fillShelves("ownedShelves")
+fillShelves("currentShelves")
 
 // Set background image and chat colors
 document.documentElement.style.setProperty("--user-chat-bg", window.app.settings["userColor"]) // User message color

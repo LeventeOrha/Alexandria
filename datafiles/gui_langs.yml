@@ -22,6 +22,7 @@ en:
     importLibrary: Import library
     toReadShelfLabel: "Big shelf:"
     ownedShelfLabel: "Small shelf:"
+    currentShelfLabel: "Covers:"
   inCodeOptions:
     bookStart: Start
     bookEnd: End
@@ -64,6 +65,7 @@ hu:
     importLibrary: "Könyvtár importálása"
     toReadShelfLabel: "Nagy polc:"
     ownedShelfLabel: "Kis polc:"
+    currentShelfLabel: "Borítók:"
   inCodeOptions:
     bookStart: "Kezdve"
     bookEnd: "Befejezve"
