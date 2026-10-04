@@ -5,7 +5,7 @@ en:
   GeminiAPI: "Paste here Gemini API key: "
   WelcomeText: "Welcome to Alexandria!"
   Options: |
-    1) Search a new book
+    1) Add a new book
     2) List a shelf
     3) Search in my library
     4) Talk with the librarian
@@ -74,7 +74,7 @@ hu:
   GeminiAPI: "Illessze be a Gemini API kulcsot: "
   WelcomeText: "Üdv Alexandriában!"
   Options: |
-    1) Új könyv keresése
+    1) Új könyv hozzáadása
     2) Egy polc megtekintése
     3) Keresés a könyvtárban
     4) Beszélgetés a könyvtárossal
