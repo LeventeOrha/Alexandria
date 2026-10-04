@@ -108,7 +108,9 @@
 
 .cover {
     color: black;
-    height: 250px;
+    height: 252px;
+    margin-left: 2px;
+    margin-right: 2px;
     cursor: var(--cover-cursor, pointer);
     box-sizing: border-box;
 }
