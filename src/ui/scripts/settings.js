@@ -26,6 +26,7 @@ document.getElementById("googleBooksKey").value = window.app.settings["GBooksAPI
 document.getElementById("geminiKey").value = window.app.settings["GeminiAPI"]
 document.getElementById("toReadShelves").value = window.app.settings["toReadShelf"]
 document.getElementById("ownedShelves").value = window.app.settings["ownedShelf"]
+document.getElementById("currentShelves").value = window.app.settings["currentShelf"]
 
 // Save current settings
 async function saveSettings() {
@@ -60,6 +61,9 @@ async function saveSettings() {
 
     // Small shelf name
     settings["ownedShelf"] = document.getElementById("ownedShelves").value
+
+    // Current shelf
+    settings["currentShelf"] = document.getElementById("currentShelves").value
 
     await window.python.saveSettings(settings)
 
