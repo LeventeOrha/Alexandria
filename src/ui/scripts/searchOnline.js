@@ -62,6 +62,11 @@ startOnlineSearch.addEventListener("click", async () => {
     document.body.style.cursor = "default"
 })
 
+document.getElementById("onlineAuthor").addEventListener("keydown", (e) => {
+    if (e.key != "Enter") return
+    startOnlineSearch.click()
+})
+
 // On page load, place in all available shelves in this select/option
 const saveShelf = document.getElementById("saveShelf")
 window.app.shelfOptions.forEach((shelf) => {
