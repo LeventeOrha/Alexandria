@@ -268,7 +268,7 @@ document.getElementById("refreshButton").addEventListener("click", () => {
     fillShelf("ownedShelf")
 
     // Refresh the current reading carousel
-    fillCurrentReading(currentSelect.value)
+    fillCurrentReading(window.app.settings["currentShelf"])
 
     // Refresh calender
     createCalender()
