@@ -86,6 +86,38 @@ class Shelves:
         conn.commit()
         conn.close()
 
+    def syncShelf(self, shelf: str, data: list[dict]) -> None:
+        """
+        Synchronize a shelf's stored books with its current books.
+        """
+        conn = sqlite3.connect(self.source)
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+
+        try:
+            cur.execute(
+                "SELECT ID FROM shelves WHERE LOWER(shelf) = LOWER(?)",
+                (shelf,)
+            )
+            existing_ids = {row["ID"] for row in cur.fetchall()}
+            current_ids = {item["ID"] for item in data}
+
+            cur.executemany(
+                "DELETE FROM shelves WHERE ID = ? AND LOWER(shelf) = LOWER(?)",
+                ((ID, shelf) for ID in existing_ids - current_ids)
+            )
+            cur.executemany("""
+                INSERT INTO shelves (ID, shelf, direction)
+                VALUES (:ID, :shelf, :direction)
+                ON CONFLICT(ID) DO UPDATE SET
+                    shelf = excluded.shelf,
+                    direction = excluded.direction
+            """, data)
+
+            conn.commit()
+        finally:
+            conn.close()
+
 
 class API:
     def __init__(self, params: dict):
@@ -412,12 +444,7 @@ class API:
         including their directional data (spine (0) or cover (1))
         """
         books = self.shelves.listShelf(shelf)
-
-        # for i in range(len(books)):
-        #     book = self.searchByID(books[i]["ID"])
-        #     book["direction"] = books[i]["direction"]
-        #     books[i] = book
-
+        
         return books
 
     def updateShelf(self, shelf: str) -> None:
@@ -444,7 +471,7 @@ class API:
                     "shelf": shelf,
                     "direction": 0
                 })
-        self.shelves.saveShelf(saved)
+        self.shelves.syncShelf(shelf, saved)
 
     def rotateBook(self, shelf: str, ID: str) -> None:
         """
