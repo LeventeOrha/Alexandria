@@ -62,7 +62,11 @@ class OpenLibrary:
 
         response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=self.timeout)
 
-        response = json.loads(response.text)
+        try:
+            response = json.loads(response.text)
+        except:
+            print(response.text)
+            return None
 
         if response["numFound"] < 1:
             return None
