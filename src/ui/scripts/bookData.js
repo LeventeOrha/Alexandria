@@ -205,6 +205,11 @@ async function saveBook() {
 
     notify(window.app.inCodeText["SuccessfulSave"])
 
+    // Update all Shelf dropdowns (if a new option appeared)
+    fillShelves("toReadShelves")
+    fillShelves("ownedShelves")
+    fillShelves("currentShelves")
+
 }
 
 // Change active book
