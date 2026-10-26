@@ -10,7 +10,7 @@
     "GUI_text_file": "./datafiles/gui_langs.yml",
     "aiColor": "#008000",
     "userColor": "#00ffff",
-    "background": "../images/bookshelf_background.jpg",
+    "background": "Cozy_shop.jpeg",
     "toReadShelf": "To read",
     "ownedShelf": "Owned",
     "currentShelf": "Reading"
