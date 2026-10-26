@@ -7,6 +7,8 @@ import yaml
 import json
 from datetime import date
 import sqlite3
+import shutil
+import os
 
 from alexandria.data import Book, Database
 import alexandria.utils as au
@@ -414,10 +416,22 @@ class API:
             ]
         )
         root.destroy() # close tkinter
+
         # Check file extension
         if filePath.rsplit(".", 1)[1] in ["png", "jpg", "jpeg", "svg"]:
-            self.params["background"] = filePath
-            return filePath
+            # Copy the file in the images folder
+            try:
+                destination_folder = "./src/ui/images"
+                shutil.copy(filePath, destination_folder)
+            except shutil.SameFileError:
+                pass
+
+            # Extract the filename itself
+            fileName = os.path.basename(filePath)
+
+            # Save the file's NAME and return it
+            self.params["background"] = fileName
+            return fileName
 
     def getHistory(self) -> list[dict[str, str]]:
         """
