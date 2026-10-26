@@ -20,7 +20,7 @@ fillShelves("currentShelves")
 // Set background image and chat colors
 document.documentElement.style.setProperty("--user-chat-bg", window.app.settings["userColor"]) // User message color
 document.documentElement.style.setProperty("--ai-chat-bg", window.app.settings["aiColor"]) // AI message color
-document.documentElement.style.setProperty("--background-image", `url(${window.app.settings["background"]})`) // Background image
+document.documentElement.style.setProperty("--background-image", `url(../images/${window.app.settings["background"]})`) // Background image
 
 // Set ai message text colors based on their backgrounds
 function getTextColor(hex) {
