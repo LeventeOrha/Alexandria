@@ -199,7 +199,9 @@ class API:
         if lang == "hu":
             books = self.moly.searchBook(title, author)
         else:
-            books = self.gb.searchBook(title, author, lang)
+            books = None
+            if hasattr(self, "gb"):
+                books = self.gb.searchBook(title, author, lang)
 
             if books is None:
                 books = self.ol.searchBook(title, author, lang)
@@ -318,8 +320,12 @@ class API:
             Options for the different settings
         """
         params = self.params.copy()
-        params["GBooksAPIkey"] = self.api_keys["GB_API"]
-        params["GeminiAPI"] = self.api_keys["Gemini_API"]
+        try:
+            params["GBooksAPIkey"] = self.api_keys["GB_API"]
+            params["GeminiAPI"] = self.api_keys["Gemini_API"]
+        except AttributeError:
+            params["GBooksAPIkey"] = ""
+            params["GeminiAPI"] = ""
 
         return params, self.settings_options
 
