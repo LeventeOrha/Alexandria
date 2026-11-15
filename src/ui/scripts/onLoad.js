@@ -13,9 +13,17 @@ function fillShelves(ID) {
         select.appendChild(option)
     }
 }
-fillShelves("toReadShelves")
-fillShelves("ownedShelves")
-fillShelves("currentShelves")
+
+async function updateShelves() {
+    var shelfOptions = await window.python.getShelves()
+    shelfOptions.push(window.app.inCodeText["new"])
+    window.app.shelfOptions = shelfOptions
+
+    fillShelves("toReadShelves")
+    fillShelves("ownedShelves")
+    fillShelves("currentShelves")
+}
+
 
 // Set background image and chat colors
 document.documentElement.style.setProperty("--user-chat-bg", window.app.settings["userColor"]) // User message color

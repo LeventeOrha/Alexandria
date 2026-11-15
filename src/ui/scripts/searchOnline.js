@@ -62,9 +62,7 @@ startOnlineSearch.addEventListener("click", async () => {
     document.body.style.cursor = "default"
 
     // Update all Shelf options
-    fillShelves("toReadShelves")
-    fillShelves("ownedShelves")
-    fillShelves("currentShelves")
+    updateShelves()
 })
 
 document.getElementById("onlineAuthor").addEventListener("keydown", (e) => {
