@@ -140,68 +140,59 @@ function editBook() {
 
 // Save mode
 async function saveBook() {
+    const bookData = document.querySelector(".bookData")
+    const bookId = bookData.id
+    bookData.querySelectorAll(".removeTag, .addTag").forEach(element => element.remove())
+    const categories = [...document.getElementById("categoryTags").querySelectorAll(".tag")].map(el =>
+        el.matches("span") ? el.textContent.trim() : el.value
+    )
+    const shelf = [...document.getElementById("shelfTags").querySelectorAll(".tag")].map(el =>
+        el.matches("span") ? el.textContent.trim() : el.value
+    )
+    const start = document.getElementById("startDate").value || "---"
+    const end = document.getElementById("endDate").value || "---"
+
     // Get the book's all data from the database
-    let book = await window.python.searchByID(document.querySelector(".bookData").id)
+    let book = await window.python.searchByID(bookId)
 
-    // Remove "removeTag" buttons
-    let removes = document.querySelectorAll(".removeTag")
-    removes.forEach((element) => {element.remove()})
+    if (bookData.id === bookId) {
+        // Replace existing select/options with its value
+        let selects = bookData.querySelectorAll("select.tag")
+        selects.forEach((select) => {
+            const tag = document.createElement("span")
+            tag.className = "tag"
 
-    // Remove "addTag" buttons
-    removes = document.querySelectorAll(".addTag")
-    removes.forEach((element) => {element.remove()})
+            tag.innerHTML = `<span>${select.options[select.selectedIndex].text}</span>`
 
-    // And now update the fields
-    // First the categories
-    let categories = document.getElementById("categoryTags")
-    categories = [...categories.querySelectorAll(".tag")].map(el =>
-        el.matches("span") ? el.textContent.trim() : el.value
-    )
+            select.replaceWith(tag)
+        })
+
+        // Replace shelf inputs (if any)
+        const inputs = bookData.querySelectorAll("input.tag")
+        inputs.forEach((inp) => {
+            const tag = document.createElement("span")
+            tag.className = "tag"
+
+            tag.innerHTML = `<span>${inp.value}</span>`
+            inp.replaceWith(tag)
+        })
+
+        // Replace all date inputs with the values
+        bookData.querySelectorAll('input.dateTag[type="date"]').forEach(input => {
+            const span = document.createElement('span');
+            span.textContent = input.value || '---';
+            input.replaceWith(span);
+        });
+    }
+
+    // Update the book's data
     book["category"] = categories
-
-    // Now the shelves
-    let shelf = document.getElementById("shelfTags")
-    shelf = [...shelf.querySelectorAll(".tag")].map(el =>
-        el.matches("span") ? el.textContent.trim() : el.value
-    )
     book["shelf"] = shelf
-
-    // Starting date
-    book["start"] = document.getElementById("startDate").value || "---" // If empty, use the conventional sign
-
-    // End date
-    book["end"] = document.getElementById("endDate").value || "---"
+    book["start"] = start // If empty, use the conventional sign
+    book["end"] = end
 
     // Save the updated book
     window.python.saveBook(book)
-
-    // Replace existing select/options with its value
-    let selects = document.querySelectorAll("select.tag")
-    selects.forEach((select) => {
-        const tag = document.createElement("span")
-        tag.className = "tag"
-
-        tag.innerHTML = `<span>${select.options[select.selectedIndex].text}</span>`
-
-        select.replaceWith(tag)
-    })
-
-    // Replace shelf inputs (if any)
-    const inputs = document.querySelectorAll("input.tag")
-    inputs.forEach((inp) => {
-        const tag = document.createElement("span")
-        tag.className = "tag"
-        
-        tag.innerHTML = `<span>${inp.value}</span>`
-        inp.replaceWith(tag)
-    })
-
-    // Replace all date inputs with the values
-    document.querySelectorAll('input.dateTag[type="date"]').forEach(input => {
-        const span = document.createElement('span');
-        span.textContent = input.value || '---';
-        input.replaceWith(span);
-    });
 
     notify(window.app.inCodeText["SuccessfulSave"])
 
@@ -209,6 +200,9 @@ async function saveBook() {
     updateShelves()
 
 }
+
+// To track edit mode
+var editModeOn = false
 
 // Change active book
 async function fillBookData(book) {
@@ -247,10 +241,12 @@ async function fillBookData(book) {
         if (editbtn.textContent == window.app.inCodeText["edit"]) {
             editBook()
             editbtn.textContent = window.app.inCodeText["save"]
+            editModeOn = true
         }
         else {
             saveBook()
             editbtn.textContent = window.app.inCodeText["edit"]
+            editModeOn = false
         }
     })
     
@@ -394,3 +390,12 @@ document.getElementById("startSearch").addEventListener('keydown', (e) => {
     if (e.key != "Enter") return
     searchIn()
 })
+
+document.addEventListener("click", event => {
+    const bookData = document.querySelector(".bookData")
+    if (!editModeOn || bookData.contains(event.target)) return
+
+    editModeOn = false
+    document.getElementById("editBookDetails").textContent = window.app.inCodeText["edit"]
+    saveBook()
+}, true)
