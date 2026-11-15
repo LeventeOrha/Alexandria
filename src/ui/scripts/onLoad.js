@@ -24,11 +24,7 @@ async function updateShelves() {
     fillShelves("currentShelves")
 }
 
-
-// Set background image and chat colors
-document.documentElement.style.setProperty("--user-chat-bg", window.app.settings["userColor"]) // User message color
-document.documentElement.style.setProperty("--ai-chat-bg", window.app.settings["aiColor"]) // AI message color
-document.documentElement.style.setProperty("--background-image", `url(../images/${window.app.settings["background"]})`) // Background image
+updateShelves()
 
 // Set ai message text colors based on their backgrounds
 function getTextColor(hex) {
@@ -49,8 +45,18 @@ function getTextColor(hex) {
 
     return brightness > 128 ? "#000000" : "#FFFFFF"
 }
-document.documentElement.style.setProperty("--user-chat-color", getTextColor(window.app.settings["userColor"]))
-document.documentElement.style.setProperty("--ai-chat-color", getTextColor(window.app.settings["aiColor"]))
+
+// Set CSS variables for the settings
+function setCSS(){
+    // Set background image and chat colors
+    document.documentElement.style.setProperty("--user-chat-bg", window.app.settings["userColor"]) // User message color
+    document.documentElement.style.setProperty("--ai-chat-bg", window.app.settings["aiColor"]) // AI message color
+    document.documentElement.style.setProperty("--background-image", `url(../images/${window.app.settings["background"]})`) // Background image
+    document.documentElement.style.setProperty("--user-chat-color", getTextColor(window.app.settings["userColor"]))
+    document.documentElement.style.setProperty("--ai-chat-color", getTextColor(window.app.settings["aiColor"]))
+}
+
+setCSS()
 
 // Fill up the HTML text first
 // Placeholders first

@@ -68,6 +68,17 @@ async function saveSettings() {
     await window.python.saveSettings(settings)
 
     notify(window.app.inCodeText["SuccessfulSave"])
+
+    const [setts, settingsKeys] = await window.python.getSettings()
+    window.app.settings = setts
+    window.app.settingsKeys = settingsKeys
+
+    // Update the system of the changes
+    // Simply refresh the homepage
+    document.getElementById("refreshButton").click()
+
+    // Update actual settings used
+    setCSS()
 }
 document.getElementById("saveSettings").addEventListener("click", saveSettings)
 
