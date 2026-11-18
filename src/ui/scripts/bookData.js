@@ -385,6 +385,8 @@ async function searchIn() {
     })
 }
 
+searchIn()
+
 document.getElementById("startSearch").addEventListener("click", searchIn)
 document.getElementById("startSearch").addEventListener('keydown', (e) => {
     if (e.key != "Enter") return
