@@ -415,8 +415,8 @@ class API:
         filePath = filedialog.askopenfilename(
             title = self.text["backgroundImage"],
             filetypes = [
-                ("PNG files", "*.png"),
                 ("JPG files", "*.jpg"),
+                ("PNG files", "*.png"),
                 ("JPEG files", "*.jpeg"),
                 ("SVG files", "*.svg")
             ]
@@ -425,15 +425,22 @@ class API:
 
         # Check file extension
         if filePath.rsplit(".", 1)[1] in ["png", "jpg", "jpeg", "svg"]:
+            print("filePath =", repr(filePath), flush=True)
+            print("shutil.copy =", shutil.copy, flush=True)
+            print("os.path.basename =", os.path.basename, flush=True)
+            print("cwd =", os.getcwd(), flush=True)
+
             # Copy the file in the images folder
             try:
-                destination_folder = "./src/ui/images"
+                destination_folder = os.path.abspath("./src/ui/images")
                 shutil.copy(filePath, destination_folder)
             except shutil.SameFileError:
                 pass
 
+            print("dir now contains:", os.listdir(destination_folder), flush=True)
             # Extract the filename itself
             fileName = os.path.basename(filePath)
+            print("basename =", repr(fileName), flush=True)
 
             # Save the file's NAME and return it
             self.params["background"] = fileName
