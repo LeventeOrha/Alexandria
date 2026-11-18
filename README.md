@@ -26,8 +26,6 @@ and enjoy your own little library! Note that at first, you have to include two A
 - [Google Books API key](https://console.cloud.google.com/apis/credentials)
 - [Gemini API key](https://aistudio.google.com/api-keys)
 
-(*I haven't figured out yet how to make it in a way that you don't need this data... Sorry*)
-
 # Features
 
 - Pick the exact book you are reading, including the passing cover
@@ -35,3 +33,9 @@ and enjoy your own little library! Note that at first, you have to include two A
 - Add new books in English or in Hungarian
 - Use the system in both languages
 - Chat with the AI librarian, who can manage your library for you
+
+# Upcoming features
+
+- Only login to Google needed
+- Drag books around the shelves
+- Modify the homepage layout
