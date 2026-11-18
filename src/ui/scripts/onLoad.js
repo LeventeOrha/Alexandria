@@ -54,6 +54,15 @@ function setCSS(){
     document.documentElement.style.setProperty("--background-image", `url(../images/${window.app.settings["background"]})`) // Background image
     document.documentElement.style.setProperty("--user-chat-color", getTextColor(window.app.settings["userColor"]))
     document.documentElement.style.setProperty("--ai-chat-color", getTextColor(window.app.settings["aiColor"]))
+
+    const body = document.querySelector("body")
+    const probe = new Image()
+    probe.src = `../images/${window.app.settings["background"]}`
+
+    probe.decode().then(() => {
+        const fits = probe.naturalWidth >= body.clientWidth && probe.naturalHeight >= body.clientHeight
+        body.classList.toggle('bg-cover', fits)
+    })
 }
 
 setCSS()

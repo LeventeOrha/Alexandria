@@ -10,14 +10,14 @@
     --cover-cursor: pointer;
 }
 
+.bg-cover { background-size: cover; }
+
 body {
   position: relative;
   margin: 0px;
   padding: 0px;
   background-image: var(--background-image);
-  background-size: cover;
   background-position: left top;
-  background-repeat: no-repeat;
   display: flex;
   flex-direction: row;
   justify-content: start;
