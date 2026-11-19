@@ -196,7 +196,7 @@ class API:
         """
         Search a new book online
         """
-        if lang == "hu":
+        if False: # lang == "hu"
             books = self.moly.searchBook(title, author)
         else:
             books = None
@@ -217,6 +217,10 @@ class API:
             book = self.moly.searchByID(ID)
         elif "OL" in ID:
             book = self.ol.searchByID(ID)
+        elif "MY" in ID:
+            book = self.db.searchBy("ID", ID)[0]
+            book = asdict(book)
+            book["abs"] = "No abstract found."
         else:
             book = self.gb.searchByID(ID)
         return book
