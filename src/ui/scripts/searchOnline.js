@@ -16,7 +16,7 @@ startOnlineSearch.addEventListener("click", async () => {
     const results = document.getElementById("onlineResults")
 
     // Put in a "No result found" message if there are no results
-    if (books === null) {
+    if (books === null || books.length == 0) {
         console.log("No results.")
         const h1 = document.createElement("h1")
         h1.textContent = window.app.inCodeText["NoSearchResults"]
