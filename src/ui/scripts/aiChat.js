@@ -24,6 +24,27 @@ function createNewMessage(content, sender) {
     document.getElementById("aiBody").appendChild(message)
 }
 
+function createTypingIndicator() {
+    const message = document.createElement("div")
+    message.className = "aiMessage"
+    message.setAttribute("role", "status")
+    message.setAttribute("aria-label", "Librarian is typing")
+
+    const bubble = document.createElement("span")
+    bubble.className = "aiMessageText typingIndicator"
+
+    for (let i = 0; i < 3; i++) {
+        const dot = document.createElement("span")
+        dot.className = "typingDot"
+        dot.setAttribute("aria-hidden", "true")
+        bubble.appendChild(dot)
+    }
+
+    message.appendChild(bubble)
+    document.getElementById("aiBody").appendChild(message)
+    return message
+}
+
 const sendMessage = document.getElementById("sendNewMessage")
 async function sendNewMessage() {
     // Get the new text from the user
@@ -36,15 +57,22 @@ async function sendNewMessage() {
     // Put out the user message
     createNewMessage(userMessage, "user")
 
-    // Get the answer
-    const answer = await window.python.getAIMessage(userMessage)
-
-    // Put out the answer
-    createNewMessage(answer, "ai")
-
-    // Scroll down to the bottom
-    aiBody = document.getElementById("aiBody")
+    const typingIndicator = createTypingIndicator()
+    const aiBody = document.getElementById("aiBody")
     aiBody.scrollTop = aiBody.scrollHeight
+
+    // Get the answer
+    try {
+        const answer = await window.python.getAIMessage(userMessage)
+
+        typingIndicator.remove()
+        createNewMessage(answer, "ai")
+    } finally {
+        typingIndicator.remove()
+
+        // Scroll down to the bottom
+        aiBody.scrollTop = aiBody.scrollHeight
+    }
 }
 
 sendMessage.addEventListener('click', sendNewMessage)
