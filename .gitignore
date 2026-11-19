@@ -13,3 +13,4 @@ __pycache__/
 !datafiles/**/*.json
 
 alexandria.egg-info/
+logs/

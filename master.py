@@ -1,3 +1,8 @@
+from pathlib import Path
+from alexandria.error_logging import install_exception_logging
+
+install_exception_logging(Path(__file__).resolve().parent / "logs")
+
 from ui.cmd import CMD
 from ui.gui import main
 import sys
