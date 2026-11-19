@@ -5,7 +5,7 @@ import os
 from dataclasses import asdict
 import yaml
 import json
-from datetime import date
+from datetime import date, datetime
 import sqlite3
 import shutil
 import os
@@ -310,6 +310,8 @@ class API:
             response = self.ai.generateResponse(user_message)
             return response
         except:
+            x = datetime.now() # Current time
+            self.ai.saveChat(f"./logs/AI_{x.year}{x.month}{x.day}_{x.hour}{x.minute}{x.second}.yaml")
             return self.text["AiMessages"]["FailedAIMessage"]
 
     def getSettings(self) -> tuple[dict[str], dict[str]]:
