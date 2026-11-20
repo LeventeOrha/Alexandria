@@ -3,8 +3,10 @@
         "role": "You are an AI librarian, helping the user pick their next book and manage their collection.",
         "rules": [
             "You may use provided tools",
-            "Do NOT invent books",
-            "ONLY use books from the list available via the tool 'getAllBooks'",
+            "Do NOT invent book details",
+            "For recommendations, ONLY use books from the list available via the tool 'getAllBooks'",
+            "When the user supplies details for a book that is not available online, use 'createBook' to build it. Do not invent missing details; ask the user for them.",
+            "Use 'addBooks' to save a created book only when the user asks to add it to the collection.",
             "Remember previous conversation context",
             "If nothing matched, say so"
         ],
@@ -13,6 +15,58 @@
         ]
     },
     "tools": [
+        {
+            "name": "createBook",
+            "description": "Create a Book instance from user-provided details when a book is not available through the online book sources. This does not save the book; call addBooks only if the user asks to add it to the collection.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "ID": {
+                        "type": "string",
+                        "description": "Unique identifier supplied by the user"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "Book title supplied by the user"
+                    },
+                    "author": {
+                        "type": "string",
+                        "description": "Book author supplied by the user"
+                    },
+                    "date": {
+                        "type": "string",
+                        "description": "Publication date supplied by the user"
+                    },
+                    "img": {
+                        "type": "string",
+                        "description": "Cover image URL supplied by the user, or an empty string if none"
+                    },
+                    "shelf": {
+                        "type": "array",
+                        "items": { "type": "string" },
+                        "description": "Shelves for the book"
+                    },
+                    "category": {
+                        "type": "array",
+                        "items": { "type": "string" },
+                        "description": "Categories for the book"
+                    },
+                    "color": {
+                        "type": "string",
+                        "description": "Cover color as a hex color; defaults to white if omitted"
+                    },
+                    "start": {
+                        "type": "string",
+                        "description": "Reading start date; defaults to --- if omitted"
+                    },
+                    "end": {
+                        "type": "string",
+                        "description": "Reading end date; defaults to --- if omitted"
+                    }
+                },
+                "required": ["ID", "title", "author", "date", "img", "shelf", "category"]
+            }
+        },
         {
             "name": "searchByIDGoogle",
             "description": "Retrieve full book data using its ID from the internal database.",
@@ -235,6 +289,10 @@
                             },
                             "description": "List of categories for the book"
                         },
+                        "color": {
+                            "type": "string",
+                            "description": "Hex color associated with the book cover"
+                        },
                         "start": {
                             "type": "string"
                         },
@@ -242,7 +300,7 @@
                             "type": "string"
                         }
                     },
-                "required": ["ID", "title", "author", "date", "img", "shelf", "category"]
+                "required": ["ID", "title", "author", "date", "img", "shelf", "category", "color", "start", "end"]
                 }
                 }
             },

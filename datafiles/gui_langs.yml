@@ -3,6 +3,9 @@ en:
   AiMessages:
     NoAIConnection: "No AI agent found. Add an API key first in the settings!"
     FailedAIMessage: "Something went wrong. Try again another time!"
+    LimitReached: "Daily request limit reached. See you tomorrow!"
+    OtherErrorHappened: "Sorry, something else went wrong, not Gemini broke."
+    SuccesfulChatSave: "Messages succesfully saved in "
   placeholders:
     onlineTitle: Title
     onlineAuthor: Author
@@ -48,6 +51,9 @@ hu:
   AiMessages:
     NoAIConnection: "Nem található MI segéd. Adjon hozzá API kulcsot a beállításokban!"
     FailedAIMessage: "Valami félrement. Próbálja meg máskor!"
+    LimitReached: "Napi üzenetlimit elérve. Viszlát holnap!"
+    OtherErrorHappened: "Sajnálom, valami más ment félre, nem Gemini."
+    SuccesfulChatSave: "Üzenetek sikeresen elmentve ide: "
   placeholders:
     onlineTitle: "Cím"
     onlineAuthor: "Író"

@@ -7,13 +7,15 @@ from alexandria.searchGoogle import Google
 from alexandria.searchMoly import Moly
 
 class AI:
-    def __init__(self, API_keys: dict, model: str, settings: dict, db: Database):
+    def __init__(self, API_keys: dict, model: str, daily_limit: int, settings: dict, db: Database):
         self.API_KEY = API_keys["Gemini_API"]
         self.settings = settings
+        self.daily_limit = daily_limit
         self.model = model
         self.moly = Moly(db)
         self.google = Google(API_keys["GB_API"], db)
         self.db = db
+        self.n_requests = 0 # Number of sent requests
 
         self.system_prompt = f"Role: \n{self.settings["system_prompt"]["role"]}\n"
         self.system_prompt += f"Rules: \n{"\n -".join(self.settings["system_prompt"]["rules"])}"
@@ -39,6 +41,7 @@ class AI:
             "addBooks": self.db.addBooks,
             "removeBook": self.db.removeBook,
             "updateBook": self.db.updateBook,
+            "createBook": self.createBook,
             "searchBy": self.db.searchBy,
             "searchByCategory": self.db.searchByCategory,
             "searchByShelf": self.db.searchByShelf,
@@ -49,6 +52,33 @@ class AI:
             "getAllBooks": db.getAllBooks
         }
 
+    def createBook(
+        self,
+        ID: str,
+        title: str,
+        author: str,
+        date: str,
+        img: str,
+        shelf: list[str],
+        category: list[str],
+        color: str = "#FFFFFF",
+        start: str = "---",
+        end: str = "---"
+    ) -> Book:
+        """Create a Book instance from details supplied by the user."""
+        return Book(
+            ID=ID,
+            title=title,
+            author=author,
+            date=date,
+            img=img,
+            shelf=shelf,
+            category=category,
+            color=color,
+            start=start,
+            end=end
+        )
+
     def saveChat(self, filename: str):
         """
         Save the conversation
@@ -57,12 +87,17 @@ class AI:
             yaml.safe_dump(self.conversation_log, out, sort_keys=False, allow_unicode=True)
         return {"success": True}
 
+    def _send(self, content):
+        if self.n_requests >= self.daily_limit:
+            raise RuntimeError("Daily Gemini limit reached")
+        self.n_requests += 1
+        return self.chat.send_message(content)
 
     def generateResponse(self, user_prompt: str):
         """
         Generate a new message
         """
-        response = self.chat.send_message(user_prompt)
+        response = self._send(user_prompt)
 
         self.conversation_log.append({"role": "user", "content": user_prompt})
 
@@ -100,7 +135,7 @@ class AI:
                 response=result
             )
 
-            response = self.chat.send_message([tool_response])
+            response = self._send([tool_response])
 
 if __name__ == "__main__":
     import traceback

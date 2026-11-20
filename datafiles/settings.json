@@ -14,5 +14,6 @@
     "toReadShelf": "To read",
     "ownedShelf": "Owned",
     "currentShelf": "Reading",
-    "Pre-defined_shelves": false
+    "Pre-defined_shelves": false,
+    "Gemini_daily_limit": 20
 }

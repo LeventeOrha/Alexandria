@@ -9,6 +9,7 @@ from datetime import date, datetime
 import sqlite3
 import shutil
 import os
+from google.genai import errors
 
 from alexandria.data import Book, Database
 import alexandria.utils as au
@@ -173,7 +174,7 @@ class API:
 
         # Create AI agent (Gemini throws error if there is no key) -> No error message, simply the chat is not working
         try:
-            self.ai = AI(self.api_keys, self.params["Gemini_model"], self.ai_settings, self.db)
+            self.ai = AI(self.api_keys, self.params["Gemini_model"], self.params["Gemini_daily_limit"], self.ai_settings, self.db)
         except:
             pass
 
@@ -313,13 +314,23 @@ class API:
         """
         if hasattr(self, "ai") is False:
             return self.text["AiMessages"]["NoAIConnection"]
+        if "/save" in user_message:
+            x = datetime.now() # Current time
+            save_name = f"./logs/AI_{x.year}{x.month}{x.day}_{x.hour}{x.minute}{x.second}.yaml"
+            self.ai.saveChat(save_name)
+            return self.text["AiMessages"]["SuccesfulChatSave"] + save_name
         try:
             response = self.ai.generateResponse(user_message)
             return response
-        except:
+        except RuntimeError as e:
+            if "limit" in str(e):
+                return self.text["AiMessages"]["LimitReached"]
+        except errors.APIError:
             x = datetime.now() # Current time
             self.ai.saveChat(f"./logs/AI_{x.year}{x.month}{x.day}_{x.hour}{x.minute}{x.second}.yaml")
             return self.text["AiMessages"]["FailedAIMessage"]
+        except Exception:
+            return self.text["AiMessages"]["OtherErrorHappened"]
 
     def getSettings(self) -> tuple[dict[str], dict[str]]:
         """
