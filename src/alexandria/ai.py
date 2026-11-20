@@ -104,7 +104,7 @@ class AI:
 
         # Check out if Gemini wants to call a function (or several)
         assistant_text = []
-        for _ in self.max_tool_steps:
+        for _ in range(self.max_tool_steps):
             tool_responses = []
 
             for part in response.candidates[0].content.parts:
