@@ -102,40 +102,45 @@ class AI:
         self.conversation_log.append({"role": "user", "content": user_prompt})
 
         # Check out if Gemini wants to call a function (or several)
+        assistant_text = []
         while True:
+            tool_responses = []
 
-            part = response.candidates[0].content.parts[0]
+            for part in response.candidates[0].content.parts:
+                call = getattr(part, "function_call", None)
+                if call:
+                    if call.name in ["removeBook", "updateBook"]:
+                        result = self.tools[call.name](Book(**call.args))
+                    elif call.name == "addBooks":
+                        result = self.tools[call.name]([Book(**b) for b in call.args["books"]])
+                    else:
+                        result = self.tools[call.name](**call.args)
 
-            if not getattr(part, "function_call", None):
-                self.conversation_log.append({"role": "assistant", "content": response.text})
-                return response.text
+                    if call.name in ["searchBy", "searchByCategory", "searchByShelf", "getAllBooks"]:
+                        result = {"books": [asdict(r) for r in result]}
+                    elif "createBook" in call.name:
+                        result = asdict(result)
 
-            call = part.function_call
+                    if result is None:
+                        result = {"success": True}
 
-            if call.name in ["removeBook", "updateBook"]:
-                result = self.tools[call.name](Book(**call.args))
-            elif call.name == "addBooks":
-                result = self.tools[call.name]([Book(**b) for b in call.args["books"]])
-            else:
-                result = self.tools[call.name](**call.args)
+                    self.conversation_log.append({"role": "tool call", "name": call.name, "args": dict(call.args), "response": result})
+                    tool_responses.append(types.Part.from_function_response(
+                        name=call.name,
+                        response=result
+                    ))
+                else:
+                    text = getattr(part, "text", None)
+                    if text:
+                        assistant_text.append(text)
 
-            if call.name in ["searchBy", "searchByCategory", "searchByShelf", "getAllBooks"]:
-                result = {"books": [asdict(r) for r in result]}
-                
-            elif "createBook" in call.name:
-                result = asdict(result)
+            if tool_responses:
+                response = self._send(tool_responses)
+                continue
 
-            if result is None:
-                result = {"success": True}
-
-            self.conversation_log.append({"role": "tool call", "name": call.name, "args": dict(call.args), "response": result})
-
-            tool_response = types.Part.from_function_response(
-                name=call.name,
-                response=result
-            )
-
-            response = self._send([tool_response])
+            response_text = "".join(assistant_text)
+            self.conversation_log.append({"role": "assistant", "content": response_text})
+            return response_text
 
 if __name__ == "__main__":
     import traceback
