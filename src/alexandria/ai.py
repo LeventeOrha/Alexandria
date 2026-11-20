@@ -109,20 +109,33 @@ class AI:
             for part in response.candidates[0].content.parts:
                 call = getattr(part, "function_call", None)
                 if call:
-                    if call.name in ["removeBook", "updateBook"]:
-                        result = self.tools[call.name](Book(**call.args))
-                    elif call.name == "addBooks":
-                        result = self.tools[call.name]([Book(**b) for b in call.args["books"]])
-                    else:
-                        result = self.tools[call.name](**call.args)
+                    try:
+                        if call.name in ["removeBook", "updateBook"]:
+                            result = self.tools[call.name](Book(**call.args))
+                        elif call.name == "addBooks":
+                            result = self.tools[call.name]([Book(**b) for b in call.args["books"]])
+                        else:
+                            result = self.tools[call.name](**call.args)
 
-                    if call.name in ["searchBy", "searchByCategory", "searchByShelf", "getAllBooks"]:
-                        result = {"books": [asdict(r) for r in result]}
-                    elif "createBook" in call.name:
-                        result = asdict(result)
+                        if call.name in ["searchBy", "searchByCategory", "searchByShelf", "getAllBooks"]:
+                            result = {"books": [asdict(r) for r in result]}
+                        elif "createBook" in call.name:
+                            result = asdict(result)
 
-                    if result is None:
-                        result = {"success": True}
+                        if result is None:
+                            result = {"success": True}
+                    except Exception as error:
+                        error_message = str(error)
+                        for secret in (self.API_KEY, self.google.API_key):
+                            if secret:
+                                error_message = error_message.replace(secret, "[REDACTED]")
+                        result = {
+                            "success": False,
+                            "error": {
+                                "type": type(error).__name__,
+                                "message": error_message
+                            }
+                        }
 
                     self.conversation_log.append({"role": "tool call", "name": call.name, "args": dict(call.args), "response": result})
                     tool_responses.append(types.Part.from_function_response(
