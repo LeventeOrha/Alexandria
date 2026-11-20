@@ -241,9 +241,16 @@ class API:
 
     def getShelves(self) -> list[str]:
         """
-        Get all shelves
+        Get all shelves, and add the pre-defined ones if needed
         """
-        return self.db.getShelves()
+        shelves = self.db.getShelves()
+
+        if self.params["Pre-defined_shelves"]:
+            pre_defined_shelves = ["Finished", "Reading", "To read", "Owned", "To buy"]
+
+            shelves = list(set(shelves + pre_defined_shelves))
+
+        return shelves
 
     def addBooks(self, ids: list[str], shelf: str, imgs: list[str]) -> None:
         """

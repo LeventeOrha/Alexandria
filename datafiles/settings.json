@@ -6,12 +6,13 @@
     "categories": "./datafiles/categories.yml",
     "Language_file": "./datafiles/cmd_langs.yml",
     "Language": "en",
-    "GUI_useage": false,
+    "GUI_useage": true,
     "GUI_text_file": "./datafiles/gui_langs.yml",
     "aiColor": "#008000",
     "userColor": "#00ffff",
     "background": "Cozy_shop.jpeg",
     "toReadShelf": "To read",
     "ownedShelf": "Owned",
-    "currentShelf": "Reading"
+    "currentShelf": "Reading",
+    "Pre-defined_shelves": false
 }

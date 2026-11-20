@@ -19,14 +19,20 @@ for (const [key, value] of Object.entries(window.app.settingsKeys["Gemini_model"
 // Set current values for all settings
 selectLanguage.value = window.app.settings["Language"]
 selectAI.value = window.app.settings["Gemini_model"]
-document.getElementById("aiChatColor").value = window.app.settings["aiColor"]
-document.getElementById("userChatColor").value = window.app.settings["userColor"]
-document.getElementById("backgroundImage").textContent = window.app.settings["background"]
-document.getElementById("googleBooksKey").value = window.app.settings["GBooksAPIkey"]
-document.getElementById("geminiKey").value = window.app.settings["GeminiAPI"]
-document.getElementById("toReadShelves").value = window.app.settings["toReadShelf"]
-document.getElementById("ownedShelves").value = window.app.settings["ownedShelf"]
-document.getElementById("currentShelves").value = window.app.settings["currentShelf"]
+
+// Set the current settings out again (needed when shelves are updated)
+function setSettings(){
+    document.getElementById("aiChatColor").value = window.app.settings["aiColor"]
+    document.getElementById("userChatColor").value = window.app.settings["userColor"]
+    document.getElementById("backgroundImage").textContent = window.app.settings["background"]
+    document.getElementById("googleBooksKey").value = window.app.settings["GBooksAPIkey"]
+    document.getElementById("geminiKey").value = window.app.settings["GeminiAPI"]
+    document.getElementById("toReadShelves").value = window.app.settings["toReadShelf"]
+    document.getElementById("ownedShelves").value = window.app.settings["ownedShelf"]
+    document.getElementById("currentShelves").value = window.app.settings["currentShelf"]
+    document.getElementById("preDefinedShelves").checked = window.app.settings["Pre-defined_shelves"]
+}
+setSettings()
 
 // Save current settings
 async function saveSettings() {
@@ -65,6 +71,9 @@ async function saveSettings() {
     // Current shelf
     settings["currentShelf"] = document.getElementById("currentShelves").value
 
+    // Pre-defined shelves
+    settings["Pre-defined_shelves"] = document.getElementById("preDefinedShelves").checked
+
     await window.python.saveSettings(settings)
 
     notify(window.app.inCodeText["SuccessfulSave"])
@@ -79,6 +88,12 @@ async function saveSettings() {
 
     // Update actual settings used
     setCSS()
+
+    // Update shelves
+    await updateShelves()
+
+    // Update the settings
+    setSettings()
 }
 document.getElementById("saveSettings").addEventListener("click", saveSettings)
 

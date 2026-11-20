@@ -1,17 +1,26 @@
 // Functions to run at the start of the app
 
 // Fill out the select on the homepage of the available settings
-function fillShelves(ID) {
+function fillShelves(ID, settingKey) {
     const select = document.getElementById(ID)
     select.replaceChildren() // Empty it out first
 
-    for (let i = 0; i < window.app.shelfOptions.length - 1; i++) { // Skip the last element ("New" anyways)
+    const selectedShelf = window.app.settings[settingKey]
+    const shelves = window.app.shelfOptions.slice(0, -1) // Skip the last element ("New" anyways)
+
+    if (selectedShelf && !shelves.includes(selectedShelf)) {
+        shelves.push(selectedShelf)
+    }
+
+    for (const shelf of shelves) {
         const option = document.createElement("option")
-        option.value = window.app.shelfOptions[i]
-        option.textContent = window.app.shelfOptions[i]
+        option.value = shelf
+        option.textContent = shelf
 
         select.appendChild(option)
     }
+
+    select.value = selectedShelf
 }
 
 async function updateShelves() {
@@ -19,9 +28,9 @@ async function updateShelves() {
     shelfOptions.push(window.app.inCodeText["new"])
     window.app.shelfOptions = shelfOptions
 
-    fillShelves("toReadShelves")
-    fillShelves("ownedShelves")
-    fillShelves("currentShelves")
+    fillShelves("toReadShelves", "toReadShelf")
+    fillShelves("ownedShelves", "ownedShelf")
+    fillShelves("currentShelves", "currentShelf")
 }
 
 updateShelves()
