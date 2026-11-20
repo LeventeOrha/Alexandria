@@ -155,6 +155,19 @@ class Python {
         await window.pywebview.api.deleteBook(book)
     }
 
+    // Get how much (%) of the daily limit is used of the AI
+    async getAIUseage() {
+        let result
+
+        if (window.pywebview?.api) {
+            result = await window.pywebview.api.getAIUseage()
+        }
+        else {
+            result = 0
+        }
+        return result
+    }
+
     // Send and recieve a message to the AI assistant
     // (str) -> str
     async getAIMessage(user_message){

@@ -332,6 +332,13 @@ class API:
         except Exception:
             return self.text["AiMessages"]["OtherErrorHappened"]
 
+    def getAIUseage(self) -> float:
+        """
+        Get how much (percentage) did the user use from the daily limit
+        """
+        perc = self.ai.n_requests / self.params["Gemini_daily_limit"] * 100
+        return perc
+
     def getSettings(self) -> tuple[dict[str], dict[str]]:
         """
         Get the current settings of the system

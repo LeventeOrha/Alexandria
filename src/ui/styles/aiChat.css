@@ -17,9 +17,17 @@
     left: 0px;
 
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
+
+progress {
+    width: 8vw;
+    margin-right: 10px;
+    accent-color: green;
+}
+progress[data-level="warn"] { accent-color: #e6b800; }
+progress[data-level="bad"]  { accent-color: crimson; }
 
 #aiName {
     text-align: center;

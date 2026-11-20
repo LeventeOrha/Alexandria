@@ -45,6 +45,15 @@ function createTypingIndicator() {
     return message
 }
 
+async function getAIUseage() {
+    const useage = await window.python.getAIUseage()
+
+    const progress = document.getElementById("aiUseage")
+
+    progress.value = useage
+    progress.dataset.level = useage < 70 ? 'ok' : useage <= 90 ? 'warn' : 'bad'
+}
+
 const sendMessage = document.getElementById("sendNewMessage")
 async function sendNewMessage() {
     // Get the new text from the user
@@ -73,6 +82,7 @@ async function sendNewMessage() {
         // Scroll down to the bottom
         aiBody.scrollTop = aiBody.scrollHeight
     }
+    getAIUseage()
 }
 
 sendMessage.addEventListener('click', sendNewMessage)
