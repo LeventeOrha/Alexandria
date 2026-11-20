@@ -3,6 +3,27 @@ from typing import List
 import sqlite3
 import json
 import os
+import tkinter as tk
+
+def askUserConfirmation(title: str):
+    root = tk.Tk()
+    root.title = title
+    root.geometry("600x240")
+    result = {"value": False}
+
+    def yes():
+        result["value"] = True
+        root.destroy()
+    def no():
+        root.destroy()
+    tk.Label(root, text = title, wraplength=260).pack(pady=15)
+    frame = tk.Frame(root)
+    frame.pack()
+    tk.Button(frame, text="Yes", width=8, command=yes).pack(side="left", padx=5)
+    tk.Button(frame, text="No", width=8, command=no).pack(side="left", padx=5)
+
+    root.mainloop()
+    return result["value"]
 
 # Book class to hold everything together
 @dataclass
@@ -138,14 +159,18 @@ class Database:
         """
         Remove book with given ID
         """
-        cur = self.conn.cursor()
-        cur.execute("""
-        DELETE FROM books
-        WHERE ID = ?
-        """, (ID,))
+        book = self.searchBy("ID", ID)[0]
+        if askUserConfirmation(f"Do you want to delete {book.title}?"):
+            cur = self.conn.cursor()
+            cur.execute("""
+            DELETE FROM books
+            WHERE ID = ?
+            """, (ID,))
 
-        self.conn.commit()
-        return {"success": True}
+            self.conn.commit()
+            return {"success": True}
+        else:
+            return {"success": False}
     
     def searchBy(self, key: str, value: str) -> list[Book]:
         """

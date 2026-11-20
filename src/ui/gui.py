@@ -305,8 +305,7 @@ class API:
         """
         Delete a book
         """
-        self.db.removeBook(book["ID"])
-        return
+        return self.db.removeBook(book["ID"])
 
     def getAIMessage(self, user_message: str) -> str:
         """

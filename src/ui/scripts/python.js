@@ -152,7 +152,7 @@ class Python {
     // Delete a book
     // (dict[str]) -> None
     async deleteBook(book) {
-        await window.pywebview.api.deleteBook(book)
+        return await window.pywebview.api.deleteBook(book)
     }
 
     // Get how much (%) of the daily limit is used of the AI

@@ -257,9 +257,11 @@ async function fillBookData(book) {
     deletebtn.id = "deleteBook"
     deletebtn.textContent = window.app.inCodeText["delete"]
     deletebtn.addEventListener("click", async () => {
-        await window.python.deleteBook(book)
-        div.replaceChildren() // Clear out the book details
-        document.querySelector(`.bookList#${CSS.escape(book["ID"])}`).remove() // Remove it from the results
+        const result = await window.python.deleteBook(book)
+        if (result["success"]) {
+            div.replaceChildren() // Clear out the book details
+            document.querySelector(`.bookList#${CSS.escape(book["ID"])}`).remove() // Remove it from the results
+        }
     })
 
     buttons.appendChild(deletebtn)
