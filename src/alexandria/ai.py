@@ -11,6 +11,7 @@ class AI:
         self.API_KEY = API_keys["Gemini_API"]
         self.settings = settings
         self.daily_limit = daily_limit
+        self.max_tool_steps = 8
         self.model = model
         self.moly = Moly(db)
         self.google = Google(API_keys["GB_API"], db)
@@ -103,7 +104,7 @@ class AI:
 
         # Check out if Gemini wants to call a function (or several)
         assistant_text = []
-        while True:
+        for _ in self.max_tool_steps:
             tool_responses = []
 
             for part in response.candidates[0].content.parts:
@@ -154,6 +155,7 @@ class AI:
             response_text = "".join(assistant_text)
             self.conversation_log.append({"role": "assistant", "content": response_text})
             return response_text
+        raise OverflowError
 
 if __name__ == "__main__":
     import traceback

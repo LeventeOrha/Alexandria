@@ -321,6 +321,8 @@ class API:
         try:
             response = self.ai.generateResponse(user_message)
             return response
+        except OverflowError:
+            return self.text["AiMessages"]["TooManyToolCalls"]
         except RuntimeError as e:
             if "limit" in str(e):
                 return self.text["AiMessages"]["LimitReached"]

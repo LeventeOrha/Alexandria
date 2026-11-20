@@ -6,6 +6,7 @@ en:
     LimitReached: "Daily request limit reached. See you tomorrow!"
     OtherErrorHappened: "Sorry, something else went wrong, not Gemini broke."
     SuccesfulChatSave: "Messages succesfully saved in "
+    TooManyToolCalls: "I wanted to use too many tools. Try refrasing the question!"
   placeholders:
     onlineTitle: Title
     onlineAuthor: Author
@@ -54,6 +55,7 @@ hu:
     LimitReached: "Napi üzenetlimit elérve. Viszlát holnap!"
     OtherErrorHappened: "Sajnálom, valami más ment félre, nem Gemini."
     SuccesfulChatSave: "Üzenetek sikeresen elmentve ide: "
+    TooManyToolCalls: "Túl sokat akartam egyszerre. Próbálja meg másképp megfogalmazni a kérdést!"
   placeholders:
     onlineTitle: "Cím"
     onlineAuthor: "Író"
