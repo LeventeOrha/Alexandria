@@ -311,11 +311,10 @@ class API:
         """
         Send and recieve a message to the AI assistant
         """
+        save_name = f"./logs/{datetime.now().strftime('%Y%m%d_%H%M%S')}.yaml"
         if hasattr(self, "ai") is False:
             return self.text["AiMessages"]["NoAIConnection"]
         if "/save" in user_message:
-            x = datetime.now() # Current time
-            save_name = f"./logs/AI_{x.year}{x.month}{x.day}_{x.hour}{x.minute}{x.second}.yaml"
             self.ai.saveChat(save_name)
             return self.text["AiMessages"]["SuccesfulChatSave"] + save_name
         try:
@@ -327,8 +326,7 @@ class API:
             if "limit" in str(e):
                 return self.text["AiMessages"]["LimitReached"]
         except errors.APIError:
-            x = datetime.now() # Current time
-            self.ai.saveChat(f"./logs/AI_{x.year}{x.month}{x.day}_{x.hour}{x.minute}{x.second}.yaml")
+            self.ai.saveChat(save_name)
             return self.text["AiMessages"]["FailedAIMessage"]
         except Exception:
             return self.text["AiMessages"]["OtherErrorHappened"]
