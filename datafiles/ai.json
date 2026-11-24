@@ -248,73 +248,73 @@
             }
         },
         {
-        "name": "addBooks",
-        "description": "Add multiple books to the database in a single operation. Each book must be provided as a full structured object.",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "books": {
-                    "type": "array",
-                    "description": "List of books to insert into the database",
-                    "items": {
-                    "type": "object",
-                    "properties": {
-                        "ID": {
-                            "type": "string",
-                            "description": "Unique book identifier"
-                        },
-                        "title": {
-                            "type": "string"
-                        },
-                        "author": {
-                            "type": "string"
-                        },
-                        "date": {
-                            "type": "string"
-                        },
-                        "img": {
-                            "type": "string"
-                        },
-                        "shelf": {
-                            "type": "array",
-                            "items": {
+            "name": "addBooks",
+            "description": "Add multiple books to the database in a single operation. Each book must be provided as a full structured object.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "books": {
+                        "type": "array",
+                        "description": "List of books to insert into the database",
+                        "items": {
+                        "type": "object",
+                        "properties": {
+                            "ID": {
+                                "type": "string",
+                                "description": "Unique book identifier"
+                            },
+                            "title": {
                                 "type": "string"
                             },
-                            "description": "List of shelves this book belongs to"
-                        },
-                        "category": {
-                            "type": "array",
-                            "items": {
+                            "author": {
                                 "type": "string"
                             },
-                            "description": "List of categories for the book"
+                            "date": {
+                                "type": "string"
+                            },
+                            "img": {
+                                "type": "string"
+                            },
+                            "shelf": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "List of shelves this book belongs to"
+                            },
+                            "category": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "List of categories for the book"
+                            },
+                            "color": {
+                                "type": "string",
+                                "description": "Hex color associated with the book cover"
+                            },
+                            "start": {
+                                "type": "string"
+                            },
+                            "end": {
+                                "type": "string"
+                            }
                         },
-                        "color": {
-                            "type": "string",
-                            "description": "Hex color associated with the book cover"
-                        },
-                        "start": {
-                            "type": "string"
-                        },
-                        "end": {
-                            "type": "string"
-                        }
-                    },
-                "required": ["ID", "title", "author", "date", "img", "shelf", "category", "color", "start", "end"]
-                }
-                }
-            },
-            "required": ["books"]
-        }
+                    "required": ["ID", "title", "author", "date", "img", "shelf", "category", "color", "start", "end"]
+                    }
+                    }
+                },
+                "required": ["books"]
+            }
         },
         {
-        "name": "getAllBooks",
-        "description": "Read all book data from the database.",
-        "parameters": {
-            "type": "object",
-            "properties": {},
-            "required": []
-        }
+            "name": "getAllBooks",
+            "description": "Read all book data from the database.",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "required": []
+            }
         }
     ]
 }
